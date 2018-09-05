@@ -1,0 +1,181 @@
+<template>
+    <div style='position: relative;height:100%;padding:10px;'>
+        <Row type="flex" justify="space-between" align="middle" class="code-row-bg" style='margin-bottom:10px;'>
+            <Col span="6">
+            <h2 style="margin: 6px 0 0 20px">产品管理</h2>
+            </Col>
+            <Col span="3" style='text-align:right;margin-right:5px;'>
+            <Button type="primary" @click="newCreate" style="    position: absolute;top: 0px;right: 220px;">新建
+            </Button>
+            <i-input>
+                <i-button slot="append" icon="ios-search"></i-button>
+            </i-input>
+            </Col>
+        </Row>
+        <Table border :columns="columns7" :data="data6"></Table>
+        <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" class="paging" @on-change="changepage"/>
+
+    </div>
+</template>
+
+<style scoped>
+    .paging {
+        width: 200px;
+        height: 60px;
+        line-height: 60px;
+        margin: 0 auto;
+    }
+</style>
+<script>
+
+    import api from '@/api';
+    import Cookies from 'js-cookie';
+
+    export default {
+        data () {
+            return {
+                dataCount: 0,
+                page: {
+                    pageIndex: 1,
+                    pageSize: 10
+                },
+                columns7: [
+                    {
+                        title: '序号',
+                        key: 'id',
+
+                    },
+                    {
+                        title: '名称',
+                        key: 'productName'
+                    },
+                    {
+                        title: '类别',
+                        key: 'categoryName'
+                    },
+                    {
+                        title: '时间',
+                        key: 'createTime'
+                    },
+                    {
+                        title: '操作',
+                        key: 'action',
+                        width: 350,
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'success',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '10px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.$router.push({
+                                                name: 'check_product',
+                                                query:{
+                                                    id:this.data6[params.index].id
+                                                }
+                                            });
+                                        }
+                                    }
+                                }, '查看'),
+                                h('Button', {
+                                    props: {
+                                        type: 'info',
+                                        size: 'small'
+                                    }, style: {
+                                        marginRight: '10px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.edit(this.data6[params.index]);
+                                        }
+                                    }
+                                }, '编辑'),
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+
+                                            this.product_delete(this.data6[params.index].id);
+                                        }
+                                    }
+                                }, '删除')
+                            ]);
+                        }
+                    }
+                ],
+                data6: []
+            };
+        },
+        created () {
+            this.init();
+        },
+        methods: {
+            newCreate () {
+                this.$router.push({name:'new_product'})
+            },
+            changepage (index) {
+                this.page.pageIndex = index;
+                this.init();
+            },
+            edit (index) {
+                this.$router.push({
+                    name:"edit_product",
+                    params:{
+                        data6:index
+                    }
+                })
+            },
+            init () {
+                this.$axios({
+                    method: 'post',
+                    url: api.product_list(),
+                    data: {
+                        pageIndex: this.page.pageIndex,
+                        pageSize: this.page.pageSize
+                    },
+                }).then(res => {
+                    this.data6 = res.data.data;
+                    this.dataCount = res.data.page.totalRecords;
+                });
+            },
+            product_delete (index) {
+                this.$Modal.confirm({
+                    title: '删除警告',
+                    content: '<p>您确定要删除该用户吗</p>',
+                    loading: true,
+                    onOk: () => {
+                        setTimeout(() => {
+                            this.$axios({
+                                method: 'post',
+                                url: api.product_delete(index),
+                                headers: {
+                                    Authorization: Cookies.get('token'),
+
+                                }
+                            }).then(res => {
+                                if (res.data.code == 200) {
+                                    this.$Message.info('已删除');
+                                    this.init();
+                                    this.$Modal.remove();
+                                } else {
+                                    this.$Modal.remove();
+                                    this.$Message.info(res.data.msg);
+                                }
+                            });
+                        }, 0);
+                    }
+                });
+            },
+
+        }
+    };
+</script>
