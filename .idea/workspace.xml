@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="484d7776-59f4-48d1-8897-fb62eeeb9ea4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" afterPath="$PROJECT_DIR$/package-lock.json" />
-      <change beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
       <change beforePath="$PROJECT_DIR$/src/api/index.js" afterPath="$PROJECT_DIR$/src/api/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/views/main-components/shrinkable-menu/components/sidebarMenu.vue" afterPath="$PROJECT_DIR$/src/views/main-components/shrinkable-menu/components/sidebarMenu.vue" />
-      <change beforePath="$PROJECT_DIR$/src/views/productManagement/check_product.vue" afterPath="$PROJECT_DIR$/src/views/productManagement/check_product.vue" />
       <change beforePath="$PROJECT_DIR$/src/views/productManagement/edit_product.vue" afterPath="$PROJECT_DIR$/src/views/productManagement/edit_product.vue" />
-      <change beforePath="$PROJECT_DIR$/src/views/productManagement/new_product.vue" afterPath="$PROJECT_DIR$/src/views/productManagement/new_product.vue" />
-      <change beforePath="$PROJECT_DIR$/src/views/productManagement/product_management.vue" afterPath="$PROJECT_DIR$/src/views/productManagement/product_management.vue" />
+      <change beforePath="$PROJECT_DIR$/src/views/tabManagement/tab_management.vue" afterPath="$PROJECT_DIR$/src/views/tabManagement/tab_management.vue" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -104,22 +98,18 @@
       <file leaf-file-name="edit_product.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/views/productManagement/edit_product.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2175">
-              <caret line="87" column="73" lean-forward="false" selection-start-line="87" selection-start-column="73" selection-end-line="87" selection-end-column="73" />
+            <state relative-caret-position="275">
+              <caret line="11" column="87" lean-forward="false" selection-start-line="11" selection-start-column="87" selection-end-line="11" selection-end-column="87" />
               <folding>
                 <element signature="n#style#0;n#Form#0;n#div#0;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#FormItem#0;n#Form#0;n#div#0;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#Input#0;n#FormItem#0;n#Form#0;n#div#0;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#Form#0;n#div#1;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#Input#0;n#Form#0;n#div#1;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#p#0;n#div#2;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#Button#0;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="e#2337#2361#0" expanded="true" />
-                <element signature="e#3652#7242#0" expanded="false" />
-                <element signature="e#3853#4079#0" expanded="false" />
-                <element signature="e#4115#4993#0" expanded="false" />
-                <element signature="e#7315#7429#0" expanded="false" />
-                <element signature="e#7443#7537#0" expanded="false" />
+                <element signature="e#7314#7428#0" expanded="false" />
+                <element signature="e#7442#7536#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -439,12 +429,12 @@
       <workItem from="1535967073635" duration="34630000" />
       <workItem from="1536056553610" duration="14908000" />
       <workItem from="1536107208456" duration="17656000" />
-      <workItem from="1536128601898" duration="16343000" />
+      <workItem from="1536128601898" duration="16536000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="546584000" />
+    <option name="totallyTimeSpent" value="546777000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -454,7 +444,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3242655" sideWeight="0.50790304" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297062" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -507,7 +497,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/views/productManagement/edit_product.vue</url>
-          <line>221</line>
+          <line>220</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="77" />
         </line-breakpoint>
@@ -828,22 +818,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/views/productManagement/edit_product.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2175">
-          <caret line="87" column="73" lean-forward="false" selection-start-line="87" selection-start-column="73" selection-end-line="87" selection-end-column="73" />
+        <state relative-caret-position="275">
+          <caret line="11" column="87" lean-forward="false" selection-start-line="11" selection-start-column="87" selection-end-line="11" selection-end-column="87" />
           <folding>
             <element signature="n#style#0;n#Form#0;n#div#0;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#FormItem#0;n#Form#0;n#div#0;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#Input#0;n#FormItem#0;n#Form#0;n#div#0;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#Form#0;n#div#1;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#Input#0;n#Form#0;n#div#1;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#0;n#div#2;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#Button#0;n#Row#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="e#2337#2361#0" expanded="true" />
-            <element signature="e#3652#7242#0" expanded="false" />
-            <element signature="e#3853#4079#0" expanded="false" />
-            <element signature="e#4115#4993#0" expanded="false" />
-            <element signature="e#7315#7429#0" expanded="false" />
-            <element signature="e#7443#7537#0" expanded="false" />
+            <element signature="e#7314#7428#0" expanded="false" />
+            <element signature="e#7442#7536#0" expanded="false" />
           </folding>
         </state>
       </provider>

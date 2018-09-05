@@ -307,20 +307,33 @@ export default {
       this.modal1 = true;
     },
 
-    show(info) {
+    show(data) {
       this.isEdit = "编辑";
       this.modal1 = true;
-      console.log(info);
-      this.categoryDetails.code = JSON.parse(JSON.stringify(info.labelCode));
-      this.categoryDetails.name = JSON.parse(JSON.stringify(info.labelName));
-      this.categoryDetails.labelType = JSON.parse(JSON.stringify(info.dataType));
-      this.categoryDetails.classification = JSON.parse(JSON.stringify(info.categoryId));
-      this.categoryDetails.processing = JSON.parse(JSON.stringify(info.oneTime));
-      this.categoryDetails.processingType = JSON.parse(JSON.stringify(info.processType));
-      this.categoryDetails.precision = JSON.parse(JSON.stringify(info.labelCode));
-      this.categoryDetails.processingRules = JSON.parse(JSON.stringify(info.rule));
-      this.categoryDetails.id = JSON.parse(JSON.stringify(info.id));
-      this.categoryDetails.available = JSON.parse(JSON.stringify(info.available));
+      let info=JSON.parse(JSON.stringify(data))
+      this.categoryDetails.code = info.labelCode;
+      this.categoryDetails.name = info.labelName;
+      this.categoryDetails.labelType = info.dataType;
+      this.categoryDetails.classification = info.categoryId;
+      this.categoryDetails.processing = info.oneTime;
+      this.categoryDetails.processingType = info.processType;
+      this.categoryDetails.precision = info.labelCode;
+      this.categoryDetails.id = info.id;
+      this.categoryDetails.available = info.available;
+      this.$axios({
+        method: "get",
+        url: api.queryLabelById(info.id),
+      }).then(res => {
+        if (res.data.code == 200) {
+          console.log('编辑',res.data.data)
+          this.categoryDetails.processingRules = res.data.data.rule
+        } else {
+          this.$Message.error({
+            content: res.data.msg,
+            duration: 3
+          });
+        }
+      });
      },
     remove(id, index) {
       this.$axios({
@@ -423,7 +436,7 @@ export default {
                 rule: this.categoryDetails.processingRules,
                 oneTime: this.categoryDetails.processing,
                 id: this.categoryDetails.id,
-                available: this.categoryDetails.available,
+                // available: this.categoryDetails.available,
               }
             }).then(
               res => {
