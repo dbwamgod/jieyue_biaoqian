@@ -15,7 +15,7 @@
                     <FormItem label="产品类别" prop="product_type" style="float: left;width: 270px;">
                         <Select v-model="formValidate.categoryName"  placeholder="请选择产品类型" style="width: 180px;" >
                             <Option v-for="(item,index) in formValidate" :key="index"
-                                    :value="item.categoryName?item.id:''">
+                                    :value="item.id">
                                 {{item.categoryName}}
                             </Option>
                         </Select>
@@ -33,8 +33,7 @@
             <div>
                 <p style="position: absolute;top: 264px;left: 424px;font-size: 23px;">查询输出</p>
                 <div class="container_label" ref="container_label">
-                    <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">标签{{ item + 1
-                        }}
+                    <Tag v-for="(item,index) in title" :key="index" :name="item.title" closable @on-close="handleClose2">{{ item.title}}
                     </Tag>
                 </div>
             </div>
@@ -60,102 +59,92 @@
                     categoryName: [],
                 },
                 data3: [{}],
-                flag: 1,
-                count: [0, 1, 2],
-                test:[]
+                title:[],
+                out:[],
+                select:[]
             };
         },
         created () {
             this.init();
-            // this.test=this.$route.query.data6
-            this.formValidate = this.$route.params.data6 && this.$route.params.data6.categoryName ? this.$route.params.data6 : {
-                queryParam: '',
-                productName: '',
-                categoryName: ''
-            };
-
             this.product_First_list();
-
         },
         mounted(){
 
         },
         methods: {
             loadData (item, callback) {
-                setTimeout(() => {
-                    if (this.flag === 1) {
-                        this.$axios({
-                            method: 'post',
-                            url: api.product_Second_list(),
-                            data: {
-                                form: {
-                                    parentId: item.id
-                                },
-                                pageIndex: 0,
-                                pageSize: 0
+                if (item.type === 1) {
+                    this.$axios({
+                        method: 'post',
+                        url: api.product_Second_list(),
+                        data: {
+                            form: {
+                                parentId: item.id
+                            },
+                            pageIndex: 0,
+                            pageSize: 0
+                        }
+                    }).then(res => {
+                        if (res.data.code == 200) {
+                            this.flag = 2;
+                            if (res.data.data.length !== 0) {
+                                const data = res.data.data.map((item, index) => {
+                                    return {
+                                        title: item.categoryName || '',
+                                        id: item.parentId || '',
+                                        type:2,
+                                        loading: false,
+                                        children: []
+                                    };
+                                });
+                                callback(data);
+                            } else {
+                                this.$Message.info('没有数据');
                             }
-                        }).then(res => {
-                            if (res.data.code == 200) {
-                                this.flag = 2;
-                                if (res.data.data.length !== 0) {
-                                    const data = res.data.data.map((item, index) => {
-                                        return {
-                                            title: item.categoryName || '',
-                                            id: item.parentId || '',
-                                            loading: false,
-                                            children: []
-                                        };
-                                    });
-                                    callback(data);
-                                } else {
-                                    this.$Message.info('没有数据');
-                                }
+                        }
+                    });
+                } else if (item.type === 2) {
+                    this.$axios({
+                        method: 'post',
+                        url: api.queryLabels(),
+                        data: {
+                            'form': {
+                                'parentId': item.id,
+                            },
+                            'pageIndex': 0,
+                            'pageSize': 0,
+                        }
+                    }).then(res => {
+                        if (res.data.code == 200) {
+                            this.flag === 1;
+                            if (res.data.data.length !== 0) {
+                                const data = res.data.data.map((item, index) => {
+                                    return {
+                                        title: item.labelName || '',
+                                        id: item.id || '',
+                                        type:3,
+                                        render:(h,params)=>{
+                                            return h('span',{
+                                                on:{
+                                                    click:()=>{
+                                                        if (this.title.filter(r => r.id == params.data.id)[0]) {
+                                                        } else {
+                                                            this.title.push(params.data);
+                                                        }
+                                                    }
+                                                }
+                                            },item.labelName)
+                                        }
+                                    };
+                                });
+                                callback(data);
+                            } else {
+                                this.$Message.info('没有数据');
                             }
-                        });
-                    } else if (this.flag === 2) {
-                        this.$axios({
-                            method: 'post',
-                            url: api.queryLabels(),
-                            data: {
-                                'form': {
-                                    'parentId': item.id,
-                                },
-                                'pageIndex': 0,
-                                'pageSize': 0,
-                            }
-                        }).then(res => {
-                            if (res.data.code == 200) {
-                                this.flag === 1;
-                                if (res.data.data.length !== 0) {
-                                    const data = res.data.data.map((item, index) => {
-                                        return {
-                                            title: item.labelName || '',
-                                            id: item.id || '',
-                                            loading: false,
-                                            /*  render:(h, params) => {
-                                                  console.log(params);
-                                                  on: {
-                                                      click: () => {
-                                                          console.log(1);
-                                                      }
-                                                  }
-                                                  return h('span', {
-                                                      style: {
-                                                          display: 'inline-block',
-                                                          width: '100%'
-                                                      }
-                                                  })
-                                              }*/
-                                        };
-                                    });
-                                    callback(data);
-                                } else {
-                                    this.$Message.info('没有数据');
-                                }
-                            }
-                        });
-                    }
-                }, 0);
+                        }
+                    });
+                }
+
 
             },
             init () {
@@ -164,13 +153,11 @@
                     method: 'get',
                     url: api.product_getDetail_name_list(),
                 }).then(res => {
-
+                    this.select=res.data.data
                     this.formValidate = Object.assign({},res.data.data)
-                    // console.log(this.formValidate,111111);
                 });
             },
-
-            //页面列表
+            //页面fenlei列表
             product_First_list () {
                 this.$axios({
                     method: 'post',
@@ -184,10 +171,11 @@
                     if (res.data.code == 200) {
                         let result = res.data.data.map((item, index) => {
                             return {
-                                title: item.categoryName || '',
-                                id: item.id || '',
+                                title: item.categoryName ,
+                                id: item.id ,
                                 loading: false,
-                                children: []
+                                children: [],
+                                type:1
                             };
                         });
                         this.data3 = result;
@@ -200,37 +188,34 @@
             },
             //保存
             submit () {
-                if (this.count.length) {
-                    this.count.push(this.count[this.count.length - 1] + 1);
-                } else {
-                    this.count.push(0);
-                }
 
                 //保存的接口
-
+                this.title.map((item,index)=>{
+                    return this.out.push(item.id)
+                })
                 this.$axios({
-                                method: 'post',
-                                url: api.product_add(),
-                                data: {
-                                    productName: this.formValidate.productName,//产品名称
-                                    queryParam: this.formValidate.queryParam,//查询参数(规则)
-                                    categoryId: this.formValidate.id||1,//产品类别ID
-                                    outputParamIdList: [1],//输出参数id列表(数组)
-                                    userId: Cookies.get('userId'),//用户ID
-                                }
-                            }).then(res => {
-                                if (res.data.code == 200) {
-                                    this.$router.back(-1);
+                    method: 'post',
+                    url: api.product_add(),
+                    data: {
+                        productName: this.formValidate.productName,//产品名称
+                        queryParam: this.formValidate.queryParam,//查询参数(规则)
+                        categoryId: this.formValidate.categoryName,//产品类别ID
+                        outputParamIdList: this.out,//输出参数id列表(数组)
+                        userId: Cookies.get('userId'),//用户ID
+                    }
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        this.$router.back(-1);
 
-                                }else{
-                                    this.$Message.info(res.data.msg)
-                                }
-                            });
+                    }else{
+                        this.$Message.info(res.data.msg)
+                    }
+                });
 
             },
             handleClose2 (event, name) {
-                const index = this.count.indexOf(name);
-                this.count.splice(index, 1);
+                const index = this.title.indexOf(name);
+                this.title.splice(index, 1);
             }
         }
     };

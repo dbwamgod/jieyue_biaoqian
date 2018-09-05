@@ -1,14 +1,12 @@
 <template>
     <div class="check_container">
-    <Tree :data="data3" class="menu_product_list" :load-data="loadData" ref="data3"></Tree>
-
 
         <Row>
             <Col span="3">
-            <span class="check_container_product">产品</span>
+            <span class="check_container_product">{{defaultRules.productName}}</span>
             </Col>
             <Col span="3">
-            <span class="check_container_list">分类</span>
+            <span class="check_container_list">{{defaultRules.categoryName}}</span>
             </Col>
         </Row>
         <Row>
@@ -17,18 +15,8 @@
             </Col>
         </Row>
         <Row style="margin-top: 30px;">
-
-            <Col span="6">
-            <span>{{defaultRules.id}}</span>
-            </Col>
-            <Col span="6">
-            <span>{{defaultRules.modifier}}</span>
-            </Col>
-            <Col span="6">
-            <span>{{defaultRules.creator}}</span>
-            </Col>
-            <Col span="6">
-            <span>{{defaultRules.categoryId}}</span>
+            <Col span="24">
+            <span>{{defaultRules.queryParam}}</span>
             </Col>
         </Row>
         <Row>
@@ -40,7 +28,8 @@
 
             <Col span="4" offset="7">
             <div class="container_label_check" ref="container_label_check">
-                <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">标签{{ item + 1 }}
+                <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName" closable
+                     @on-close="handleClose2">{{ item.labelName }}
                 </Tag>
             </div>
             </Col>
@@ -91,148 +80,55 @@
                 data2: [],
                 data3: [{}],
                 flag: 1,
-                count: [0, 1, 2]
+                check_list: []
             };
         },
         created () {
-            this.product_First_list();
-            this.product_productOutput_list();
+
             this.product_getDetail();
         },
         methods: {
             //获取输出列表
             product_productOutput_list () {
                 this.$axios({
-                    method: 'get',
-                    url: api.product_productOutput_list()
-                }).then(res => {
-                });
-            },
-            loadData (item, callback) {
-
-                setTimeout(() => {
-
-                    if (this.flag === 1) {
-                        this.$axios({
-                            method: 'post',
-                            url: api.product_Second_list(),
-                            data: {
-                                form: {
-                                    parentId: item.id
-                                },
-                                pageIndex: 0,
-                                pageSize: 0
-                            }
-
-                        }).then(res => {
-                            if (res.data.code == 200) {
-                                this.flag = 2;
-                                if (res.data.data.length !== 0) {
-                                    const data = res.data.data.map((item, index) => {
-                                        return {
-                                            title: item.categoryName || '',
-                                            id: item.id || '',
-                                            loading: false,
-                                            children: []
-                                        };
-                                    });
-
-                                    callback(data);
-                                } else {
-                                    this.$Message.info('没有数据');
-                                }
-                            }
-                        });
-                    } else if (this.flag === 2) {
-                        this.$axios({
-                            method: 'post',
-                            url: api.queryLabels(),
-                            data: {
-                                'form': {
-                                    'parentId': item.id,
-                                },
-                                'pageIndex': 0,
-                                'pageSize': 0,
-                            }
-                        }).then(res => {
-                            if (res.data.code == 200) {
-                                this.flag === 1;
-                                if (res.data.data.length !== 0) {
-                                    const data = res.data.data.map((item, index) => {
-                                        return {
-                                            title: item.labelName || '',
-                                            id: item.id || '',
-                                            loading: false,
-                                            /*  render:(h, params) => {
-                                                  console.log(params);
-                                                  on: {
-                                                      click: () => {
-                                                          console.log(1);
-                                                      }
-                                                  }
-                                                  return h('span', {
-                                                      style: {
-                                                          display: 'inline-block',
-                                                          width: '100%'
-                                                      }
-                                                  })
-                                              }*/
-                                        };
-                                    });
-                                    callback(data);
-                                } else {
-                                    this.$Message.info('没有数据');
-                                }
-                            }
-                        });
-                    }
-
-                }, 1000);
-            },
-            product_First_list () {
-                this.$axios({
                     method: 'post',
-                    url: api.product_First_list(),
+                    url: api.product_productOutput_list(),
                     data: {
-                        form: {},
-                        pageIndex: 0,
-                        pageSize: 0
+                        outputVos: {
+                            labelCode: [
+                                this.check_list
+                            ]
+                        },
+                        'pageIndex': 1,
+                        'pageSize': 3,
+                        'productId': this.defaultRules.id,
+                        'queryParam': this.defaultRules.queryParam
                     }
                 }).then(res => {
-                    if (res.data.code == 200) {
-                        let result = res.data.data.map((item, index) => {
-                            return {
-                                title: item.categoryName || '',
-                                id: item.id || '',
-                                loading: false,
-                                children: []
-                            };
-                        });
-                        this.data3 = result;
 
-                    }
                 });
             },
+
             product_getDetail () {
                 this.$axios({
                     method: 'get',
                     url: api.product_getDetail(this.$route.query.id),
                 }).then(res => {
                     this.defaultRules = res.data.data;
+
+
+                    console.log(this.defaultRules,111111111111111111);
                 });
+
             },
-            //关闭标签
+
+            //查询
+            checkInfo () {
+                this.product_productOutput_list();
+            },
             handleClose2 (event, name) {
                 const index = this.count.indexOf(name);
                 this.count.splice(index, 1);
-            },
-            //查询
-            checkInfo(){
-                if (this.count.length) {
-                    this.count.push(this.count[this.count.length - 1] + 1);
-                } else {
-                    this.count.push(0);
-                }
             }
         }
     };
@@ -271,6 +167,7 @@
         top: 40%;
         left: 25px;
     }
+
     .container_label_check {
         position: absolute;
         top: 35%;

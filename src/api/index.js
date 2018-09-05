@@ -61,6 +61,10 @@ export default {
     product_productOutput_list() {
         return _baseUrlC+'/galaxy/api/productOutput/list'
     },
+    //编辑获取产品输出列表
+    product_productOutput_find(id) {
+        return _baseUrlC+'/galaxy/api/product/find/'+id
+    },
     /*标签管理*/
     queryLabelCategorys() {// 一级分类标签列表
         return _baseUrlB + '/galaxy-label-admin/label/category/queryLabelCategorys';

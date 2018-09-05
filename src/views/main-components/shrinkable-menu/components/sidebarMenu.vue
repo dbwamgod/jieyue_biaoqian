@@ -52,7 +52,6 @@
         data () {
             return {
                 activeName: '1-1',
-
                 accordion: true
             };
         },

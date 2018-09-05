@@ -129,7 +129,7 @@
             edit (index) {
                 this.$router.push({
                     name:"edit_product",
-                    params:{
+                    query:{
                         data6:index
                     }
                 })
