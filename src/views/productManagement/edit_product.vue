@@ -77,7 +77,6 @@
         },
         methods: {
             loadData (item, callback) {
-                setTimeout(() => {
                     if (this.flag === 1) {
                         this.$axios({
                             method: 'post',
@@ -91,6 +90,7 @@
                             }
                         }).then(res => {
                             if (res.data.code == 200) {
+                                console.log('11111111111111111111111111111111111111111',res)
                                 this.flag = 2;
                                 if (res.data.data.length !== 0) {
                                     const data = res.data.data.map((item, index) => {
@@ -150,7 +150,6 @@
                             }
                         });
                     }
-                }, 0);
 
             },
             init () {

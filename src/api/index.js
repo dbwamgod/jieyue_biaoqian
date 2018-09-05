@@ -101,5 +101,8 @@ export default {
     changeLabelAvailable() {//启用停用
         return _baseUrlB + '/galaxy-label-admin/label/manage/changeLabelAvailable';
     },
+    queryLabelById(id) {//获取规则
+        return _baseUrlB + '/galaxy-label-admin/label/manage/queryLabelById/' + id;
+    },
 
 } 
