@@ -154,7 +154,7 @@ export default {
         if (res.data.code == 200) {
           this.categoryList = res.data.data;
           this.dataCount = res.data.page.totalRecords;
-          if(r.data.data.length==0 || r.data.data==[]){
+          if(res.data.data.length==0 || res.data.data==[]){
               this.page.pageIndex= this.page.pageIndex!=0?this.page.pageIndex-1:this.page.pageIndex;
               this.init(); 
             }

@@ -48,8 +48,8 @@
             </FormItem>
             <FormItem prop="processingType" label="加工类型：" label-position="right" :label-width="100">
                     <RadioGroup v-model="categoryDetails.processingType" style="width:300px">
-                        <Radio label="0">是</Radio>
-                        <Radio label="1">否</Radio>
+                        <Radio label="0">sql</Radio>
+                        <Radio label="1">el</Radio>
                     </RadioGroup>
             </FormItem>
               <FormItem prop="processingRules" label="加工规则：" label-position="right" :label-width="100">
