@@ -191,7 +191,7 @@ export default {
         if (res.data.code == 200) {
           this.categoryList = res.data.data;
           this.dataCount = res.data.page.totalRecords;
-          if(r.data.data.length==0 || r.data.data==[]){
+          if(res.data.data.length==0 || res.data.data==[]){
               this.page.pageIndex= this.page.pageIndex!=0?this.page.pageIndex-1:this.page.pageIndex;
               this.init(); 
             }
@@ -247,7 +247,7 @@ export default {
               url: api.saveLabelCategoryT(),
               data: {
                 parentId:this.categoryDetails.parentId,
-                categoryName: this.categoryDetails.content
+                categoryName: this.categoryDetails.content.replace(/(^\s+)|(\s+$)|\s+/g,'')
               }
             }).then(res => {
               if (res.data.code == 200) {
@@ -271,7 +271,7 @@ export default {
               url: api.updateLabelCategoryT(),
               data: {
                 id: this.categoryDetails.id,
-                categoryName: this.categoryDetails.content
+                categoryName: this.categoryDetails.content.replace(/(^\s+)|(\s+$)|\s+/g,'')
               }
             }).then(res => {
               if (res.data.code == 200) {

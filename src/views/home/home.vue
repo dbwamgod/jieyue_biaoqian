@@ -64,7 +64,7 @@ export default {
       ruleInline: {
         content: [
           { required: true, message: "请输入分类名称", trigger: "blur" }
-        ]
+        ],
       },
       columns7: [
         {
@@ -207,7 +207,7 @@ export default {
                   method: "post",
                   url: api.saveLabelCategory(),
                   data: {
-                    categoryName: this.categoryDetails.content
+                    categoryName: this.categoryDetails.content.replace(/(^\s+)|(\s+$)|\s+/g,'')
                   }
                 }).then(res => {
                   if (res.data.code == 200) {
@@ -231,7 +231,7 @@ export default {
                   url: api.updateLabelCategory(),
                   data: {
                     id:this.categoryDetails.id,
-                    categoryName: this.categoryDetails.content,
+                    categoryName: this.categoryDetails.content.replace(/(^\s+)|(\s+$)|\s+/g,''),
                   }
                 }).then(res => {
                   if (res.data.code == 200) {
