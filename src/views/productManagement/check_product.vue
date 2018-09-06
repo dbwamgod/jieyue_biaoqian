@@ -28,8 +28,9 @@
 
             <Col span="4" offset="7">
             <div class="container_label_check" ref="container_label_check">
-                <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName" closable
-                     @on-close="handleClose2">{{ item.labelName }}
+                <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName"
+                     @on-close="handleClose2" style="height: 40px;line-height: 40px; padding: 0 15px;
+">{{ item.labelName }}
                 </Tag>
             </div>
             </Col>
@@ -37,6 +38,7 @@
         <Row style="margin-top: 141px;">
             <Col span="4" offset="12">
             <Button type="primary" @click="checkInfo">查询</Button>
+            <Button type="primary" @click="comeout">导出</Button>
             </Col>
         </Row>
         <Row>
@@ -46,10 +48,17 @@
         </Row>
 
         <Row style="margin-top: 30px;">
-            <Col span="24">
+            <Col span="18">
             <Table :columns="columns1" :data="data2"></Table>
             </Col>
         </Row>
+        <Row style="margin-top: 30px;">
+            <Col span="12" offset="12">
+            <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" class="paging"
+                  @on-change="changepage"/>
+            </Col>
+        </Row>
+
     </div>
 </template>
 
@@ -58,29 +67,23 @@
     import Cookies from 'js-cookie';
 
     export default {
+
         name: 'check_product'
         ,
         data () {
             return {
-                columns1: [
-                    {
-                        title: 'Name',
-                        key: 'name'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age'
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    }
-                ],
+
+                dataCount: 0,
+                page: {
+                    pageSize: 10,
+                    pageIndex: 1
+                },
+                columns1: [],
                 defaultRules: {},
                 data2: [],
                 data3: [{}],
-                flag: 1,
-                check_list: []
+                check_list: [],
+
             };
         },
         created () {
@@ -88,12 +91,33 @@
             this.product_getDetail();
         },
         methods: {
+            comeout () {
+                if(this.check_list.length){
+                    window.open(api.product_out(encodeURIComponent(JSON.stringify({'queryParam': this.defaultRules.queryParam, 'outputVos': this.check_list, 'pageSize': 0, 'pageIndex': 0}))),"_blank")
+                    window.open(api.product_out(encodeURIComponent(JSON.stringify({'queryParam': this.defaultRules.queryParam, 'outputVos': this.check_list, 'pageSize': 0, 'pageIndex': 0}))),"_blank")
+                }else{
+                    this.$Message.info('请先点击查询')
+                }
+
+            },
+            changepage (index) {
+                this.page.pageIndex = index;
+                this.product_productOutput_list();
+            },
             //获取输出列表
             product_productOutput_list () {
+
+                this.check_list = this.defaultRules.labelNameVoList;
                 this.$axios({
                     method: 'post',
                     url: api.product_productOutput_list(),
                     data: {
+                        'queryParam': this.defaultRules.queryParam,//"q=*%3A*&wt=json&indent=true&fl=id", encodeURIComponent(
+                        'outputVos': this.check_list,//{"labelCode":"name"},{"labelCode":"tel"},{"labelCode":"addr"},{"labelCode":"phone"},{"labelCode":"age"},{"labelCode":"empt"}
+                        'pageSize': this.page.pageSize,
+                        'pageIndex': this.page.pageIndex - 1
+                    }
+                    /*  {
                         outputVos: {
                             labelCode: [
                                 this.check_list
@@ -103,9 +127,14 @@
                         'pageSize': 3,
                         'productId': this.defaultRules.id,
                         'queryParam': this.defaultRules.queryParam
-                    }
+                    }*/
                 }).then(res => {
-
+                    if (res.data.code == 200) {
+                        this.data2 = res.data.data;
+                        this.dataCount = res.data.page.totalRecords;
+                    } else {
+                        this.$Message.info(res.data.msg);
+                    }
                 });
             },
 
@@ -114,12 +143,26 @@
                     method: 'get',
                     url: api.product_getDetail(this.$route.query.id),
                 }).then(res => {
-                    this.defaultRules = res.data.data;
-
-
-                    console.log(this.defaultRules,111111111111111111);
+                    if (res.data.code == 200) {
+                        if (res.data.data !== null) {
+                            this.defaultRules = res.data.data;
+                            this.columns1 = this.defaultRules.labelNameVoList.map((item, index) => {
+                                return {
+                                    title: item.labelName,
+                                    key: item.labelCode
+                                };
+                            });
+                        } else {
+                            this.$Message.info(res.data.msg);
+                        }
+                    } else {
+                        this.$Message.info(res.data.msg + ',没有数据');
+                        let a = setTimeout(() => {
+                            this.$router.back(-1);
+                            clearTimeout(a);
+                        }, 1700);
+                    }
                 });
-
             },
 
             //查询
@@ -136,7 +179,7 @@
 
 <style scoped>
     .check_container {
-        padding: 40px 32px 0 170px;
+        padding: 40px 32px 0 125px;
     }
 
     .check_container_product {
