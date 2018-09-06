@@ -115,7 +115,17 @@
                                         id: item.parentId || '',
                                         type: 2,
                                         loading: false,
-                                        children: []
+                                        children: [],
+                                        render:(h,params)=>{
+
+                                            return h('span',{
+                                                on :{
+                                                    click:()=>{
+                                                        this.loadData(h,params)
+                                                    }
+                                                }
+                                            },item.categoryName)
+                                        }
                                     };
                                 });
                                 callback(data);
@@ -214,7 +224,16 @@
                                 id: item.id,
                                 loading: false,
                                 children: [],
-                                type: 1
+                                type: 1,
+                                render:(h,params)=>{
+                                    return h('span',{
+                                        on :{
+                                            click:()=>{
+                                                this.loadData(params,h)
+                                            }
+                                        }
+                                    },item.categoryName)
+                                }
                             };
                         });
                         this.data3 = result;

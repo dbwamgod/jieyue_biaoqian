@@ -30,6 +30,7 @@
     import Cookies from 'js-cookie';
 
     export default {
+        inject:['reload'],
         data () {
             return {
                 labelname: '',
@@ -79,6 +80,7 @@
                                                     id: this.data6[params.index].id
                                                 }
                                             });
+                                            this.reload()
                                         }
                                     }
                                 }, '查看'),

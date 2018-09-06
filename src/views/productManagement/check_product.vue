@@ -66,6 +66,7 @@
     import Cookies from 'js-cookie';
 
     export default {
+
         name: 'check_product'
         ,
         data () {
@@ -79,8 +80,8 @@
                 defaultRules: {},
                 data2: [],
                 data3: [{}],
-                flag: 1,
-                check_list: []
+                check_list: [],
+
             };
         },
         created () {
@@ -88,9 +89,7 @@
             this.product_getDetail();
         },
         methods: {
-            out(){
 
-            },
             changepage (index) {
                 this.page.pageIndex = index;
                 this.product_productOutput_list();
@@ -146,8 +145,6 @@
                         }else{
                             this.$Message.info(res.data.msg)
                         }
-
-
                     } else {
                         this.$Message.info(res.data.msg+",没有数据");
                         let a=setTimeout(()=>{
@@ -155,9 +152,7 @@
                             clearTimeout(a)
                         },1700)
                     }
-
                 });
-
             },
 
             //查询
