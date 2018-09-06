@@ -3,7 +3,7 @@
         <Row>
             <Col class="Col_product_new">
 
-            <Tree :data="data3" :load-data="loadData" class="menu_product_list"></Tree>
+            <Tree :data="data3" :load-data="loadData" class="menu_product_list" @on-select-change="selectChange" ></Tree>
             </Col>
             <div class="new_product_fir">
                 <p class="new_text">新建</p>
@@ -73,6 +73,7 @@
         },
         methods: {
             loadData (item, callback) {
+                console.log('123123===========', item, callback)
                 if (item.type === 1) {
                     this.$axios({
                         method: 'post',
@@ -147,6 +148,9 @@
 
 
             },
+            selectChange(selectedList) {
+                console.log('==============================',selectedList)
+            }, 
             init () {
                 //类型
                 this.$axios({
