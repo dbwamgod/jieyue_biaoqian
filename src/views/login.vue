@@ -98,8 +98,11 @@
                                     name: 'home_index'
                                 });
                             }
-                        }, (err) => {
-                            this.$Message.info("你输入的用户密码不匹配");
+
+                        },(err)=>{
+                            console.log('失败',err)
+                            this.$Message.error('登录失败！帐号或密码错误');
+
                         });
                     } else {
                         this.$Message.info('请输入用户和密码');
