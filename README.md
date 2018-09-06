@@ -8,7 +8,7 @@
 - 动态路由
 - 重构权限控制体系
 - 使用最新版iView以及iView-editor
-- 加入大数据量表格[vue-bigdata-table](https://github.com/lison16/vue-bigdata-table)组件，几十万数据流畅渲染
+<!-- - 加入大数据量表格[vue-bigdata-table](https://github.com/lison16/vue-bigdata-table)组件，几十万数据流畅渲染 -->
 - ......
 
 ## Install
@@ -108,4 +108,5 @@ npm run build
         │   └── text-editor  富文本编辑器
         ├── own-space  个人中心
         └── tables  综合表格
+        
 ```

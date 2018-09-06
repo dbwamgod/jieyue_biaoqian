@@ -75,6 +75,9 @@ export default {
     updateLabelCategory() {// 一级分类修改
         return _baseUrlB + '/galaxy-label-admin/label/category/updateLabelCategory';
     },
+    removeLabelCategoryByIds() {// 一级分类删除
+        return _baseUrlB + '/galaxy-label-admin/label/category/removeLabelCategoryByIds';
+    },
     queryLabelCategorysT() {// 二级分类列表
         return _baseUrlB + '/galaxy-label-admin/label/secondaryCategory/queryLabelCategorys';
     },
