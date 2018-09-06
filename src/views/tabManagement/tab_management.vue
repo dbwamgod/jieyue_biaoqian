@@ -37,7 +37,7 @@
             </FormItem>
             <FormItem prop="classification" label="分类：" label-position="right" :label-width="100">
                         <Select v-model="categoryDetails.classification" style="width:300px" >
-                            <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{ item.categoryName}}</Option>
+                            <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{item.parentName +'-'+ item.categoryName}}</Option>
                         </Select>
             </FormItem>
             <FormItem prop="processing" label="重复加工：" label-position="right" :label-width="100">
@@ -301,7 +301,8 @@ export default {
     },
     filterClassification(id) {
       let aa = this.categoryList.filter(r => r.id === id)[0];
-      return aa ? aa.categoryName : "无类型";
+      console.log(aa)
+      return aa ?aa.parentName +'-'+ aa.categoryName : "无类型";
     },
     filterWordType(id) {
       let aa = this.queryLabelDataTypesList.filter(r => r.id === id)[0];
