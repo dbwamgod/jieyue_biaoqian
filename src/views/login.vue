@@ -64,47 +64,45 @@
                 this.$refs.loginForm.validate(valid => {
                     if (valid) {//登陆接口
                         let fd = new FormData();
-                        fd.append('password', this.form.password)
-                        fd.append('username', this.form.userName)
-                        fd.append('client_id', 'browser')
-                        fd.append('client_secret',"abc")
-                        fd.append('grant_type', "password")
-
+                        fd.append('password', this.form.password);
+                        fd.append('username', this.form.userName);
+                        fd.append('client_id', 'browser');
+                        fd.append('client_secret', 'abc');
+                        fd.append('grant_type', 'password');
                         this.$axios({
                             method: 'post',
                             url: api.login(),
-                            data:fd,
+                            data: fd,
                             headers: {
                                 'content-Type': 'application/x-www-form-urlencoded',
                             },
                         }).then(res => {
-                            // console.log('123123123123123123123',res)
                             if (res.status === 200) {
-                                 Cookies.set('user', this.form.userName);
-                                 Cookies.set('password', this.form.password);
-                                 Cookies.set('access', 1);
-                                 Cookies.set('token', res.data.access_token);
+                                Cookies.set('user', this.form.userName);
+                                Cookies.set('password', this.form.password);
+                                Cookies.set('access', 1);
+                                Cookies.set('token', res.data.access_token);
                                 this.$store.commit('addOpenSubmenu', '2-1');
                                 this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
                                 this.$axios({
-                                    method:'get',
-                                    url:api.userId(),
+                                    method: 'get',
+                                    url: api.userId(),
                                     headers: {
                                         'content-Type': 'application/x-www-form-urlencoded',
                                     },
-                                }).then(res=>{
+                                }).then(res => {
                                     console.log(res.data.principal.id);
-                                    Cookies.set("userId",res.data.principal.id)
-                                })
+                                    Cookies.set('userId', res.data.principal.id);
+                                });
                                 this.$router.push({
                                     name: 'home_index'
                                 });
-                            } else {
-                                this.$Message.error(res.data.msg);
                             }
-                        },(err)=>{
-                            console.log('失败',err)
+                        }, (err) => {
+                            this.$Message.info("你输入的用户密码不匹配");
                         });
+                    } else {
+                        this.$Message.info('请输入用户和密码');
                     }
                 });
             }

@@ -7,21 +7,21 @@
             <Col span="3" style='text-align:right;margin-right:5px;'>
             <Button type="primary" @click="newCreate" style="    position: absolute;top: 0px;right: 200px;">新建
             </Button>
-            <Input v-model="labelname" icon="ios-search" search placeholder="请搜索..." style=" width:170px;" @on-change='searchChange'/>
+            <Input v-model="labelname" icon="ios-search" search placeholder="请搜索..." style=" width:170px;"
+                   @on-change='searchChange'/>
             </Col>
         </Row>
         <Table border :columns="columns7" :data="data6"></Table>
-        <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" class="paging" @on-change="changepage"/>
+        <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" class="paging"
+              @on-change="changepage"/>
 
     </div>
 </template>
 
 <style scoped>
     .paging {
-        width: 215px;
-        height: 60px;
-        line-height: 60px;
-        margin: 0 auto;
+        float: right;
+        margin: 10px 20px 0 0;
     }
 </style>
 <script>
@@ -32,7 +32,7 @@
     export default {
         data () {
             return {
-                labelname:'',
+                labelname: '',
                 dataCount: 0,
                 page: {
                     pageIndex: 1,
@@ -54,7 +54,7 @@
                     },
                     {
                         title: '时间',
-                        key: 'createTime'
+                        key: 'modifyTime'
                     },
                     {
                         title: '操作',
@@ -75,8 +75,8 @@
                                         click: () => {
                                             this.$router.push({
                                                 name: 'check_product',
-                                                query:{
-                                                    id:this.data6[params.index].id
+                                                query: {
+                                                    id: this.data6[params.index].id
                                                 }
                                             });
                                         }
@@ -118,11 +118,11 @@
             this.init();
         },
         methods: {
-            searchChange(){
-                this.init()
+            searchChange () {
+                this.init();
             },
             newCreate () {
-                this.$router.push({name:'new_product'})
+                this.$router.push({name: 'new_product'});
             },
             changepage (index) {
                 this.page.pageIndex = index;
@@ -130,52 +130,54 @@
             },
             edit (index) {
                 this.$router.push({
-                    name:"edit_product",
-                    query:{
-                        data6:JSON.stringify(index)
+                    name: 'edit_product',
+                    query: {
+                        data6: JSON.stringify(index)
                     }
-                })
+                });
             },
             init () {
                 this.$axios({
                     method: 'post',
                     url: api.product_list(),
                     data: {
-                        form:{
-                          labelName:this.labelname
+                        form: {
+                            labelName: this.labelname
                         },
-                        pageIndex: this.page.pageIndex,
+                        desc:true,
+                        currentPage: this.page.pageIndex,
                         pageSize: this.page.pageSize
-                    },
-                }).then(res => {
-                if(res.data.code==200){
-
-                    if(res.data.data==null){
-                        this.$axios({
-                            method:'post',
-                            url:api.product_list(),
-                            data:{
-                                form:{
-                                    labelName:this.labelname
-                                },
-                                pageIndex:res.data.page.totalPages,
-                                pageSize:res.data.page.pageSize
-                            }
-                        }).then(res=>{
-                            if(res.data.code==200){
-                                console.log(res.data.data);
-                                this.data6=res.data.data
-                                this.dataCount=res.data.page.totalRecords;
-                            }
-                        })
-                    }else{
-                        this.data6 = res.data.data;
-                        this.dataCount = res.data.page.totalRecords;
                     }
+                }).then(res => {
+                    if (res.data.code == 200) {
 
-                }else {
-                    this.$Message.info(res.data.msg);
-                }
+                        if (res.data.data == null) {
+                            this.$axios({
+                                method: 'post',
+                                url: api.product_list(),
+                                data: {
+                                    form: {
+                                        labelName: this.labelname
+                                    },
+                                    desc:true,
+                                    currentPage: res.data.page.totalPages,
+                                    pageSize: res.data.page.pageSize
+                                }
+                            }).then(res => {
+                                if (res.data.code == 200) {
+                                    console.log(res.data.data);
+                                    this.data6 = res.data.data;
+                                    this.dataCount = res.data.page.totalRecords;
+                                }
+                            });
+                        } else {
+                            this.data6 = res.data.data;
+                            this.dataCount = res.data.page.totalRecords;
+                        }
+
+                    } else {
+                        this.$Message.info(res.data.msg);
+                    }
                 });
             },
             product_delete (index) {

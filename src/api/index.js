@@ -1,15 +1,13 @@
 import Cookies from "js-cookie";
-
+//标签
 const _baseUrlA='http://172.18.101.118:10099/galaxy-label-admin/label';
+//产品
 const _baseUrlC = 'http://172.18.101.118:10099/galaxy-label-api';
-const _baseUrlB = 'http://172.18.101.118:10099';
 
 export default {
-
     // 登录
     login() {
-        return _baseUrlB + '/user-oauth2/oauth/token';
-        
+        return 'http://172.18.101.118:10099/user-oauth2/oauth/token';
     },
     //获取userID
     userId() {
@@ -45,7 +43,6 @@ export default {
     product_getDetail(id) {
         return _baseUrlC+'/galaxy/api/product/detail/'+id;
     },
-
     /*产品类别管理*/
     //获取类别列表
     product_getDetail_list() {
@@ -67,49 +64,49 @@ export default {
     },
     /*标签管理*/
     queryLabelCategorys() {// 一级分类标签列表
-        return _baseUrlB + '/galaxy-label-admin/label/category/queryLabelCategorys';
+        return _baseUrlA + '/category/queryLabelCategorys';
     },
     saveLabelCategory() {// 一级分类新建
-        return _baseUrlB + '/galaxy-label-admin/label/category/saveLabelCategory';
+        return _baseUrlA + '/category/saveLabelCategory';
     },
     updateLabelCategory() {// 一级分类修改
-        return _baseUrlB + '/galaxy-label-admin/label/category/updateLabelCategory';
+        return _baseUrlA + '/category/updateLabelCategory';
     },
     removeLabelCategoryByIds() {// 一级分类删除
-        return _baseUrlB + '/galaxy-label-admin/label/category/removeLabelCategoryByIds';
+        return _baseUrlA + '/category/removeLabelCategoryByIds';
     },
     queryLabelCategorysT() {// 二级分类列表
-        return _baseUrlB + '/galaxy-label-admin/label/secondaryCategory/queryLabelCategorys';
+        return _baseUrlA + '/secondaryCategory/queryLabelCategorys';
     },
     removeLabelCategoryByIdsT() {// 二级分类删除
-        return _baseUrlB + '/galaxy-label-admin/label/secondaryCategory/removeLabelCategoryByIds';
+        return _baseUrlA + '/secondaryCategory/removeLabelCategoryByIds';
     },
     saveLabelCategoryT() {// 二级分类新建
-        return _baseUrlB + '/galaxy-label-admin/label/secondaryCategory/saveLabelCategory';
+        return _baseUrlA + '/secondaryCategory/saveLabelCategory';
     },
     updateLabelCategoryT() {// 二级分类修改
-        return _baseUrlB + '/galaxy-label-admin/label/secondaryCategory/updateLabelCategory';
+        return _baseUrlA + '/secondaryCategory/updateLabelCategory';
     },
     queryLabels() {// 标签列表
-        return _baseUrlB + '/galaxy-label-admin/label/manage/queryLabels';
+        return _baseUrlA + '/manage/queryLabels';
     },
     queryLabelDataTypes() {// 查询标签数据类型
-        return _baseUrlB + '/galaxy-label-admin/label/labelDataType/queryLabelDataTypes';
+        return _baseUrlA + '/labelDataType/queryLabelDataTypes';
     },
     saveLabel() {// 保存标签
-        return _baseUrlB + '/galaxy-label-admin/label/manage/saveLabel';
+        return _baseUrlA + '/manage/saveLabel';
     },
     removeLabelByIds() {// 删除标签
-        return _baseUrlB + '/galaxy-label-admin/label/manage/removeLabelByIds';
+        return _baseUrlA + '/manage/removeLabelByIds';
     },
     updateLabelConfigById() {// 修改标签
-        return _baseUrlB + '/galaxy-label-admin/label/manage/updateLabelConfigById';
+        return _baseUrlA + '/manage/updateLabelConfigById';
     },
     changeLabelAvailable() {//启用停用
-        return _baseUrlB + '/galaxy-label-admin/label/manage/changeLabelAvailable';
+        return _baseUrlA + '/manage/changeLabelAvailable';
     },
     queryLabelById(id) {//获取规则
-        return _baseUrlB + '/galaxy-label-admin/label/manage/queryLabelById/' + id;
+        return _baseUrlA + '/manage/queryLabelById/' + id;
     },
 
 } 

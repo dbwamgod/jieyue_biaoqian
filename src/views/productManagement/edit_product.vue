@@ -2,14 +2,14 @@
     <div ref="container_box" id="container_box">
         <Row style="position: fixed;width: 10%;">
             <Col class="Col_product_new">
-            <Tree :data="data3" :load-data="loadData" class="menu_product_list"></Tree>
+            <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData"></Tree>
             </Col>
         </Row>
         <div style="margin-left: 100px">
             <Row>
                 <Col offset="1">
                 <div class="new_product_fir">
-                    <p class="new_text" >新建</p>
+                    <p class="new_text">新建</p>
                     <Form ref="formValidate" :model="formValidate"
                           style="flex: 5;padding-top: 10px;    padding-left: 96px;">
                         <FormItem label="产品名称" prop="product_id" style="float: left;width: 360px;">
@@ -17,7 +17,7 @@
                                    style="width: 230px;"></Input>
                         </FormItem>
                         <FormItem label="产品类别" prop="product_type" style="float: left;width: 270px;">
-                            <Select v-model="formValidate_list.id" placeholder="请选择产品类型" style="width: 180px;">
+                            <Select :model="this.find_id.categoryName"  placeholder="请选择产品类型" style="width: 180px;">
                                 <Option v-for="(item,index) in formValidate_list" :key="index"
                                         :value="item.id?item.id:''">
                                     {{item.categoryName?item.categoryName:''}}
@@ -32,7 +32,7 @@
                 <Col span="3" offset="1">
                 <span class="rules_text">新建规则</span>
                 </Col>
-                <Col span="2" >
+                <Col span="2">
                 <Form style="display: inline-block; ">
                     <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
                            placeholder="Enter something..." style="width: 279px;"></Input>
@@ -45,9 +45,10 @@
                 <Col span="3" offset="1">
                 <p style="font-size: 23px;">查询输出</p>
                 </Col>
-                <Col span="2" >
+                <Col span="2">
                 <div class="container_label" ref="container_label">
-                    <Tag v-for="(item,index) in title" :key="index" :name="item.labelName?item.labelName:item.title" closable
+                    <Tag v-for="(item,index) in title" :key="index" :name="item.labelName?item.labelName:item.title"
+                         closable
                          @on-close="handleClose2">{{item.labelName?item.labelName:item.title}}
                     </Tag>
                 </div>
@@ -56,7 +57,7 @@
 
             <Row style="margin-top: 40px">
                 <Col span="3" offset="12">
-                <Button type="primary" @click="submit" >保存</Button>
+                <Button type="primary" @click="submit">保存</Button>
                 </Col>
             </Row>
 
@@ -77,6 +78,8 @@
                 ruleValidate: {},
                 theme2: 'light',
                 formValidate: {
+                    productName:'',
+                    categoryName:this.$route.query.data6.categoryName,
                 },
                 data3: [{}],
                 flag: 1,
@@ -84,21 +87,21 @@
                 default_pro: this.$route.query.data6,
                 title: [],
                 out: [],
-                style_active:{
-                    color:"#495060",
-                    cursor:'pointer'
+                style_active: {
+                    color: '#495060',
+                    cursor: 'pointer'
                 },
-                formValidate_list:{
-                },
-                find_id:''
+                formValidate_list: {},
+                find_id: {},
+                oks:'类别一'
             };
         },
         created () {
-            this.formValidate_list.id=JSON.parse(this.$route.query.data6).categoryName
-            this.init();
-            this.find_id=JSON.parse(this.$route.query.data6).id
+            this.find_id = JSON.parse(this.$route.query.data6);
             this.detail_type_list();
+            this.init();
             this.product_First_list();
+
         },
         mounted () {
 
@@ -109,10 +112,16 @@
             detail_type_list () {
                 this.$axios({
                     method: 'post',
-                    url: api.product_productOutput_find(this.find_id),
+                    url: api.product_productOutput_find(this.find_id.id),
                 }).then(res => {
-                    this.title = res.data.data.outputParamList
-                    this.formValidate = res.data.data
+                    if(res.data.code==200){
+                        this.title = res.data.data.outputParamList;
+                        this.formValidate = res.data.data;
+                    }else{
+                        this.$Message.info(res.data.msg)
+                    }
+
+
                 });
             },
             loadData (item, callback) {
@@ -175,10 +184,10 @@
                                         render: (h, params) => {
 
                                             return h('span', {
-                                                style:this.style_active,
+                                                style: this.style_active,
                                                 on: {
                                                     click: (ev) => {
-                                                        ev.path[0].style.color='#9ea7b4'
+                                                        ev.path[0].style.color = '#9ea7b4';
 
                                                         if (this.title.filter(r => r.id == params.data.id)[0]) {
                                                         } else {
@@ -213,7 +222,17 @@
                     method: 'get',
                     url: api.product_getDetail_name_list(),
                 }).then(res => {
-                    this.formValidate_list =res.data.data
+                    this.formValidate_list = res.data.data;
+
+                    let a = this.formValidate.categoryId;
+                if(a==1){
+                    this.oks='类别一'
+                }else if(a==3){
+                    this.oks='类别二'
+                }else if(a==5){
+                    this.oks='类别三'
+
+                }
 
                 });
 
@@ -252,7 +271,6 @@
                 this.title.map((item, index) => {
                     return this.out.push(item.labelId);
                 });
-                console.log(this.$route.query.data6,'======');
                 this.$axios({
                     method: 'post',
                     url: api.product_to_update(),
@@ -265,11 +283,11 @@
                     }
                 }).then(res => {
                     if (res.data.code == 200) {
-                        this.out=[]
+                        this.out = [];
                         this.$router.back(-1);
 
                     } else {
-                        this.out=[]
+                        this.out = [];
                         this.$Message.info(res.data.msg);
                     }
                 });
