@@ -11,6 +11,7 @@ const user = {
             Cookies.remove('access');
             Cookies.remove('azkaban');
             Cookies.remove('hue');
+            Cookies.remove('pages');
             // 恢复默认样式
             let themeLink = document.querySelector('link[name="theme"]');
             themeLink.setAttribute('href', '');
