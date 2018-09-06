@@ -77,10 +77,9 @@
                                             this.$router.push({
                                                 name: 'check_product',
                                                 query: {
-                                                    id: this.data6[params.index].id
+                                                    id: JSON.stringify(this.data6[params.index].id)
                                                 }
                                             });
-                                            this.reload()
                                         }
                                     }
                                 }, '查看'),

@@ -1,8 +1,8 @@
 <template>
     <div ref="container_box" id="container_box">
-        <Row style="position: fixed;width: 10%;">
+        <Row style="position: fixed;width: 6%;">
             <Col class="Col_product_new">
-            <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData"></Tree>
+            <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData" ></Tree>
             </Col>
         </Row>
         <div style="margin-left: 100px">
@@ -17,9 +17,9 @@
                                    style="width: 230px;"></Input>
                         </FormItem>
                         <FormItem label="产品类别" prop="product_type" style="float: left;width: 270px;">
-                            <Select :model="this.find_id.categoryName"  placeholder="请选择产品类型" style="width: 180px;">
+                            <Select :model="formValidate_list.categoryName?formValidate_list.categoryName:''" :placeholder="descrition?descrition:'请输入产品类别'" style="    color: #495060;width: 180px;" >
                                 <Option v-for="(item,index) in formValidate_list" :key="index"
-                                        :value="item.id?item.id:''">
+                                        :value="item.categoryName?item.categoryName:''">
                                     {{item.categoryName?item.categoryName:''}}
                                 </Option>
                             </Select>
@@ -75,16 +75,17 @@
         name: 'new_product',
         data () {
             return {
+                descrition:'',
                 ruleValidate: {},
                 theme2: 'light',
                 formValidate: {
-                    productName:'',
-                    categoryName:this.$route.query.data6.categoryName,
+                    productName: '',
+                    categoryName: JSON.parse(this.$route.query.data6).categoryName,
                 },
                 data3: [{}],
                 flag: 1,
                 count: [0, 1, 2],
-                default_pro: this.$route.query.data6,
+                default_pro: '',
                 title: [],
                 out: [],
                 style_active: {
@@ -93,11 +94,13 @@
                 },
                 formValidate_list: {},
                 find_id: {},
-                oks:'类别一'
             };
         },
         created () {
             this.find_id = JSON.parse(this.$route.query.data6);
+
+            this.descrition= this.find_id.categoryName;
+
             this.detail_type_list();
             this.init();
             this.product_First_list();
@@ -108,20 +111,17 @@
         },
         methods: {
             //编辑的当前数据
-
             detail_type_list () {
                 this.$axios({
                     method: 'post',
                     url: api.product_productOutput_find(this.find_id.id),
                 }).then(res => {
-                    if(res.data.code==200){
+                    if (res.data.code == 200) {
                         this.title = res.data.data.outputParamList;
                         this.formValidate = res.data.data;
-                    }else{
-                        this.$Message.info(res.data.msg)
+                    } else {
+                        this.$Message.info(res.data.msg);
                     }
-
-
                 });
             },
             loadData (item, callback) {
@@ -223,17 +223,6 @@
                     url: api.product_getDetail_name_list(),
                 }).then(res => {
                     this.formValidate_list = res.data.data;
-
-                    let a = this.formValidate.categoryId;
-                if(a==1){
-                    this.oks='类别一'
-                }else if(a==3){
-                    this.oks='类别二'
-                }else if(a==5){
-                    this.oks='类别三'
-
-                }
-
                 });
 
             },
@@ -304,6 +293,10 @@
 <style scoped>
     .menu_product_list {
         margin-top: 50%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
     }
 
     .new_product_fir {

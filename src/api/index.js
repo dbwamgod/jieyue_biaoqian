@@ -7,11 +7,11 @@ const _baseUrlC = 'http://172.18.101.118:10099/galaxy-label-api';
 export default {
     // 登录
     login() {
-        return 'http://172.18.101.118:10099/user-oauth2/oauth/token';
+        return 'http://172.18.101.118:10099/platform-user-oauth2/oauth/token';
     },
     //获取userID
     userId() {
-        return 'http://172.18.101.118:10099/user-oauth2/user?'+"access_token="+Cookies.get('token');
+        return 'http://172.18.101.118:10099/platform-user-oauth2/user?'+"access_token="+Cookies.get('token');
     },
     //获取一级分类
     product_First_list() {
