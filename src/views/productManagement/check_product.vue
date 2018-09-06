@@ -29,7 +29,8 @@
             <Col span="4" offset="7">
             <div class="container_label_check" ref="container_label_check">
                 <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName"
-                     @on-close="handleClose2">{{ item.labelName }}
+                     @on-close="handleClose2" style="height: 40px;line-height: 40px; padding: 0 15px;
+">{{ item.labelName }}
                 </Tag>
             </div>
             </Col>
@@ -37,7 +38,7 @@
         <Row style="margin-top: 141px;">
             <Col span="4" offset="12">
             <Button type="primary" @click="checkInfo">查询</Button>
-            <!--<Button type="primary" @click="Out">导出</Button>-->
+            <Button type="primary" @click="comeout">导出</Button>
             </Col>
         </Row>
         <Row>
@@ -71,6 +72,7 @@
         ,
         data () {
             return {
+
                 dataCount: 0,
                 page: {
                     pageSize: 10,
@@ -89,7 +91,15 @@
             this.product_getDetail();
         },
         methods: {
+            comeout () {
+                if(this.check_list.length){
+                    window.open(api.product_out(encodeURIComponent(JSON.stringify({'queryParam': this.defaultRules.queryParam, 'outputVos': this.check_list, 'pageSize': 0, 'pageIndex': 0}))),"_blank")
+                    window.open(api.product_out(encodeURIComponent(JSON.stringify({'queryParam': this.defaultRules.queryParam, 'outputVos': this.check_list, 'pageSize': 0, 'pageIndex': 0}))),"_blank")
+                }else{
+                    this.$Message.info('请先点击查询')
+                }
 
+            },
             changepage (index) {
                 this.page.pageIndex = index;
                 this.product_productOutput_list();
@@ -105,7 +115,7 @@
                         'queryParam': this.defaultRules.queryParam,//"q=*%3A*&wt=json&indent=true&fl=id", encodeURIComponent(
                         'outputVos': this.check_list,//{"labelCode":"name"},{"labelCode":"tel"},{"labelCode":"addr"},{"labelCode":"phone"},{"labelCode":"age"},{"labelCode":"empt"}
                         'pageSize': this.page.pageSize,
-                        'pageIndex': this.page.pageIndex-1
+                        'pageIndex': this.page.pageIndex - 1
                     }
                     /*  {
                         outputVos: {
@@ -134,7 +144,7 @@
                     url: api.product_getDetail(this.$route.query.id),
                 }).then(res => {
                     if (res.data.code == 200) {
-                        if(res.data.data!==null){
+                        if (res.data.data !== null) {
                             this.defaultRules = res.data.data;
                             this.columns1 = this.defaultRules.labelNameVoList.map((item, index) => {
                                 return {
@@ -142,15 +152,15 @@
                                     key: item.labelCode
                                 };
                             });
-                        }else{
-                            this.$Message.info(res.data.msg)
+                        } else {
+                            this.$Message.info(res.data.msg);
                         }
                     } else {
-                        this.$Message.info(res.data.msg+",没有数据");
-                        let a=setTimeout(()=>{
-                            this.$router.back(-1)
-                            clearTimeout(a)
-                        },1700)
+                        this.$Message.info(res.data.msg + ',没有数据');
+                        let a = setTimeout(() => {
+                            this.$router.back(-1);
+                            clearTimeout(a);
+                        }, 1700);
                     }
                 });
             },
@@ -169,7 +179,7 @@
 
 <style scoped>
     .check_container {
-        padding: 40px 32px 0 170px;
+        padding: 40px 32px 0 125px;
     }
 
     .check_container_product {
