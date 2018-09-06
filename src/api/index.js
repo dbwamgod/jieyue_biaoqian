@@ -30,8 +30,8 @@ export default {
     },
 
     //编辑产品
-    product_toEdit() {
-        return _baseUrlC+'/galaxy/api/product/toEdit';
+    product_to_update() {
+        return _baseUrlC+'/galaxy/api/product/to_update';
     },
     //删除产品
     product_delete(id) {

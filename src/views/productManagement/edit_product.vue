@@ -1,46 +1,67 @@
 <template>
     <div ref="container_box" id="container_box">
-        <Row>
+        <Row style="position: fixed;width: 10%;">
             <Col class="Col_product_new">
-
             <Tree :data="data3" :load-data="loadData" class="menu_product_list"></Tree>
             </Col>
-            <div class="new_product_fir">
-                <p class="new_text" @click="tititi">新建</p>
-                <Form ref="formValidate" :model="formValidate"
-                      style="flex: 5;padding-top: 10px;    padding-left: 86px;">
-                    <FormItem label="产品名称" prop="product_id" style="float: left;width: 360px;">
-                        <Input v-model="default_pro.productName" placeholder="请输入产品名称" style="width: 230px;"></Input>
-                    </FormItem>
-                    <FormItem label="产品类别" prop="product_type" style="float: left;width: 270px;">
-                        <Select v-model="default_pro.categoryName" placeholder="请选择产品类型" style="width: 180px;">
-                            <Option v-for="(item,index) in formValidate" :key="index"
-                                    :value="item.categoryName?item.categoryName:default_pro.categoryName">
-                                {{item.categoryName}}
-                            </Option>
-                        </Select>
-                    </FormItem>
-                </Form>
-            </div>
-            <div class="rules_container">
-
+        </Row>
+        <div style="margin-left: 100px">
+            <Row>
+                <Col offset="1">
+                <div class="new_product_fir">
+                    <p class="new_text" >新建</p>
+                    <Form ref="formValidate" :model="formValidate"
+                          style="flex: 5;padding-top: 10px;    padding-left: 96px;">
+                        <FormItem label="产品名称" prop="product_id" style="float: left;width: 360px;">
+                            <Input v-model="formValidate.productName" placeholder="请输入产品名称"
+                                   style="width: 230px;"></Input>
+                        </FormItem>
+                        <FormItem label="产品类别" prop="product_type" style="float: left;width: 270px;">
+                            <Select v-model="formValidate_list.id" placeholder="请选择产品类型" style="width: 180px;">
+                                <Option v-for="(item,index) in formValidate_list" :key="index"
+                                        :value="item.id?item.id:''">
+                                    {{item.categoryName?item.categoryName:''}}
+                                </Option>
+                            </Select>
+                        </FormItem>
+                    </Form>
+                </div>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="3" offset="1">
                 <span class="rules_text">新建规则</span>
-                <Form style="position: absolute;top: 0;left: -255px; ">
-                    <Input v-model="default_pro.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
+                </Col>
+                <Col span="2" >
+                <Form style="display: inline-block; ">
+                    <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
                            placeholder="Enter something..." style="width: 279px;"></Input>
                 </Form>
-            </div>
-            <div>
-                <p style="position: absolute;top: 264px;left: 424px;font-size: 23px;">查询输出</p>
+                </Col>
+
+            </Row>
+
+            <Row style="margin-top: 40px">
+                <Col span="3" offset="1">
+                <p style="font-size: 23px;">查询输出</p>
+                </Col>
+                <Col span="2" >
                 <div class="container_label" ref="container_label">
-                    <Tag v-for="(item,index) in title" :key="index" :name="item.title" closable
-                         @on-close="handleClose2">{{ item.title
-                        }}
+                    <Tag v-for="(item,index) in title" :key="index" :name="item.labelName?item.labelName:item.title" closable
+                         @on-close="handleClose2">{{item.labelName?item.labelName:item.title}}
                     </Tag>
                 </div>
-            </div>
-            <Button type="primary" @click="submit" style="    position: absolute;left: 50%;top: 50%;">保存</Button>
-        </Row>
+                </Col>
+            </Row>
+
+            <Row style="margin-top: 40px">
+                <Col span="3" offset="12">
+                <Button type="primary" @click="submit" >保存</Button>
+                </Col>
+            </Row>
+
+
+        </div>
     </div>
 
 </template>
@@ -56,40 +77,43 @@
                 ruleValidate: {},
                 theme2: 'light',
                 formValidate: {
-                    queryParam: '',
-                    productName: '',
-                    categoryName: [],
                 },
                 data3: [{}],
                 flag: 1,
                 count: [0, 1, 2],
                 default_pro: this.$route.query.data6,
                 title: [],
-                out: []
+                out: [],
+                style_active:{
+                    color:"#495060",
+                    cursor:'pointer'
+                },
+                formValidate_list:{
+                },
+                find_id:''
             };
         },
         created () {
+            this.formValidate_list.id=JSON.parse(this.$route.query.data6).categoryName
             this.init();
-            this.default_pro = this.$route.query.data6;
+            this.find_id=JSON.parse(this.$route.query.data6).id
             this.detail_type_list();
             this.product_First_list();
-
         },
         mounted () {
 
         },
         methods: {
             //编辑的当前数据
+
             detail_type_list () {
                 this.$axios({
                     method: 'post',
-                    url: api.product_productOutput_find(this.$route.query.data6.id),
+                    url: api.product_productOutput_find(this.find_id),
                 }).then(res => {
-                    this.formValidate = Object.assign({}, res.data.data);
+                    this.title = res.data.data.outputParamList
+                    this.formValidate = res.data.data
                 });
-            },
-            tititi () {
-                console.log(this.default_pro);
             },
             loadData (item, callback) {
                 if (item.type === 1) {
@@ -105,7 +129,6 @@
                         }
                     }).then(res => {
                         if (res.data.code == 200) {
-                            this.flag = 2;
                             if (res.data.data.length !== 0) {
                                 const data = res.data.data.map((item, index) => {
                                     return {
@@ -118,6 +141,14 @@
                                 });
                                 callback(data);
                             } else {
+                                const data = res.data.data.map((item, index) => {
+                                    return {
+                                        title: item.categoryName || '',
+                                        id: item.parentId || '',
+                                        type: 2,
+                                    };
+                                });
+                                callback(data);
                                 this.$Message.info('没有数据');
                             }
                         }
@@ -135,22 +166,20 @@
                         }
                     }).then(res => {
                         if (res.data.code == 200) {
-
                             if (res.data.data.length !== 0) {
                                 const data = res.data.data.map((item, index) => {
                                     return {
                                         title: item.labelName,
                                         id: item.id,
-                                        // loading: false,
-                                        children: [],
                                         type: 3,
                                         render: (h, params) => {
 
                                             return h('span', {
+                                                style:this.style_active,
                                                 on: {
-                                                    click: () => {
+                                                    click: (ev) => {
+                                                        ev.path[0].style.color='#9ea7b4'
 
-                                                        // console.log(this.title.filter(r=> r.id==params.data.id)[0],params.data.id)
                                                         if (this.title.filter(r => r.id == params.data.id)[0]) {
                                                         } else {
                                                             this.title.push(params.data);
@@ -164,6 +193,14 @@
                                 });
                                 callback(data);
                             } else {
+                                const data = res.data.data.map((item, index) => {
+                                    return {
+                                        title: item.labelName || '',
+                                        id: item.id || '',
+                                        type: 3,
+                                    };
+                                });
+                                callback(data);
                                 this.$Message.info('没有数据');
                             }
                         }
@@ -176,7 +213,7 @@
                     method: 'get',
                     url: api.product_getDetail_name_list(),
                 }).then(res => {
-                    this.formValidate = Object.assign({}, res.data.data);
+                    this.formValidate_list =res.data.data
 
                 });
 
@@ -208,31 +245,31 @@
                 });
             },
 
-            handleAdd () {
-
-            },
             //保存
             submit () {
 
                 //保存的接口
                 this.title.map((item, index) => {
-                    return this.out.push(item.id);
+                    return this.out.push(item.labelId);
                 });
+                console.log(this.$route.query.data6,'======');
                 this.$axios({
                     method: 'post',
-                    url: api.product_add(),
+                    url: api.product_to_update(),
                     data: {
-                        productName: this.default_pro.productName,//产品名称
-                        queryParam: this.default_pro.queryParam,//查询参数(规则)
-                        categoryId: this.default_pro.id,//产品类别ID
+                        productName: this.formValidate.productName,//产品名称
+                        queryParam: this.formValidate.queryParam,//查询参数(规则)
+                        categoryId: this.formValidate_list.id,//产品类别ID
                         outputParamIdList: this.out,//输出参数id列表(数组)
                         userId: Cookies.get('userId'),//用户ID
                     }
                 }).then(res => {
                     if (res.data.code == 200) {
+                        this.out=[]
                         this.$router.back(-1);
 
                     } else {
+                        this.out=[]
                         this.$Message.info(res.data.msg);
                     }
                 });
@@ -247,15 +284,8 @@
 </script>
 
 <style scoped>
-    .Col_product_new {
-        width: 240px;
-        height: 883px;
-        float: left;
-        background: #eee;
-    }
-
     .menu_product_list {
-        margin-top: 128%;
+        margin-top: 50%;
     }
 
     .new_product_fir {
@@ -264,15 +294,11 @@
     }
 
     .new_text {
-        text-align: right;
         font-size: 23px;
-        flex: 1;
     }
 
     .container_label {
-        position: absolute;
-        top: 35%;
-        left: 33%;
+        margin-right: 30px;
         width: 479px;
         height: 115px;
         border: 1px solid #dddee1;
@@ -280,19 +306,11 @@
     }
 
     .rules_container {
-        position: absolute;
-        width: 400px;
-        top: 126px;
-        bottom: 0;
-        left: 350px;
-        right: 0;
         margin: 0 auto;
     }
 
     .rules_text {
-        position: absolute;
-        top: -15px;
         font-size: 23px;
-        left: -406px;
+
     }
 </style>

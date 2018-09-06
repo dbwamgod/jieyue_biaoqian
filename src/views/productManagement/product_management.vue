@@ -5,11 +5,9 @@
             <h2 style="margin: 6px 0 0 20px">产品管理</h2>
             </Col>
             <Col span="3" style='text-align:right;margin-right:5px;'>
-            <Button type="primary" @click="newCreate" style="    position: absolute;top: 0px;right: 220px;">新建
+            <Button type="primary" @click="newCreate" style="    position: absolute;top: 0px;right: 200px;">新建
             </Button>
-            <i-input>
-                <i-button slot="append" icon="ios-search"></i-button>
-            </i-input>
+            <Input v-model="labelname" icon="ios-search" search placeholder="请搜索..." style=" width:170px;" @on-change='searchChange'/>
             </Col>
         </Row>
         <Table border :columns="columns7" :data="data6"></Table>
@@ -20,7 +18,7 @@
 
 <style scoped>
     .paging {
-        width: 200px;
+        width: 215px;
         height: 60px;
         line-height: 60px;
         margin: 0 auto;
@@ -34,6 +32,7 @@
     export default {
         data () {
             return {
+                labelname:'',
                 dataCount: 0,
                 page: {
                     pageIndex: 1,
@@ -119,6 +118,9 @@
             this.init();
         },
         methods: {
+            searchChange(){
+                this.init()
+            },
             newCreate () {
                 this.$router.push({name:'new_product'})
             },
@@ -130,7 +132,7 @@
                 this.$router.push({
                     name:"edit_product",
                     query:{
-                        data6:index
+                        data6:JSON.stringify(index)
                     }
                 })
             },
@@ -139,12 +141,41 @@
                     method: 'post',
                     url: api.product_list(),
                     data: {
+                        form:{
+                          labelName:this.labelname
+                        },
                         pageIndex: this.page.pageIndex,
                         pageSize: this.page.pageSize
                     },
                 }).then(res => {
-                    this.data6 = res.data.data;
-                    this.dataCount = res.data.page.totalRecords;
+                if(res.data.code==200){
+
+                    if(res.data.data==null){
+                        this.$axios({
+                            method:'post',
+                            url:api.product_list(),
+                            data:{
+                                form:{
+                                    labelName:this.labelname
+                                },
+                                pageIndex:res.data.page.totalPages,
+                                pageSize:res.data.page.pageSize
+                            }
+                        }).then(res=>{
+                            if(res.data.code==200){
+                                console.log(res.data.data);
+                                this.data6=res.data.data
+                                this.dataCount=res.data.page.totalRecords;
+                            }
+                        })
+                    }else{
+                        this.data6 = res.data.data;
+                        this.dataCount = res.data.page.totalRecords;
+                    }
+
+                }else {
+                    this.$Message.info(res.data.msg);
+                }
                 });
             },
             product_delete (index) {

@@ -28,7 +28,7 @@
 
             <Col span="4" offset="7">
             <div class="container_label_check" ref="container_label_check">
-                <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName" closable
+                <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName"
                      @on-close="handleClose2">{{ item.labelName }}
                 </Tag>
             </div>
