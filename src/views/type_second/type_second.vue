@@ -36,6 +36,14 @@
         </div>
          	
     </Modal>
+     <Modal
+        v-model="modal2"
+        title="删除分类"
+        @on-ok="okDelete"
+        :closable="false"
+        @on-cancel="cancel2">
+        <p>确定要删除此分类么？</p>
+    </Modal>
     </div>
 </template>
 <style scoped>
@@ -57,6 +65,8 @@ export default {
         pageSize: 10
       },
       modal1: false,
+      modal2:false,
+      paramsRowId:'',
       ruleInline: {
         content: [
           { required: true, message: "请输入分类名称", trigger: "blur" }
@@ -112,7 +122,9 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.remove(params.index, params.row.id);
+                      // this.remove(params.index, params.row.id);
+                      this.modal2=true;
+                     this.paramsRowId=params.row.id;
                     }
                   }
                 },
@@ -282,6 +294,12 @@ export default {
       this.$refs.formInline.resetFields();
       this.categoryDetails.parentId = '',
        this.categoryDetails.content = ''
+    },
+    okDelete() {
+       this.remove('', this.paramsRowId);
+    },
+    cancel2() {
+      this.modal2 = false;
     }
   }
 };

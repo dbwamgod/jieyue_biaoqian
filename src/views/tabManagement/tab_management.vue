@@ -65,6 +65,14 @@
         </div>
          	
     </Modal>
+     <Modal
+        v-model="modal2"
+        title="删除分类"
+        @on-ok="okDelete"
+        :closable="false"
+        @on-cancel="cancel2">
+        <p>确定要删除此分类么？</p>
+    </Modal>
     </div>
 </template>
 <style scoped>
@@ -86,6 +94,7 @@ export default {
         pageSize: 10
       },
       modal1: false,
+      modal2:false,
       labelname: "",
       queryLabelDataTypesList: [],
       categoryList: [],
@@ -157,7 +166,9 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.remove(params.row.id, params.index);
+                      // this.remove(params.row.id, params.index);
+                     this.modal2=true;
+                     this.paramsRowId=params.row.id;
                     }
                   }
                 },
@@ -474,6 +485,12 @@ export default {
         processingType: 0,
         precision: ""
       };
+    },
+     okDelete() {
+       this.remove('', this.paramsRowId);
+    },
+    cancel2() {
+      this.modal2 = false;
     }
   }
 };
