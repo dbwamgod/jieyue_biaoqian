@@ -255,6 +255,10 @@ export default {
           if (r.data.code == 200) {
             this.data6 = r.data.data;
             this.dataCount = r.data.page.totalRecords;
+            if(r.data.data.length==0 || r.data.data==[]){
+              this.page.pageIndex= this.page.pageIndex!=0?this.page.pageIndex-1:this.page.pageIndex;
+              this.init(); 
+            }
           } else {
             this.$Message.warning("网络请求错误！请刷新");
           }
@@ -487,7 +491,7 @@ export default {
       };
     },
      okDelete() {
-       this.remove('', this.paramsRowId);
+       this.remove(this.paramsRowId, '');
     },
     cancel2() {
       this.modal2 = false;
