@@ -65,6 +65,14 @@
         </div>
          	
     </Modal>
+     <Modal
+        v-model="modal2"
+        title="删除分类"
+        @on-ok="okDelete"
+        :closable="false"
+        @on-cancel="cancel2">
+        <p>确定要删除此分类么？</p>
+    </Modal>
     </div>
 </template>
 <style scoped>
@@ -86,6 +94,7 @@ export default {
         pageSize: 10
       },
       modal1: false,
+      modal2: false,
       labelname: "",
       queryLabelDataTypesList: [],
       categoryList: [],
@@ -157,7 +166,9 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.remove(params.row.id, params.index);
+                      // this.remove(params.row.id, params.index);
+                      this.modal2 = true;
+                      this.paramsRowId = params.row.id;
                     }
                   }
                 },
@@ -205,7 +216,10 @@ export default {
         ],
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         processingRules: [
-          { required: true, message: "请输入规则", trigger: "blur" }
+          { required: true, message: "请输入规则", trigger: "blur" },
+        ],
+        precision: [
+          { pattern: /^[0-9]{0,5}$/, message: "请输入数字最多六位", trigger: "blur" },
         ]
       },
       categoryDetails: {
@@ -218,7 +232,7 @@ export default {
         precision: "",
         processingRules: "",
         id: "",
-        available:''
+        available: ""
       }
     };
   },
@@ -244,6 +258,13 @@ export default {
           if (r.data.code == 200) {
             this.data6 = r.data.data;
             this.dataCount = r.data.page.totalRecords;
+            if (r.data.data.length == 0 || r.data.data == []) {
+              this.page.pageIndex =
+                this.page.pageIndex != 0
+                  ? this.page.pageIndex - 1
+                  : this.page.pageIndex;
+              this.init();
+            }
           } else {
             this.$Message.warning("网络请求错误！请刷新");
           }
@@ -308,25 +329,24 @@ export default {
     },
 
     show(data) {
+          let info = data;
       this.isEdit = "编辑";
       this.modal1 = true;
-      let info=JSON.parse(JSON.stringify(data))
-      this.categoryDetails.code = info.labelCode;
-      this.categoryDetails.name = info.labelName;
-      this.categoryDetails.labelType = info.dataType;
-      this.categoryDetails.classification = info.categoryId;
-      this.categoryDetails.processing = info.oneTime;
-      this.categoryDetails.processingType = info.processType;
-      this.categoryDetails.precision = info.labelCode;
-      this.categoryDetails.id = info.id;
-      this.categoryDetails.available = info.available;
       this.$axios({
         method: "get",
-        url: api.queryLabelById(info.id),
+        url: api.queryLabelById(info.id)
       }).then(res => {
         if (res.data.code == 200) {
-          console.log('编辑',res.data.data)
-          this.categoryDetails.processingRules = res.data.data.rule
+          this.categoryDetails.processingRules = res.data.data.rule;
+          this.categoryDetails.code = info.labelCode;
+          this.categoryDetails.name = info.labelName;
+          this.categoryDetails.labelType = info.dataType;
+          this.categoryDetails.classification = info.categoryId;
+          this.categoryDetails.processing = info.oneTime;
+          this.categoryDetails.processingType = info.processType;
+          this.categoryDetails.precision = info.accuracy;
+          this.categoryDetails.id = info.id;
+          this.categoryDetails.available = info.available;
         } else {
           this.$Message.error({
             content: res.data.msg,
@@ -334,7 +354,7 @@ export default {
           });
         }
       });
-     },
+    },
     remove(id, index) {
       this.$axios({
         method: "post",
@@ -387,19 +407,23 @@ export default {
     ok() {
       this.$refs.formInline.validate(valid => {
         if (valid) {
+          this.categoryDetails.precision =
+            this.categoryDetails.labelType == 3
+              ? this.categoryDetails.precision
+              : "";
           if (this.isEdit == "新建") {
             this.$axios({
               method: "post",
               url: api.saveLabel(),
               data: {
-                accuracy: this.categoryDetails.precision,
+                accuracy: Number(this.categoryDetails.precision),
                 categoryId: this.categoryDetails.classification,
                 dataType: this.categoryDetails.labelType,
-                labelCode: this.categoryDetails.code,
-                labelName: this.categoryDetails.name,
+                labelCode: this.categoryDetails.code.replace(/(^\s+)|(\s+$)|\s+/g,''),
+                labelName: this.categoryDetails.name.replace(/(^\s+)|(\s+$)|\s+/g,''),
                 processType: this.categoryDetails.processType,
                 rule: this.categoryDetails.processingRules,
-                oneTime: this.categoryDetails.processing,
+                oneTime: this.categoryDetails.processing
               }
             }).then(
               res => {
@@ -422,7 +446,7 @@ export default {
               }
             );
           } else {
-            console.log(this.isEdit,'编辑');
+            console.log(this.isEdit, "编辑");
             this.$axios({
               method: "post",
               url: api.updateLabelConfigById(),
@@ -435,7 +459,7 @@ export default {
                 processType: this.categoryDetails.processType,
                 rule: this.categoryDetails.processingRules,
                 oneTime: this.categoryDetails.processing,
-                id: this.categoryDetails.id,
+                id: this.categoryDetails.id
                 // available: this.categoryDetails.available,
               }
             }).then(
@@ -474,6 +498,12 @@ export default {
         processingType: 0,
         precision: ""
       };
+    },
+    okDelete() {
+      this.remove(this.paramsRowId, "");
+    },
+    cancel2() {
+      this.modal2 = false;
     }
   }
 };
