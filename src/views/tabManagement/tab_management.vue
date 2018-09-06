@@ -337,9 +337,7 @@ export default {
         url: api.queryLabelById(info.id)
       }).then(res => {
         if (res.data.code == 200) {
-          console.log("编辑", res.data.data);
           this.categoryDetails.processingRules = res.data.data.rule;
-          console.log(this.categoryDetails.processingRules)
           this.categoryDetails.code = info.labelCode;
           this.categoryDetails.name = info.labelName;
           this.categoryDetails.labelType = info.dataType;
@@ -421,8 +419,8 @@ export default {
                 accuracy: Number(this.categoryDetails.precision),
                 categoryId: this.categoryDetails.classification,
                 dataType: this.categoryDetails.labelType,
-                labelCode: this.categoryDetails.code,
-                labelName: this.categoryDetails.name,
+                labelCode: this.categoryDetails.code.replace(/(^\s+)|(\s+$)|\s+/g,''),
+                labelName: this.categoryDetails.name.replace(/(^\s+)|(\s+$)|\s+/g,''),
                 processType: this.categoryDetails.processType,
                 rule: this.categoryDetails.processingRules,
                 oneTime: this.categoryDetails.processing
