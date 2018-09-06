@@ -22,6 +22,10 @@ export default {
         return _baseUrlA+'/secondaryCategory/queryLabelCategorys';
     },
     /**/
+    //导出
+    product_out(json) {
+        return _baseUrlC+'/galaxy/api/productOutput/excel/'+ json;
+    },
     //获取产品列表
     product_list() {
         return _baseUrlC+'/galaxy/api/product/list';

@@ -143,9 +143,7 @@
                     method: 'post',
                     url: api.product_list(),
                     data: {
-                        form: {
-                            labelName: this.labelname
-                        },
+                        keyword: this.labelname,
                         desc:true,
                         currentPage: this.page.pageIndex,
                         pageSize: this.page.pageSize
@@ -158,9 +156,7 @@
                                 method: 'post',
                                 url: api.product_list(),
                                 data: {
-                                    form: {
-                                        labelName: this.labelname
-                                    },
+                                    keyword: this.labelname,
                                     desc:true,
                                     currentPage: res.data.page.totalPages,
                                     pageSize: res.data.page.pageSize
@@ -170,6 +166,8 @@
                                     console.log(res.data.data);
                                     this.data6 = res.data.data;
                                     this.dataCount = res.data.page.totalRecords;
+                                }else{
+                                    this.data6=[]
                                 }
                             });
                         } else {
@@ -178,6 +176,7 @@
                         }
 
                     } else {
+                        this.data6=[]
                         this.$Message.info(res.data.msg);
                     }
                 });

@@ -121,7 +121,7 @@
                                             return h('span',{
                                                 on :{
                                                     click:()=>{
-                                                        this.loadData(h,params)
+                                                        this.loadData()
                                                     }
                                                 }
                                             },item.categoryName)
