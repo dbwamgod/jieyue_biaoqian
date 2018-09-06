@@ -421,7 +421,7 @@ export default {
                 dataType: this.categoryDetails.labelType,
                 labelCode: this.categoryDetails.code.replace(/(^\s+)|(\s+$)|\s+/g,''),
                 labelName: this.categoryDetails.name.replace(/(^\s+)|(\s+$)|\s+/g,''),
-                processType: this.categoryDetails.processType,
+                processType: this.categoryDetails.processingType,
                 rule: this.categoryDetails.processingRules,
                 oneTime: this.categoryDetails.processing
               }
@@ -456,7 +456,7 @@ export default {
                 dataType: this.categoryDetails.labelType,
                 labelCode: this.categoryDetails.code,
                 labelName: this.categoryDetails.name,
-                processType: this.categoryDetails.processType,
+                processType: this.categoryDetails.processingType,
                 rule: this.categoryDetails.processingRules,
                 oneTime: this.categoryDetails.processing,
                 id: this.categoryDetails.id

@@ -104,6 +104,7 @@
                             }
                         },(err)=>{
                             console.log('失败',err)
+                            this.$Message.error('登录失败！帐号或密码错误');
                         });
                     }
                 });
