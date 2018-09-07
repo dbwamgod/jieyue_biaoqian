@@ -219,7 +219,7 @@ export default {
           { required: true, message: "请输入规则", trigger: "blur" },
         ],
         precision: [
-          { pattern: /^[0-9]{0,5}$/, message: "请输入数字最多六位", trigger: "blur" },
+          { pattern: /^[0-9]{0,5}$/, message: "请输入数字最多五位", trigger: "blur" },
         ]
       },
       categoryDetails: {
