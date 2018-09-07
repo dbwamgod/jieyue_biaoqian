@@ -36,7 +36,7 @@
             </Col>
         </Row>
         <Row style="margin-top: 141px;">
-            <Col span="4" offset="12">
+            <Col span="4" offset="6">
             <Button type="primary" @click="checkInfo">查询</Button>
             <Button type="primary" @click="comeout">导出</Button>
             </Col>
@@ -92,11 +92,27 @@
         },
         methods: {
             comeout () {
-                if(this.check_list.length){
-                    window.open(api.product_out(encodeURIComponent(JSON.stringify({'queryParam': this.defaultRules.queryParam, 'outputVos': this.check_list, 'pageSize': 0, 'pageIndex': 0}))),"_blank")
-                    window.open(api.product_out(encodeURIComponent(JSON.stringify({'queryParam': this.defaultRules.queryParam, 'outputVos': this.check_list, 'pageSize': 0, 'pageIndex': 0}))),"_blank")
-                }else{
-                    this.$Message.info('请先点击查询')
+
+                if (this.check_list.length) {
+                    if (this.data2.length !== 0) {
+                        window.open(api.product_out(encodeURIComponent(JSON.stringify({
+                            'queryParam': this.defaultRules.queryParam,
+                            'outputVos': this.check_list,
+                            'pageSize': 0,
+                            'pageIndex': 0
+                        }))), '_blank');
+                        window.open(api.product_out(encodeURIComponent(JSON.stringify({
+                            'queryParam': this.defaultRules.queryParam,
+                            'outputVos': this.check_list,
+                            'pageSize': 0,
+                            'pageIndex': 0
+                        }))), '_blank');
+                    }else{
+                        this.$Message.error("没有数据,不能导出")
+                    }
+
+                } else {
+                    this.$Message.info('请先点击查询');
                 }
 
             },
@@ -130,8 +146,13 @@
                     }*/
                 }).then(res => {
                     if (res.data.code == 200) {
-                        this.data2 = res.data.data;
-                        this.dataCount = res.data.page.totalRecords;
+
+                        if (res.data.data.length !== 0) {
+                            this.data2 = res.data.data;
+                            this.dataCount = res.data.page.totalRecords;
+                        } else {
+                            this.$Message.error('标签内容没有数据!');
+                        }
                     } else {
                         this.$Message.info(res.data.msg);
                     }

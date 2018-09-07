@@ -10,6 +10,7 @@ const user = {
             Cookies.remove('userId');
             Cookies.remove('access');
             Cookies.remove('azkaban');
+            Cookies.remove('pages');
             Cookies.remove('hue');
             Cookies.remove('pages');
             // 恢复默认样式
