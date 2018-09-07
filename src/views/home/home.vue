@@ -38,7 +38,7 @@
         <p>确定要删除此分类么？</p>
     </Modal>
     </div>
-    
+
 </template>
 <style scoped>
 .paging {
@@ -156,7 +156,7 @@ export default {
           this.dataCount = res.data.page.totalRecords;
           if(res.data.data.length==0 || res.data.data==[]){
               this.page.pageIndex= this.page.pageIndex!=0?this.page.pageIndex-1:this.page.pageIndex;
-              this.init(); 
+              this.init();
             }
         } else {
           this.$Message.info({
@@ -202,7 +202,7 @@ export default {
       this.$refs.formInline.validate(valid => {
         if (valid) {
             if(this.isEdit==='新建分类'){
-               
+
                 this.$axios({
                   method: "post",
                   url: api.saveLabelCategory(),
@@ -253,7 +253,7 @@ export default {
         }
       });
 
-     
+
     },
     cancel() {
         this.modal1 = false;

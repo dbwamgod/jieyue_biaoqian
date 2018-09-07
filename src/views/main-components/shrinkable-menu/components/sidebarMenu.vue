@@ -31,6 +31,7 @@
                 <router-link tag="li" to="/Tab_management/index"
                              style="width:100%;  height: 50px;line-height: 50px; font-size:14px; ">
                              <Icon type="ios-analytics" style='margin-right:8px;'></Icon>标签管理
+
                 </router-link>
             </div>
         </MenuItem>
@@ -38,8 +39,9 @@
             <div style="margin: 0 24px;">
                 <router-link tag="li" to="/product_management/index"
                              style="width:100%; height: 50px; line-height: 50px; ">
-                <Icon type="ios-analytics" style='margin-right:8px;'></Icon>
-                             产品管理
+
+                    <Icon type="ios-analytics" style='margin-right:8px;'></Icon>
+                    产品管理
                 </router-link>
             </div>
         </MenuItem>

@@ -91,18 +91,20 @@
                                         'content-Type': 'application/x-www-form-urlencoded',
                                     },
                                 }).then(res => {
-                                    console.log(res.data.principal.id);
+
                                     Cookies.set('userId', res.data.principal.id);
                                 });
                                 this.$router.push({
                                     name: 'home_index'
                                 });
+
+                            }else{
+                                this.$Message.error('登录失败！帐号或密码错误');
+
                             }
 
                         },(err)=>{
-
                             this.$Message.error('登录失败！帐号或密码错误');
-
                         });
                     } else {
                         this.$Message.info('请输入用户和密码');
