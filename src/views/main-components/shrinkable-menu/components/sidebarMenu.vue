@@ -4,7 +4,7 @@
 
 <template>
     <Menu ref="sideMenu" :active-name="activeName" :open-names="['1']" :theme="menuTheme" width="auto"
-          @on-select="menuSelect">
+          @on-select="menuSelect" style="margin-top: 20px;">
         <Submenu name="1" style='margin-top: 10px;'>
             <template slot="title">
                 <Icon type="ios-analytics"></Icon>
@@ -30,7 +30,8 @@
             <div style="margin: 0 24px;">
                 <router-link tag="li" to="/Tab_management/index"
                              style="width:100%;  height: 50px;line-height: 50px; font-size:14px; ">
-                             <Icon type="ios-analytics" style='margin-right:8px;'></Icon>标签管理
+                    <Icon type="ios-analytics" style='margin-right:8px;'></Icon>
+                    标签管理
 
                 </router-link>
             </div>
@@ -70,10 +71,29 @@
                 type: Array
             }
         },
+        watch: {
+            '$route' (to, form) {
+
+                const pathNameObj = {
+                    home_index: '1-1', typeSecond_index: '1-2', Tab_management_index: '2',
+                    product_management_index: '3'
+                };
+                if (pathNameObj[to.name]) {
+
+                    this.activeName = pathNameObj[to.name];
+                } else {
+
+                    this.activeName = '1-1';
+                }
+            }
+        },
         created () {
-            this.activeName = Cookies.get('pages') ? Cookies.get('pages') : '1-1';
+            this.activeName = Cookies.get('pages') || '1-1';
         },
         mounted () {
+        },
+        beforeDestroy () {
+
         },
         methods: {
             menuSelect (name) {

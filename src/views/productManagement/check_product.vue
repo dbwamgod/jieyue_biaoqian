@@ -1,8 +1,8 @@
 <template>
     <div class="check_container">
 
-        <Row :gutter="100">
-            <Col span="3" style="    overflow: hidden;text-overflow: ellipsis;">
+        <Row :gutter="100" style="margin: 0;">
+            <Col span="3" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
             <span class="check_container_product">{{defaultRules.productName}}</span>
             </Col>
             <Col span="3">

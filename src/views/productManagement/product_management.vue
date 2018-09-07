@@ -74,6 +74,8 @@
                                     },
                                     on: {
                                         click: () => {
+                                            Cookies.set('now_index', this.page.pageIndex);
+
                                             this.$router.push({
                                                 name: 'check_product',
                                                 query: {
@@ -92,8 +94,10 @@
                                     },
                                     on: {
                                         click: () => {
+                                            Cookies.set('now_index', this.page.pageIndex);
+
                                             this.edit(this.data6[params.index]);
-                                            
+
                                         }
                                     }
                                 }, '编辑'),
@@ -117,6 +121,11 @@
             };
         },
         created () {
+            if (Cookies.get('now_index')) {
+                this.page.pageIndex = Number(Cookies.get('now_index'));
+                Cookies.remove('now_index');
+            }
+
             this.init();
         },
         methods: {
