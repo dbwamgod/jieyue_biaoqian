@@ -174,13 +174,13 @@
                 }
             },
             handleSubmenuChange (val) {
-                console.log('ddddddd导航', val);
+
             },
             beforePush (name) {
                 return true;
             },
             fullscreenChange (isFullScreen) {
-                // console.log(isFullScreen);
+
             },
 
             scrollBarResize () {

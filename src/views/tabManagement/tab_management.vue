@@ -301,7 +301,6 @@ export default {
     },
     filterClassification(id) {
       let aa = this.categoryList.filter(r => r.id === id)[0];
-      console.log(aa)
       return aa ?aa.parentName +'-'+ aa.categoryName : "无类型";
     },
     filterWordType(id) {
@@ -447,7 +446,6 @@ export default {
               }
             );
           } else {
-            console.log(this.isEdit, "编辑");
             this.$axios({
               method: "post",
               url: api.updateLabelConfigById(),

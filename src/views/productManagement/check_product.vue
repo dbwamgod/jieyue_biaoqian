@@ -1,8 +1,8 @@
 <template>
     <div class="check_container">
 
-        <Row>
-            <Col span="3">
+        <Row :gutter="100">
+            <Col span="3" style="    overflow: hidden;text-overflow: ellipsis;">
             <span class="check_container_product">{{defaultRules.productName}}</span>
             </Col>
             <Col span="3">
@@ -26,7 +26,7 @@
         </Row>
         <Row style="margin-top: 10px;">
 
-            <Col span="4" offset="7">
+            <Col span="4" offset="3">
             <div class="container_label_check" ref="container_label_check">
                 <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName"
                      @on-close="handleClose2" style="height: 40px;line-height: 40px; padding: 0 15px;
@@ -35,7 +35,7 @@
             </div>
             </Col>
         </Row>
-        <Row style="margin-top: 141px;">
+        <Row style="margin-top: 40px;">
             <Col span="4" offset="6">
             <Button type="primary" @click="checkInfo">查询</Button>
             <Button type="primary" @click="comeout">导出</Button>
@@ -92,7 +92,6 @@
         },
         methods: {
             comeout () {
-
                 if (this.check_list.length) {
                     if (this.data2.length !== 0) {
                         window.open(api.product_out(encodeURIComponent(JSON.stringify({
@@ -133,16 +132,26 @@
                         'pageSize': this.page.pageSize,
                         'pageIndex': this.page.pageIndex - 1
                     }
-
+                    /*  {
+                        outputVos: {
+                            labelCode: [
+                                this.check_list
+                            ]
+                        },
+                        'pageIndex': 1,
+                        'pageSize': 3,
+                        'productId': this.defaultRules.id,
+                        'queryParam': this.defaultRules.queryParam
+                    }*/
                 }).then(res => {
                     if (res.data.code == 200) {
-
                         if (res.data.data.length !== 0) {
                             this.data2 = res.data.data;
                             this.dataCount = res.data.page.totalRecords;
                         } else {
                             this.$Message.error('标签内容没有数据!');
                         }
+
                     } else {
                         this.$Message.info(res.data.msg);
                     }
@@ -216,16 +225,10 @@
         font-size: 22px;
     }
 
-    .menu_product_list {
-        position: absolute;
-        top: 40%;
-        left: 25px;
-    }
+
 
     .container_label_check {
-        position: absolute;
-        top: 35%;
-        left: -100%;
+        overflow-y: scroll;
         width: 479px;
         height: 115px;
         border: 1px solid #dddee1;

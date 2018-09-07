@@ -86,7 +86,6 @@ export default {
                 },
                 on: {
                   click: (event, data) => {
-                  console.log('点击')
                   }
                 }
               },
@@ -104,7 +103,6 @@ export default {
                 },
                 on: {
                   click: (event, data) => {
-                  console.log('点击')
                   }
                 }
               },
@@ -122,7 +120,6 @@ export default {
                 },
                 on: {
                   click: (event, data) => {
-                  console.log('点击')
                   }
                 }
               },
@@ -140,7 +137,6 @@ export default {
                 },
                 on: {
                   click: (event, data) => {
-                  console.log('点击')
                   }
                 }
               },
@@ -193,9 +189,7 @@ export default {
       });
     },
     onHandChange(data) {
-      console.log(data)
       data.key!=data.key;
-      console.log(this.roleList,'ddd')
     },
     changepage(index) {
       this.page.pageIndex = index;

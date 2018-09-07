@@ -17,14 +17,12 @@ export default {
   props: ["option"],
   watch: {
     option: function(val) {
-      console.log("watch", val);
       this.echartsOption = Object.assign({}, val);
       this.echartsInit(this.echartsOption);
     }
   },
   created() {},
   mounted() {
-    console.log("mounted", this.option);
     this.echartsInit(this.echartsOption);
   },
   methods: {
@@ -79,7 +77,6 @@ export default {
           }
         ]
       };
-      console.log("重绘");
       const serviceRequestCharts = echarts.init(
         document.getElementById("service_request_con")
       );

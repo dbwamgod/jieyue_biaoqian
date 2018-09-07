@@ -52,7 +52,9 @@
                 </Col>
                 <Col span="2">
                 <div class="container_label" ref="container_label">
-                    <Tag v-for="(item,index) in title" :key="index" :name="item.labelName?item.labelName:item.title" closable @on-close="handleClose2">{{item.labelName?item.labelName:item.title}}
+                    <Tag v-for="(item,index) in title" :key="index" :name="item.labelName?item.labelName:item.title"
+                         closable @on-close="handleClose2" style="height: 40px;line-height: 40px;padding: 0px 15px;">
+                        {{item.labelName?item.labelName:item.title}}
                     </Tag>
                 </div>
                 </Col>
@@ -83,7 +85,7 @@
                 formValidate: {
                     productName: '',
                     categoryName: JSON.parse(this.$route.query.data6).categoryName,
-                    categoryId:Cookies.get('categoryId') || '',
+                    categoryId: Cookies.get('categoryId') || '',
                 },
                 data3: [{}],
                 title: [],
@@ -107,11 +109,10 @@
             this.find_id = JSON.parse(this.$route.query.data6);
             this.descrition = this.find_id.categoryName;
             this.init();
-            console.log(this.$route)
 
         },
-        beforeDestroy(){
-            Cookies.remove("categoryId")
+        beforeDestroy () {
+            Cookies.remove('categoryId');
         },
         methods: {
             //编辑的当前数据
@@ -123,7 +124,6 @@
                     if (res.data.code == 200) {
                         this.title = res.data.data.outputParamList;
                         this.formValidate = res.data.data;
-                        console.log('this.formValidate',this.formValidate.categoryId)
                         Cookies.set('categoryId', res.data.data.categoryId);
 
                     } else {
@@ -287,7 +287,8 @@
                                         'span',
                                         {
                                             style: {
-                                                cursor: 'pointer', display: 'inline-block',
+                                                cursor: 'pointer',
+                                                display: 'inline-block',
                                                 maxWidth: '100px',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
@@ -326,22 +327,22 @@
 
                 //保存的接口
                 this.title.map((item, index) => {
-                    return this.out.push(item.labelId||item.id);
+                    return this.out.push(item.labelId || item.id);
                 });
-                this.out=[...new Set(this.out)]
+                this.out = [...new Set(this.out)];
                 this.$axios({
                     method: 'post',
                     url: api.product_to_update(),
                     data: {
                         productName: this.formValidate.productName, //产品名称
                         queryParam: this.formValidate.queryParam, //查询参数(规则)
-                        categoryId: this.formValidate.categoryId||Cookies.get('categoryId'), //产品类别ID
+                        categoryId: this.formValidate.categoryId || Cookies.get('categoryId'), //产品类别ID
                         id: this.formValidate.id,
                         outputParamIdList: this.out, //输出参数id列表(数组)
                         userId: Cookies.get('userId') //用户ID
                     }
                 }).then(res => {
-                    Cookies.remove('categoryId')
+                    Cookies.remove('categoryId');
                     if (res.data.code == 200) {
                         this.out = [];
                         this.$router.back(-1);
@@ -385,7 +386,7 @@
         width: 479px;
         min-width: 200px;
         max-width: 579px;
-
+        overflow-y: scroll;
         background: #fff;
         height: 115px;
         border: 1px solid #dddee1;

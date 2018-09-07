@@ -259,7 +259,6 @@ export default {
         this.$axios
       .get("http://192.168.34.159:10120/galaxy/privilege/queryAllDbs")
       .then(res => {
-        console.log(res);
         this.cityList1 = res.data.data;
          this.dbName=this.cityList1[0].dbName;
         
@@ -390,7 +389,6 @@ export default {
           }
         ]
       }).then(res => {
-        console.log(res);
       });
     }
   },

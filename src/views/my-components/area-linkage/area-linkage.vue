@@ -14,7 +14,6 @@ import Cookies from "js-cookie";
         },
         created(){
          this.iframeSrc=Cookies.get('hue');
-         console.log(this.iframeSrc)
         },
         methods:{
        

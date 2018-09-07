@@ -162,7 +162,6 @@
                                 }
                             }).then(res => {
                                 if (res.data.code == 200) {
-                                    console.log(res.data.data);
                                     this.data6 = res.data.data;
                                     this.dataCount = res.data.page.totalRecords;
                                 }else{

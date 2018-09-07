@@ -330,6 +330,7 @@
 
     .container_label {
         margin-right: 30px   ;
+        overflow-y: scroll;
         width: 479px;
         height: 115px;
         border: 1px solid #dddee1;
