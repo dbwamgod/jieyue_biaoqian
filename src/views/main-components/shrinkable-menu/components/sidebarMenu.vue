@@ -14,31 +14,32 @@
             <MenuItem name="1-1" style="padding: 0">
 
                 <router-link tag="li" to="/typeFirst"
-                             style="height: 50px;text-align: center;line-height: 50px;">一级分类
+                             style="width:100%;height: 50px;text-align: center;line-height: 50px;">一级分类
                 </router-link>
 
             </MenuItem>
             <MenuItem name="1-2" style="padding: 0">
 
                 <router-link tag="li" to="/typeSecond/index"
-                             style="height: 50px;text-align: center; line-height: 50px;">二级分类
+                             style="width:100%;height: 50px;text-align: center; line-height: 50px;">二级分类
                 </router-link>
 
             </MenuItem>
         </Submenu>
         <MenuItem name="2" style="padding: 0; margin:0;">
-            <div style=" margin: 0 24px;">
-                <Icon type="ios-analytics" style='margin-right:8px;'></Icon>
-                <router-link tag="span" to="/Tab_management/index"
-                             style="  height: 50px;text-align: center; line-height: 50px; font-size:14px;  ">标签管理
+            <div style="margin: 0 24px;">
+                <router-link tag="li" to="/Tab_management/index"
+                             style="width:100%;  height: 50px;line-height: 50px; font-size:14px; ">
+                    <Icon type="ios-analytics" style='margin-right:8px;'></Icon>标签管理
                 </router-link>
             </div>
         </MenuItem>
         <MenuItem name="3" style="padding: 0;font-weight: 100;margin: 10px 0;">
-            <div style=" margin: 0 24px;">
-                <Icon type="ios-analytics" style='margin-right:8px;'></Icon>
-                <router-link tag="span" to="/product_management/index"
-                             style="height: 50px;text-align: center; line-height: 50px;">产品管理
+            <div style="margin: 0 24px;">
+                <router-link tag="li" to="/product_management/index"
+                             style="width:100%; height: 50px; line-height: 50px; ">
+                    <Icon type="ios-analytics" style='margin-right:8px;'></Icon>
+                    产品管理
                 </router-link>
             </div>
         </MenuItem>

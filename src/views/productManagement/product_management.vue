@@ -134,7 +134,7 @@
                     name: 'edit_product',
                     query: {
                         data6: JSON.stringify(index)
-                    }
+                    },
                 });
             },
             init () {
