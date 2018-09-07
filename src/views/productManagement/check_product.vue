@@ -133,17 +133,7 @@
                         'pageSize': this.page.pageSize,
                         'pageIndex': this.page.pageIndex - 1
                     }
-                    /*  {
-                        outputVos: {
-                            labelCode: [
-                                this.check_list
-                            ]
-                        },
-                        'pageIndex': 1,
-                        'pageSize': 3,
-                        'productId': this.defaultRules.id,
-                        'queryParam': this.defaultRules.queryParam
-                    }*/
+
                 }).then(res => {
                     if (res.data.code == 200) {
 

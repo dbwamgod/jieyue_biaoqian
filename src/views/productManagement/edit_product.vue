@@ -6,7 +6,7 @@
             <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData"></Tree>
             </Col>
         </Row>
-        <div style="margin-left: 100px">
+        <div style="margin-left:  148px">
             <Row>
                 <Col offset="1">
                 <div class="new_product_fir">
@@ -52,9 +52,7 @@
                 </Col>
                 <Col span="2">
                 <div class="container_label" ref="container_label">
-                    <Tag v-for="(item,index) in title" :key="index" :name="item.labelName?item.labelName:item.title"
-                         closable
-                         @on-close="handleClose2">{{item.labelName?item.labelName:item.title}}
+                    <Tag v-for="(item,index) in title" :key="index" :name="item.labelName?item.labelName:item.title" closable @on-close="handleClose2">{{item.labelName?item.labelName:item.title}}
                     </Tag>
                 </div>
                 </Col>
@@ -324,13 +322,13 @@
             },
             //保存
             submit () {
-                //根据类别名字判断类别的id
+
 
                 //保存的接口
                 this.title.map((item, index) => {
-                    return this.out.push(item.labelId);
+                    return this.out.push(item.labelId||item.id);
                 });
-                console.log(this.formValidate,this.formValidate_list,'==========');
+                this.out=[...new Set(this.out)]
                 this.$axios({
                     method: 'post',
                     url: api.product_to_update(),
