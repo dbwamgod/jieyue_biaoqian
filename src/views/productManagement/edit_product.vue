@@ -354,8 +354,20 @@
                 });
             },
             handleClose2 (event, name) {
-                const index = this.title.indexOf(name);
-                this.title.splice(index, 1);
+                let myError
+             if(myError){
+                 let index;
+                 this.count = this.title.map((r, m) => {
+                     if (r.title === name) {
+                         index = m;
+                     }
+                 });
+                 this.title.splice(index, 1);
+                 this.style_active = {};
+                 myError=true
+             }
+                this.title.splice(-1, 1);
+
             }
         }
     };

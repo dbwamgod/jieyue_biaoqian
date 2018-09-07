@@ -5,13 +5,13 @@
             <Tree :data="data3" :load-data="loadData" class="menu_product_list"></Tree>
             </Col>
         </Row>
-        <div  style="margin-left: 100px">
-            <Row >
-                <Col  offset="1" >
+        <div style="margin-left: 150px">
+            <Row>
+                <Col offset="1">
                 <div class="new_product_fir">
                     <p class="new_text">新建</p>
                     <Form :model="formValidate"
-                          style="flex: 5;padding-top: 10px;    padding-left: 96px;">
+                          style="flex: 5;padding-top: 10px;    padding-left: 112px;">
                         <FormItem label="产品名称" prop="product_id" style="float: left;width: 360px;">
                             <Input v-model="formValidate.productName" placeholder="请输入产品名称"
                                    style="width: 230px;"></Input>
@@ -29,10 +29,10 @@
                 </Col>
             </Row>
             <Row>
-                <Col  span="3" offset="1">
+                <Col span="3" offset="1">
                 <span class="rules_text">新建规则</span>
                 </Col>
-                <Col span="2" >
+                <Col span="2">
                 <Form style="display:inline-block">
                     <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
                            placeholder="Enter something..." style="width: 279px;"></Input>
@@ -44,7 +44,7 @@
                 <Col span="3" offset="1">
                 <p style="font-size: 23px;">查询输出</p>
                 </Col>
-                <Col span="2" >
+                <Col span="2">
                 <div class="container_label" ref="container_label">
                     <Tag v-for="(item,index) in title" :key="index" :name="item.title" closable
                          @on-close="handleClose2">{{ item.title}}
@@ -54,8 +54,8 @@
 
             </Row>
             <Row style="margin-top: 40px">
-                <Col  span="3" offset="6">
-                <Button type="primary" @click="submit" >保存</Button>
+                <Col span="3" offset="6">
+                <Button type="primary" @click="submit">保存</Button>
                 </Col>
             </Row>
 
@@ -72,6 +72,7 @@
         name: 'new_product',
         data () {
             return {
+                count: [],
                 theme2: 'light',
                 formValidate: {
                     productName: '',
@@ -82,17 +83,17 @@
                 title: [],
                 out: [],
                 select: [],
-                style_active:{
-                    color:"#495060",
-                    cursor:'pointer',
+                style_active: {
+                    color: '#495060',
+                    cursor: 'pointer',
                     display: 'inline-block',
                     maxWidth: '110px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
-                    lineHeight:'14px'
+                    lineHeight: '14px'
                 },
-                formValidate_list:{}
+                formValidate_list: {}
             };
         },
         created () {
@@ -122,22 +123,24 @@
                                         type: 2,
                                         loading: false,
                                         children: [],
-                                        render:(h,params)=>{
+                                        render: (h, params) => {
 
-                                            return h('span',{
-                                                style:{  cursor: 'pointer',
+                                            return h('span', {
+                                                style: {
+                                                    cursor: 'pointer',
                                                     display: 'inline-block',
                                                     maxWidth: '110px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap',
-                                                    lineHeight:'14px'},
-                                                on :{
-                                                    click:()=>{
-                                                        this.treeHandClick(params)
+                                                    lineHeight: '14px'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.treeHandClick(params);
                                                     }
                                                 }
-                                            },item.categoryName)
+                                            }, item.categoryName);
                                         }
                                     };
                                 });
@@ -176,10 +179,10 @@
                                         type: 3,
                                         render: (h, params) => {
                                             return h('span', {
-                                                style:this.style_active,
+                                                style: this.style_active,
                                                 on: {
                                                     click: (ev) => {
-                                                        ev.path[0].style.color='#9ea7b4'
+                                                        ev.path[0].style.color = '#9ea7b4';
 
                                                         if (this.title.filter(r => r.id == params.data.id)[0]) {
                                                         } else {
@@ -238,23 +241,23 @@
                                 loading: false,
                                 children: [],
                                 type: 1,
-                                render:(h,params)=>{
-                                    return h('span',{
-                                        style:{
+                                render: (h, params) => {
+                                    return h('span', {
+                                        style: {
                                             cursor: 'pointer',
                                             display: 'inline-block',
                                             maxWidth: '110px',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap',
-                                            lineHeight:'14px'
+                                            lineHeight: '14px'
                                         },
-                                        on :{
-                                            click:()=>{
-                                                this.treeHandClick(params)
+                                        on: {
+                                            click: () => {
+                                                this.treeHandClick(params);
                                             }
                                         }
-                                    },item.categoryName)
+                                    }, item.categoryName);
                                 }
                             };
                         });
@@ -278,7 +281,6 @@
             },
             //保存
             submit () {
-
                 //保存的接口
                 this.title.map((item, index) => {
                     return this.out.push(item.id);
@@ -296,20 +298,26 @@
                     }
                 }).then(res => {
                     if (res.data.code == 200) {
-                        this.out=[]
+                        this.out = [];
                         this.$router.back(-1);
 
                     } else {
-                        this.out=[]
+                        this.out = [];
                         this.$Message.info(res.data.msg);
                     }
                 });
 
             },
             handleClose2 (event, name) {
-                const index = this.title.indexOf(name);
+
+                let index;
+                this.count = this.title.map((r, m) => {
+                    if (r.title === name) {
+                        index = m;
+                    }
+                });
                 this.title.splice(index, 1);
-                this.style_active={}
+                this.style_active = {};
             }
         }
     };
@@ -320,16 +328,18 @@
         margin-top: 25%;
         margin-left: 15%;
     }
+
     .new_product_fir {
         display: flex;
         margin: 30px 0 20px 0;
     }
+
     .new_text {
         font-size: 23px;
     }
 
     .container_label {
-        margin-right: 30px   ;
+        margin-right: 30px;
         overflow-y: scroll;
         width: 479px;
         height: 115px;

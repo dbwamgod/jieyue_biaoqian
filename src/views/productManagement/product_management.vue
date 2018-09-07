@@ -93,6 +93,7 @@
                                     on: {
                                         click: () => {
                                             this.edit(this.data6[params.index]);
+                                            
                                         }
                                     }
                                 }, '编辑'),
