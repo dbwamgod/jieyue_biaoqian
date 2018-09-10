@@ -3,8 +3,8 @@
 </style>
 
 <template>
-    <Menu ref="sideMenu" :active-name="activeName" :open-names="['1']" :theme="menuTheme" width="auto"
-          @on-select="menuSelect" style="margin-top: 20px;">
+    <Menu ref="sideMenu" :active-name="activeName" :open-names="['0']" :theme="menuTheme" width="auto"
+          @on-select="menuSelect" style="margin-top: 20px;" :accordion="false">
         <Submenu name="1" style='margin-top: 10px;'>
             <template slot="title">
                 <Icon type="ios-analytics"></Icon>
@@ -73,28 +73,21 @@
         },
         watch: {
             '$route' (to, form) {
-
                 const pathNameObj = {
                     home_index: '1-1', typeSecond_index: '1-2', Tab_management_index: '2',
                     product_management_index: '3'
                 };
                 if (pathNameObj[to.name]) {
-
                     this.activeName = pathNameObj[to.name];
-                } else {
-
-                    this.activeName = '1-1';
+                    Cookies.set("pages",pathNameObj[to.name])
                 }
             }
         },
         created () {
             this.activeName = Cookies.get('pages') || '1-1';
         },
-        mounted () {
-        },
-        beforeDestroy () {
 
-        },
+
         methods: {
             menuSelect (name) {
                 Cookies.set('pages', name);
