@@ -218,12 +218,12 @@
                                                     on: {
                                                         click: ev => {
                                                             ev.path[0].style.color = '#9ea7b4';
-
-                                                            if (
-                                                                this.title.filter(r => r.id == params.data.id)[0]
-                                                            ) {
-                                                            } else {
-                                                                this.title.push(params.data);
+                                                            let flag=this.title.find(r =>  { return r.labelId === params.data.id });
+                                                            if(!flag){
+                                                                if (this.title.filter(r => r.id === params.data.id)[0]) {
+                                                                } else {
+                                                                    this.title.push(params.data);
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -354,20 +354,18 @@
                 });
             },
             handleClose2 (event, name) {
-                let myError
-             if(myError){
-                 let index;
-                 this.count = this.title.map((r, m) => {
-                     if (r.title === name) {
-                         index = m;
-                     }
-                 });
-                 this.title.splice(index, 1);
-                 this.style_active = {};
-                 myError=true
-             }
-                this.title.splice(-1, 1);
+                let myError;
+                if (!myError) {
+                    let index;
+                    this.title.map((r, m) => {
+                        if (r.title === name) {
+                            index = m;
 
+                        }
+                    });
+                    this.title.splice(index, 1);
+                    this.style_active = {};
+                }
             }
         }
     };

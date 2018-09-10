@@ -30,7 +30,7 @@
     import Cookies from 'js-cookie';
 
     export default {
-        inject:['reload'],
+        inject: ['reload'],
         data () {
             return {
                 labelname: '',
@@ -75,11 +75,13 @@
                                     on: {
                                         click: () => {
                                             Cookies.set('now_index', this.page.pageIndex);
-
+                                            let flag = 1;
+                                            flag++;
                                             this.$router.push({
                                                 name: 'check_product',
                                                 query: {
-                                                    id: JSON.stringify(this.data6[params.index].id)
+                                                    id: JSON.stringify(this.data6[params.index].id),
+                                                    caching: flag
                                                 }
                                             });
                                         }
@@ -153,7 +155,7 @@
                     url: api.product_list(),
                     data: {
                         keyword: this.labelname,
-                        desc:true,
+                        desc: true,
                         currentPage: this.page.pageIndex,
                         pageSize: this.page.pageSize
                     }
@@ -166,7 +168,7 @@
                                 url: api.product_list(),
                                 data: {
                                     keyword: this.labelname,
-                                    desc:true,
+                                    desc: true,
                                     currentPage: res.data.page.totalPages,
                                     pageSize: res.data.page.pageSize
                                 }
@@ -174,8 +176,8 @@
                                 if (res.data.code == 200) {
                                     this.data6 = res.data.data;
                                     this.dataCount = res.data.page.totalRecords;
-                                }else{
-                                    this.data6=[]
+                                } else {
+                                    this.data6 = [];
                                 }
                             });
                         } else {
@@ -184,7 +186,7 @@
                         }
 
                     } else {
-                        this.data6=[]
+                        this.data6 = [];
                         this.$Message.info(res.data.msg);
                     }
                 });

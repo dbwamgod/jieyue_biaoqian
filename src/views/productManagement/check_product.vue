@@ -87,7 +87,7 @@
             };
         },
         created () {
-
+            console.log('我是日志');
             this.product_getDetail();
         },
         methods: {
