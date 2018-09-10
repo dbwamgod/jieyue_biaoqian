@@ -37,6 +37,7 @@
             </FormItem>
             <FormItem prop="classification" label="分类：" label-position="right" :label-width="100">
                         <Select v-model="categoryDetails.classification" style="width:300px" >
+                             <Option  value=" " >请选择</Option>
                             <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{item.parentName +'-'+ item.categoryName}}</Option>
                         </Select>
             </FormItem>
@@ -341,12 +342,14 @@ export default {
           this.categoryDetails.code = info.labelCode;
           this.categoryDetails.name = info.labelName;
           this.categoryDetails.labelType = info.dataType;
-          this.categoryDetails.classification = info.categoryId;
+          this.categoryDetails.classification = this.filterClassification(info.categoryId) == '无类型'? '':info.categoryId;
           this.categoryDetails.processing = info.oneTime;
           this.categoryDetails.processingType = info.processType;
           this.categoryDetails.precision = info.accuracy;
           this.categoryDetails.id = info.id;
           this.categoryDetails.available = info.available;
+          
+
         } else {
           this.$Message.error({
             content: res.data.msg,
