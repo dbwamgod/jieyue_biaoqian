@@ -348,8 +348,6 @@ export default {
           this.categoryDetails.precision = info.accuracy;
           this.categoryDetails.id = info.id;
           this.categoryDetails.available = info.available;
-          
-
         } else {
           this.$Message.error({
             content: res.data.msg,
