@@ -9,9 +9,10 @@ const user = {
             Cookies.remove('token');
             Cookies.remove('userId');
             Cookies.remove('access');
-            Cookies.remove('azkaban');
             Cookies.remove('pages');
-            Cookies.remove('hue');
+            Cookies.remove('del');
+            Cookies.remove('flag');
+            Cookies.remove('categoryId');
 
             // 恢复默认样式
             let themeLink = document.querySelector('link[name="theme"]');

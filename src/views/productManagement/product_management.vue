@@ -14,7 +14,6 @@
         <Table border :columns="columns7" :data="data6"></Table>
         <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" class="paging"
               @on-change="changepage"/>
-
     </div>
 </template>
 
@@ -75,13 +74,10 @@
                                     on: {
                                         click: () => {
                                             Cookies.set('now_index', this.page.pageIndex);
-                                            let flag = 1;
-                                            flag++;
                                             this.$router.push({
                                                 name: 'check_product',
                                                 query: {
                                                     id: JSON.stringify(this.data6[params.index].id),
-                                                    caching: flag
                                                 }
                                             });
                                         }

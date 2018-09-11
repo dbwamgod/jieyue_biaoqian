@@ -11,7 +11,7 @@
                 <div class="new_product_fir">
                     <p class="new_text">新建</p>
                     <Form :model="formValidate"
-                          style="flex: 5;padding-top: 10px;    padding-left: 112px;">
+                          style="flex: 5;padding-top: 10px;    padding-left: 6.6%;">
                         <FormItem label="产品名称" prop="product_id" style="float: left;width: 360px;">
                             <Input v-model="formValidate.productName" placeholder="请输入产品名称"
                                    style="width: 230px;"></Input>
@@ -47,7 +47,7 @@
                 <Col span="2" >
                 <div class="container_label" ref="container_label">
                     <Tag v-for="(item,index) in title" :key="index" :name="item.title" closable
-                         @on-close="handleClose2">{{ item.title}}
+                         @on-close="handleClose2" style=" background: #dddee1;height: 40px;line-height: 40px;padding: 0 15px;">{{ item.title}}
                     </Tag>
                 </div>
                 </Col>
@@ -340,6 +340,7 @@
     }
 
     .container_label {
+        padding-left: 2px;
         margin-right: 30px   ;
         overflow-y: scroll;
         width: 479px;

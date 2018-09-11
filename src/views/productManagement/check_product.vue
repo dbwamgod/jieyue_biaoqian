@@ -1,11 +1,11 @@
 <template>
     <div class="check_container">
 
-        <Row :gutter="100" style="margin: 0;">
+        <Row style="margin: 0;">
             <Col span="3" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
             <span class="check_container_product">{{defaultRules.productName}}</span>
             </Col>
-            <Col span="3">
+            <Col span="3" offset="4">
             <span class="check_container_list">{{defaultRules.categoryName}}</span>
             </Col>
         </Row>
@@ -15,8 +15,11 @@
             </Col>
         </Row>
         <Row style="margin-top: 30px;">
-            <Col span="24">
-            <span>{{defaultRules.queryParam}}</span>
+            <Col span="12"
+                 style="border: 1px solid #dddee1;min-width: 300px;max-width: 600px;min-height: 40px;max-height: 100px;padding: 10px;">
+
+                <span style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;display: block;">{{defaultRules.queryParam}}</span>
+
             </Col>
         </Row>
         <Row>
@@ -25,19 +28,18 @@
             </Col>
         </Row>
         <Row style="margin-top: 10px;">
-
-            <Col span="4" offset="3">
+            <Col span="8">
             <div class="container_label_check" ref="container_label_check">
                 <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName"
-                     @on-close="handleClose2" style="height: 40px;line-height: 40px; padding: 0 15px;
+                     @on-close="handleClose2" style="height: 40px;line-height: 40px; padding: 0 15px;background: #e1e1e1; margin-left: 2px;
 ">{{ item.labelName }}
                 </Tag>
             </div>
             </Col>
         </Row>
         <Row style="margin-top: 40px;">
-            <Col span="4" offset="6">
-            <Button type="primary" @click="checkInfo">查询</Button>
+            <Col span="4" offset="4">
+            <Button type="primary" @click="checkInfo" style="margin-right: 40px;">查询</Button>
             <Button type="primary" @click="comeout">导出</Button>
             </Col>
         </Row>
@@ -72,7 +74,7 @@
         ,
         data () {
             return {
-
+                content: '',
                 dataCount: 0,
                 page: {
                     pageSize: 10,
@@ -86,9 +88,16 @@
 
             };
         },
+        watch: {
+            '$route' (to, form) {
+                if (to.query.id) {
+                    this.product_getDetail(to.query.id);
+                }
+            }
+        },
         created () {
-            console.log('我是日志');
-            this.product_getDetail();
+            this.product_getDetail(this.$route.query.id);
+            this.content = this.defaultRules.queryParam;
         },
         methods: {
             comeout () {
@@ -106,8 +115,8 @@
                             'pageSize': 0,
                             'pageIndex': 0
                         }))), '_blank');
-                    }else{
-                        this.$Message.error("没有数据,不能导出")
+                    } else {
+                        this.$Message.error('没有数据,不能导出');
                     }
 
                 } else {
@@ -158,11 +167,12 @@
                 });
             },
 
-            product_getDetail () {
+            product_getDetail (id) {
                 this.$axios({
                     method: 'get',
-                    url: api.product_getDetail(this.$route.query.id),
+                    url: api.product_getDetail(id),
                 }).then(res => {
+
                     if (res.data.code == 200) {
                         if (res.data.data !== null) {
                             this.defaultRules = res.data.data;
@@ -199,7 +209,7 @@
 
 <style scoped>
     .check_container {
-        padding: 40px 32px 0 125px;
+        padding: 40px 32px 0 55px;
     }
 
     .check_container_product {
@@ -218,6 +228,8 @@
     .check_inpout {
         margin-top: 40px;
         font-size: 22px;
+
+        border-radius: 5px;
     }
 
     .detail_list {
@@ -225,12 +237,11 @@
         font-size: 22px;
     }
 
-
-
     .container_label_check {
+
         overflow-y: scroll;
-        width: 479px;
-        height: 115px;
+        max-width: 500px;
+        max-height: 115px;
         border: 1px solid #dddee1;
         border-radius: 4px;
     }

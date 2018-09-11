@@ -53,7 +53,8 @@
                 <Col span="2">
                 <div class="container_label" ref="container_label">
                     <Tag v-for="(item,index) in title" :key="index" :name="item.labelName?item.labelName:item.title"
-                         closable @on-close="handleClose2" style="height: 40px;line-height: 40px;padding: 0px 15px;">
+                         closable @on-close="handleClose2"
+                         style="height: 40px;line-height: 40px;padding: 0px 15px;background: #dddee1;">
                         {{item.labelName?item.labelName:item.title}}
                     </Tag>
                 </div>
@@ -69,7 +70,6 @@
 
         </div>
     </div>
-
 </template>
 
 <script>
@@ -90,19 +90,13 @@
                 data3: [{}],
                 title: [],
                 out: [],
-                style_active: {
-                    color: '#495060',
-                    cursor: 'pointer',
-                    display: 'inline-block',
-                    maxWidth: '110px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    lineHeight: '14px'
-                },
                 formValidate_list: {},
                 find_id: {},
-                type_name_id: ''
+                type_name_id: '',
+                //judge: true,
+                big_container: [],
+                check_out: [],
+                check_out_flag: false
             };
         },
         created () {
@@ -125,7 +119,8 @@
                         this.title = res.data.data.outputParamList;
                         this.formValidate = res.data.data;
                         Cookies.set('categoryId', res.data.data.categoryId);
-
+                        // this.check_out.push(res.data.data.outputParamList);
+                        //console.log(this.check_out);
                     } else {
                         this.$Message.info(res.data.msg);
                     }
@@ -139,7 +134,6 @@
                         data: {
                             form: {
                                 parentId: item.id
-
                             },
                             pageIndex: 0,
                             pageSize: 0
@@ -205,24 +199,48 @@
                     }).then(res => {
                         if (res.data.code == 200) {
                             if (res.data.data.length !== 0) {
+
                                 const data = res.data.data.map((item, index) => {
+                                    //  console.log(this.check_out_flag);
                                     return {
                                         title: item.labelName,
                                         id: item.id,
                                         type: 3,
+                                        disabled: true,
                                         render: (h, params) => {
                                             return h(
                                                 'span',
                                                 {
-                                                    style: this.style_active,
+                                                    style: this.check_out_flag ? {
+                                                        color: '#9ea7b4', display: 'inline-block',
+                                                        maxWidth: '110px',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        lineHeight: '14px',
+                                                    } : {
+                                                        cursor: 'pointer',
+                                                        display: 'inline-block',
+                                                        maxWidth: '110px',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        lineHeight: '14px',
+                                                    },
                                                     on: {
                                                         click: ev => {
+                                                            // this.judge ? ev.path[0].style.color = '#9ea7b4' : ev.path[0].style.color = '#495060';
+                                                            this.big_container.push(ev.path[0]);
                                                             ev.path[0].style.color = '#9ea7b4';
-                                                            let flag=this.title.find(r =>  { return r.labelId === params.data.id });
-                                                            if(!flag){
+                                                            let flag = this.title.find(r => {
+                                                                return r.labelId === params.data.id;
+                                                            });
+                                                            if (!flag) {
                                                                 if (this.title.filter(r => r.id === params.data.id)[0]) {
                                                                 } else {
                                                                     this.title.push(params.data);
+                                                                    this.check_out.push(ev.path[0]);
+                                                                    // this.big_container.push(ev.path[0])
                                                                 }
                                                             }
                                                         }
@@ -233,6 +251,7 @@
                                         }
                                     };
                                 });
+
                                 callback(data);
                             } else {
                                 const data = res.data.data.map((item, index) => {
@@ -309,6 +328,7 @@
                 });
             },
             treeHandClick (params) {
+
                 if (params.data.children.length == 0) {
                     this.loadData(params.data, data => {
                         if (data.length == 0 || JSON.stringify(data) === '[]') {
@@ -323,8 +343,6 @@
             },
             //保存
             submit () {
-
-
                 //保存的接口
                 this.title.map((item, index) => {
                     return this.out.push(item.labelId || item.id);
@@ -355,17 +373,29 @@
             },
             handleClose2 (event, name) {
                 let myError;
+
                 if (!myError) {
                     let index;
+                    let designation;
                     this.title.map((r, m) => {
                         if (r.title === name) {
                             index = m;
-
+                            designation = name;
                         }
                     });
+                    if (this.check_out.length) {
+                        this.check_out.forEach((r, i) => {
+                            if (r.textContent === designation) {
+                                if (this.title) {
+                                    this.check_out[i].style.color = '#495060';
+                                }
+                            }
+                        });
+                    }
                     this.title.splice(index, 1);
-                    this.style_active = {};
+                    this.check_out_flag = false;
                 }
+
             }
         }
     };

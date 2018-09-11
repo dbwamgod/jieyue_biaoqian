@@ -1,17 +1,17 @@
 import Cookies from "js-cookie";
 //标签
-const _baseUrlA='http://172.18.101.118:10099/galaxy-label-admin/label';
+const _baseUrlA='http://172.18.101.118:10000/galaxy-label-admin/label';
 //产品
-const _baseUrlC = 'http://172.18.101.118:10099/galaxy-label-api';
+const _baseUrlC = 'http://172.18.101.118:10000/galaxy-label-api';
 
 export default {
     // 登录
     login() {
-        return 'http://172.18.101.118:10099/platform-user-oauth2/oauth/token';
+        return 'http://172.18.101.118:10000/platform-user-oauth2/oauth/token';
     },
     //获取userID
     userId() {
-        return 'http://172.18.101.118:10099/platform-user-oauth2/user?'+"access_token="+Cookies.get('token');
+        return 'http://172.18.101.118:10000/platform-user-oauth2/user?'+"access_token="+Cookies.get('token');
     },
     //获取一级分类
     product_First_list() {
@@ -45,7 +45,7 @@ export default {
     },
     //产品详情
     product_getDetail(id) {
-        return _baseUrlC+'/galaxy/api/product/detail/'+id;
+        return _baseUrlC+'/galaxy/api/product/detail/'+id
     },
     /*产品类别管理*/
     //获取类别列表
