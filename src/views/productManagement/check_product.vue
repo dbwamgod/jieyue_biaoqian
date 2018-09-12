@@ -2,61 +2,66 @@
     <div class="check_container">
 
         <Row style="margin: 0;">
+            <Col span="2">
+            <h3 style="    display: inline-block;font-size: 23px">产品:</h3>
+
+            </Col>
             <Col span="3" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
             <span class="check_container_product">{{defaultRules.productName}}</span>
             </Col>
-            <Col span="3" offset="4">
+        </Row>
+
+        <Row style="margin: 20px 0 0 0 ;">
+            <Col span="2">
+            <h3 style="    display: inline-block;font-size: 22px">类别:</h3>
+            </Col>
+            <Col span="3">
             <span class="check_container_list">{{defaultRules.categoryName}}</span>
             </Col>
         </Row>
-        <Row>
-            <Col span="3">
-            <p class="Default_rule">预设规则</p>
-            </Col>
-        </Row>
-        <Row style="margin-top: 30px;">
-            <Col span="12"
-                 style="border: 1px solid #dddee1;min-width: 300px;max-width: 600px;min-height: 40px;max-height: 100px;padding: 10px;">
 
-                <span style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;display: block;">{{defaultRules.queryParam}}</span>
+        <Row style="margin-top: 40px;">
+            <Col span="2" >
+            <p class="Default_rule">预设规则:</p>
+            </Col>
+            <Col span="18" style="border: 1px solid #dddee1;min-width: 300px;min-height: 40px;padding: 10px;">
+            <span style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;display: block;">{{defaultRules.queryParam}}</span>
+            </Col>
+        </Row>
 
+        <Row style="margin-top: 40px">
+            <Col span="2">
+            <p class="check_inpout">查询输出:</p>
             </Col>
-        </Row>
-        <Row>
-            <Col span="3">
-            <p class="check_inpout">查询输出</p>
-            </Col>
-        </Row>
-        <Row style="margin-top: 10px;">
-            <Col span="8">
+            <Col span="18">
             <div class="container_label_check" ref="container_label_check">
                 <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName"
-                     @on-close="handleClose2" style="height: 40px;line-height: 40px; padding: 0 15px;background: #e1e1e1; margin-left: 2px;
+                     @on-close="handleClose2" style="height: 35px;line-height: 35px; padding: 0 15px;background: #e1e1e1;     margin: 5px 2.5px 2.5px 5px;
 ">{{ item.labelName }}
                 </Tag>
             </div>
             </Col>
         </Row>
+
         <Row style="margin-top: 40px;">
-            <Col span="4" offset="4">
+            <Col span="3" offset="6">
             <Button type="primary" @click="checkInfo" style="margin-right: 40px;">查询</Button>
             <Button type="primary" @click="comeout">导出</Button>
             </Col>
         </Row>
-        <Row>
-            <Col span="3">
-            <p class="detail_list">详情列表</p>
+        <Row style=" margin-top: 50px;">
+            <Col span="2" >
+            <p class="detail_list">查询结果:</p>
             </Col>
-        </Row>
-
-        <Row style="margin-top: 30px;">
             <Col span="18">
             <Table :columns="columns1" :data="data2"></Table>
             </Col>
         </Row>
+
+
         <Row style="margin-top: 30px;">
-            <Col span="12" offset="12">
-            <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" class="paging"
+            <Col type="flex" justify="center" align="middle" offset="18">
+            <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" style="float: right;"
                   @on-change="changepage"/>
             </Col>
         </Row>
@@ -214,34 +219,37 @@
 
     .check_container_product {
         font-size: 22px;
+        color: #515a6e;
     }
 
     .check_container_list {
-        font-size: 22px;
+        font-size: 19px;
+        color: #515a6e;
+
     }
 
     .Default_rule {
-        margin-top: 40px;
-        font-size: 22px;
+        font-size: 21px;
+        font-weight: 600;
     }
 
     .check_inpout {
-        margin-top: 40px;
-        font-size: 22px;
-
+        font-size: 21px;
+        font-weight: 600;
         border-radius: 5px;
     }
 
     .detail_list {
-        margin-top: 40px;
-        font-size: 22px;
+
+        font-size: 21px;
+        font-weight: 600;
     }
 
     .container_label_check {
 
-        overflow-y: scroll;
-        max-width: 500px;
-        max-height: 115px;
+        /*overflow-y: scroll;*/
+
+        height: 145px;
         border: 1px solid #dddee1;
         border-radius: 4px;
     }

@@ -1,23 +1,23 @@
 <template>
     <div ref="container_box" id="container_box">
-        <Row style="position: fixed;width: 10%;">
+        <Row style="position: fixed;width: 8.5%; height: 100%;background:#585b6d;color: #dddee1;opacity: .7;">
             <Col class="Col_product_new">
-            <Tree :data="data3" :load-data="loadData" class="menu_product_list"></Tree>
+            <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData"></Tree>
             </Col>
         </Row>
-        <div  style="margin-left: 150px">
+        <div  style="margin-left: 10%;">
             <Row >
-                <Col  offset="1" >
+                <Col>
                 <div class="new_product_fir">
-                    <p class="new_text">新建</p>
+                    <!--<p class="new_text"></p>-->
                     <Form :model="formValidate"
-                          style="flex: 5;padding-top: 10px;    padding-left: 6.6%;">
+                          style="flex: 0;padding-top: 10px;    padding-left: 4.6%;">
                         <FormItem label="产品名称" prop="product_id" style="float: left;width: 360px;">
                             <Input v-model="formValidate.productName" placeholder="请输入产品名称"
                                    style="width: 230px;"></Input>
                         </FormItem>
-                        <FormItem label="产品类别" prop="product_type" style="float: left;width: 270px;">
-                            <Select v-model="formValidate_list.id" placeholder="请选择产品类型" style="width: 180px;">
+                        <FormItem label="产品类别" prop="product_type" style="float: left;width: 360px;">
+                            <Select v-model="formValidate_list.id" placeholder="请选择产品类型" style="width: 230px;">
                                 <Option v-for="(item,index) in formValidate_list" :key="index"
                                         :value="item.id?item.id:''">
                                     {{item.categoryName?item.categoryName:''}}
@@ -29,22 +29,22 @@
                 </Col>
             </Row>
             <Row>
-                <Col  span="3" offset="1">
-                <span class="rules_text">新建规则</span>
+                <Col  span="1" offset="1">
+                <span style="padding: 7px;">查询规则</span>
                 </Col>
-                <Col span="2" >
-                <Form style="display:inline-block">
+                <Col span="18" >
+                <Form style="display:inline-block; width: 100%;">
                     <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
-                           placeholder="Enter something..." style="width: 279px;"></Input>
+                           placeholder="Enter something..."></Input>
                 </Form>
                 </Col>
             </Row>
 
             <Row style="margin-top: 40px">
-                <Col span="3" offset="1">
-                <p style="font-size: 23px;">查询输出</p>
+                <Col span="1" offset="1">
+                <p style="padding: 7px;">输出标签</p>
                 </Col>
-                <Col span="2" >
+                <Col span="18" >
                 <div class="container_label" ref="container_label">
                     <Tag v-for="(item,index) in title" :key="index" :name="item.title" closable
                          @on-close="handleClose2" style=" background: #dddee1;height: 40px;line-height: 40px;padding: 0 15px;">{{ item.title}}
@@ -84,16 +84,19 @@
                 out: [],
                 select: [],
                 style_active:{
-                    color:"#495060",
+                    color:"#dddee1",
                     cursor:'pointer',
                     display: 'inline-block',
-                    maxWidth: '110px',
+                    maxWidth: '80px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     lineHeight:'14px'
                 },
                 formValidate_list:{},
+                big_container: [],
+                check_out: [],
+                check_out_flag: false
 
             };
         },
@@ -123,6 +126,7 @@
                                         id: item.parentId || '',
                                         type: 2,
                                         loading: false,
+                                        expand: false,
                                         children: [],
                                         render:(h,params)=>{
 
@@ -178,15 +182,43 @@
                                         type: 3,
                                         render: (h, params) => {
                                             return h('span', {
-                                                style:this.style_active,
+                                                style: this.check_out_flag ? {
+                                                    color: '#dddee1', display: 'inline-block',
+                                                    maxWidth: '110px',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap',
+                                                    lineHeight: '14px',
+                                                } : {
+                                                    cursor: 'pointer',
+                                                    display: 'inline-block',
+                                                    maxWidth: '110px',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap',
+                                                    lineHeight: '14px',
+                                                },
                                                 on: {
                                                     click: (ev) => {
-                                                        ev.path[0].style.color='#9ea7b4'
+                                                        this.big_container.push(ev.path[0]);
+                                                        ev.path[0].style.color = '#9ea7b4';
 
-                                                        if (this.title.filter(r => r.id == params.data.id)[0]) {
-                                                        } else {
-                                                            this.title.push(params.data);
+                                                        let flag = this.title.find(r => {
+                                                            return r.labelId === params.data.id;
+                                                        });
+                                                        if (!flag) {
+                                                            if (this.title.filter(r => r.id === params.data.id)[0]) {
+                                                            } else {
+                                                                this.title.push(params.data);
+                                                                this.check_out.push(ev.path[0]);
+                                                                // this.big_container.push(ev.path[0])
+                                                            }
                                                         }
+
+                                                        // if (this.title.filter(r => r.id == params.data.id)[0]) {
+                                                        // } else {
+                                                        //     this.title.push(params.data);
+                                                        // }
                                                     }
                                                 }
                                             }, item.labelName);
@@ -199,7 +231,7 @@
                                     return {
                                         title: item.labelName || '',
                                         id: item.id || '',
-                                        type: 2,
+                                        type: 3,
                                     };
                                 });
                                 callback(data);
@@ -239,6 +271,7 @@
                                 id: item.id,
                                 loading: false,
                                 children: [],
+                                expand: false,
                                 type: 1,
                                 render:(h,params)=>{
                                     return h('span',{
@@ -309,7 +342,7 @@
 
             },
             handleClose2 (event, name) {
-                let myError
+           /*     let myError
                 if (!myError) {
                     let index;
                     this.title.map((r, m) => {
@@ -320,7 +353,31 @@
                     });
                     this.title.splice(index, 1);
                     this.style_active = {};
+                }*/
+
+                let myError;
+                if (!myError) {
+                    let index;
+                    let designation;
+                    this.title.map((r, m) => {
+                        if (r.title === name) {
+                            index = m;
+                            designation = name;
+                        }
+                    });
+                    if (this.check_out.length) {
+                        this.check_out.forEach((r, i) => {
+                            if (r.textContent === designation) {
+                                if (this.title) {
+                                    this.check_out[i].style.color = '#dddee1';
+                                }
+                            }
+                        });
+                    }
+                    this.title.splice(index, 1);
+                    this.check_out_flag = false;
                 }
+
             }
         }
     };
@@ -328,24 +385,21 @@
 
 <style scoped>
     .menu_product_list {
-        margin-top: 25%;
-        margin-left: 15%;
+        margin-top: 15%;
+        margin-left: 10%;
+
     }
     .new_product_fir {
         display: flex;
         margin: 30px 0 20px 0;
     }
-    .new_text {
-        font-size: 23px;
-    }
 
     .container_label {
         padding-left: 2px;
-        margin-right: 30px   ;
-        overflow-y: scroll;
-        width: 479px;
+        /*overflow-y: scroll;*/
         height: 115px;
-        border: 1px solid #dddee1;
+        max-height: 200px;
+        border: 2px solid #dddee1;
         border-radius: 4px;
     }
 
@@ -353,9 +407,5 @@
         margin: 0 auto;
     }
 
-    .rules_text {
 
-        font-size: 23px;
-
-    }
 </style>

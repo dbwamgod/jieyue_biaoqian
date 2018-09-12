@@ -1,27 +1,26 @@
 <template>
     <div ref="container_box" id="container_box" class="container_box">
-        <Row style="position: fixed;width: 6%;     margin-left: 31px;
-">
+        <Row style="position: fixed;width: 8.5%; height: 100%;background:#585b6d;color: #dddee1;opacity: .7;">
             <Col class="Col_product_new">
             <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData"></Tree>
             </Col>
         </Row>
-        <div style="margin-left:  148px">
+        <div style="margin-left: 10%">
             <Row>
-                <Col offset="1">
+                <Col>
                 <div class="new_product_fir">
-                    <p class="new_text">新建</p>
+                    <!--<p class="new_text">新建</p>-->
                     <Form ref="formValidate" :model="formValidate"
-                          style="flex: 5;padding-top: 10px;    padding-left: 118px;">
+                          style="flex: 0;padding-top: 10px;    padding-left: 4.6%;">
                         <FormItem label="产品名称" prop="product_id" style="float: left;width: 360px;">
                             <Input v-model="formValidate.productName" placeholder="请输入产品名称"
                                    style="width: 230px;"></Input>
                         </FormItem>
-                        <FormItem label="产品类别" prop="product_type" style="float: left;width: 270px;">
+                        <FormItem label="产品类别" prop="product_type" style="float: left;width: 360px;">
 
                             <Select v-model="formValidate.categoryId"
                                     placeholder="请输入产品类别"
-                                    style="    color: #495060;width: 180px;">
+                                    style="width: 230px;">
                                 <Option v-for="(item,index) in formValidate_list" :key="index"
                                         :value="item.id">
                                     {{item.categoryName || ''}}
@@ -33,13 +32,13 @@
                 </Col>
             </Row>
             <Row>
-                <Col span="3" offset="1">
-                <span class="rules_text">新建规则</span>
+                <Col span="1" offset="1">
+                <span style="padding: 7px;">查询规则</span>
                 </Col>
-                <Col span="2">
-                <Form style="display: inline-block; ">
+                <Col span="18">
+                <Form style="display: inline-block;  width: 100%;">
                     <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
-                           placeholder="Enter something..." style="width: 279px;"></Input>
+                           placeholder="Enter something..." ></Input>
                 </Form>
 
                 </Col>
@@ -47,14 +46,14 @@
             </Row>
 
             <Row style="margin-top: 40px">
-                <Col span="3" offset="1">
-                <p style="font-size: 23px;">查询输出</p>
+                <Col span="1" offset="1">
+                <p style="padding: 7px;">输出标签</p>
                 </Col>
-                <Col span="2">
+                <Col span="18">
                 <div class="container_label" ref="container_label">
                     <Tag v-for="(item,index) in title" :key="index" :name="item.labelName?item.labelName:item.title"
                          closable @on-close="handleClose2"
-                         style="height: 40px;line-height: 40px;padding: 0px 15px;background: #dddee1;">
+                         style="background: #dddee1;height: 40px;line-height: 40px;padding: 0 15px;">
                         {{item.labelName?item.labelName:item.title}}
                     </Tag>
                 </div>
@@ -81,7 +80,6 @@
         name: 'new_product',
         data () {
             return {
-                descrition: '',
                 formValidate: {
                     productName: '',
                     categoryName: JSON.parse(this.$route.query.data6).categoryName,
@@ -92,8 +90,6 @@
                 out: [],
                 formValidate_list: {},
                 find_id: {},
-                type_name_id: '',
-                //judge: true,
                 big_container: [],
                 check_out: [],
                 check_out_flag: false
@@ -101,19 +97,28 @@
         },
         created () {
             this.find_id = JSON.parse(this.$route.query.data6);
-            this.descrition = this.find_id.categoryName;
+
             this.init();
 
+        },
+        watch: {
+            '$route.query.data6.id' (to, form) {
+                // console.log(to.query.data6.id,1111111111111,this.find_id);
+                if (to.query.data6.id) {
+                    this.detail_type_list(to.query.data6.id);
+                }
+            }
         },
         beforeDestroy () {
             Cookies.remove('categoryId');
         },
         methods: {
             //编辑的当前数据
-            detail_type_list () {
+            detail_type_list (id) {
+                // console.log(id);
                 this.$axios({
                     method: 'post',
-                    url: api.product_productOutput_find(this.find_id.id),
+                    url: api.product_productOutput_find(this.find_id.id||id),
                 }).then(res => {
                     if (res.data.code == 200) {
                         this.title = res.data.data.outputParamList;
@@ -387,7 +392,7 @@
                         this.check_out.forEach((r, i) => {
                             if (r.textContent === designation) {
                                 if (this.title) {
-                                    this.check_out[i].style.color = '#495060';
+                                    this.check_out[i].style.color = '#dddee1';
                                 }
                             }
                         });
@@ -404,38 +409,23 @@
 <style scoped>
 
     .menu_product_list {
-        margin-top: 50%;
+        margin-top: 15%;
+        margin-left: 10%;
+
 
     }
-
-    .container_box .ivu-select-single .ivu-select-selection .ivu-select-placeholder {
-        color: #1b1c23;
-    }
-
     .new_product_fir {
         display: flex;
         margin: 30px 0 20px 0;
     }
-
-    .new_text {
-        font-size: 23px;
-    }
-
     .container_label {
-        margin-right: 30px;
-        width: 479px;
-        min-width: 200px;
-        max-width: 579px;
-        overflow-y: scroll;
-        background: #fff;
+        padding-left: 2px;
+        /*overflow-y: scroll;*/
         height: 115px;
-        border: 1px solid #dddee1;
+        max-height: 200px;
+        border: 2px solid #dddee1;
         border-radius: 4px;
     }
 
-    .rules_text {
-        font-size: 23px;
-
-    }
 
 </style>
