@@ -78,7 +78,7 @@
                             },
                         }).then(res => {
                             if (res.status === 200) {
-                                Cookies.set('user', this.form.userName);
+                                Cookies.set('userB', this.form.userName);
                                 Cookies.set('password', this.form.password);
                                 Cookies.set('access', 1);
                                 Cookies.set('token', res.data.access_token);

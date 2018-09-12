@@ -4,7 +4,7 @@ const user = {
 
     mutations: {
         logout (state, vm) {
-            Cookies.remove('user');
+            Cookies.remove('userB');
             Cookies.remove('password');
             Cookies.remove('token');
             Cookies.remove('userId');
