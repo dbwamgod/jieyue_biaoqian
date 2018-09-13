@@ -38,7 +38,7 @@
                 <Col span="18">
                 <Form style="display: inline-block;  width: 100%;">
                     <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
-                           placeholder="Enter something..." ></Input>
+                           placeholder="Enter something..."></Input>
                 </Form>
 
                 </Col>
@@ -51,7 +51,7 @@
                 </Col>
                 <Col span="18">
                 <div class="container_label" ref="container_label">
-                    <Tag v-for="(item,index) in title" :key="index" :name="item.labelName?item.labelName:item.title"
+                    <Tag v-for="(item,index) in title" :key="index" :name="item.labelName||item.title"
                          closable @on-close="handleClose2"
                          style="background: #dddee1;height: 40px;line-height: 40px;padding: 0 15px;">
                         {{item.labelName?item.labelName:item.title}}
@@ -80,6 +80,7 @@
         name: 'new_product',
         data () {
             return {
+                defaultFlag: [],
                 formValidate: {
                     productName: '',
                     categoryName: JSON.parse(this.$route.query.data6).categoryName,
@@ -97,9 +98,7 @@
         },
         created () {
             this.find_id = JSON.parse(this.$route.query.data6);
-
             this.init();
-
         },
         watch: {
             '$route.query.data6.id' (to, form) {
@@ -118,10 +117,13 @@
                 // console.log(id);
                 this.$axios({
                     method: 'post',
-                    url: api.product_productOutput_find(this.find_id.id||id),
+                    url: api.product_productOutput_find(this.find_id.id || id),
                 }).then(res => {
                     if (res.data.code == 200) {
                         this.title = res.data.data.outputParamList;
+                        this.title.map(r => {
+                            this.defaultFlag.push(r.labelId);
+                        });
                         this.formValidate = res.data.data;
                         Cookies.set('categoryId', res.data.data.categoryId);
                         // this.check_out.push(res.data.data.outputParamList);
@@ -206,7 +208,6 @@
                             if (res.data.data.length !== 0) {
 
                                 const data = res.data.data.map((item, index) => {
-                                    //  console.log(this.check_out_flag);
                                     return {
                                         title: item.labelName,
                                         id: item.id,
@@ -216,9 +217,9 @@
                                             return h(
                                                 'span',
                                                 {
-                                                    style: this.check_out_flag ? {
+                                                    style: this.check_out_flag || this.defaultFlag.find(r => params.data.id === r) ? {
                                                         color: '#9ea7b4', display: 'inline-block',
-                                                        maxWidth: '110px',
+                                                        maxWidth: '90px',
                                                         overflow: 'hidden',
                                                         textOverflow: 'ellipsis',
                                                         whiteSpace: 'nowrap',
@@ -226,7 +227,7 @@
                                                     } : {
                                                         cursor: 'pointer',
                                                         display: 'inline-block',
-                                                        maxWidth: '110px',
+                                                        maxWidth: '90px',
                                                         overflow: 'hidden',
                                                         textOverflow: 'ellipsis',
                                                         whiteSpace: 'nowrap',
@@ -235,14 +236,15 @@
                                                     on: {
                                                         click: ev => {
                                                             // this.judge ? ev.path[0].style.color = '#9ea7b4' : ev.path[0].style.color = '#495060';
-                                                            this.big_container.push(ev.path[0]);
+                                                            //this.big_container.push(ev.path[0]);
+                                                            //console.log(this.big_container);
                                                             ev.path[0].style.color = '#9ea7b4';
-                                                            let flag = this.title.find(r => {
-                                                                return r.labelId === params.data.id;
-                                                            });
+                                                            let flag = this.title.find(r => r.labelId === params.data.id);
+
                                                             if (!flag) {
-                                                                if (this.title.filter(r => r.id === params.data.id)[0]) {
-                                                                } else {
+                                                                if (this.title.filter(r => r.labelId=== params.data.id)[0]) {
+                                                                }else {
+
                                                                     this.title.push(params.data);
                                                                     this.check_out.push(ev.path[0]);
                                                                     // this.big_container.push(ev.path[0])
@@ -378,16 +380,17 @@
             },
             handleClose2 (event, name) {
                 let myError;
-
                 if (!myError) {
                     let index;
                     let designation;
                     this.title.map((r, m) => {
-                        if (r.title === name) {
+                        let nameTitle=r.title||r.labelName
+                        if (nameTitle === name) {
                             index = m;
                             designation = name;
                         }
                     });
+                    console.log(this.check_out);
                     if (this.check_out.length) {
                         this.check_out.forEach((r, i) => {
                             if (r.textContent === designation) {
@@ -398,9 +401,7 @@
                         });
                     }
                     this.title.splice(index, 1);
-                    this.check_out_flag = false;
                 }
-
             }
         }
     };
@@ -412,12 +413,13 @@
         margin-top: 15%;
         margin-left: 10%;
 
-
     }
+
     .new_product_fir {
         display: flex;
         margin: 30px 0 20px 0;
     }
+
     .container_label {
         padding-left: 2px;
         /*overflow-y: scroll;*/
