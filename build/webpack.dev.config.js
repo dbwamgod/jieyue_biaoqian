@@ -15,7 +15,7 @@ fs.open('./build/env.js', 'w', function(err, fd) {
 module.exports = merge(webpackBaseConfig, {
     devtool: '#source-map',
     output: {
-        publicPath: '/dist/',
+        publicPath: '/galaxy-label-admin/',
         filename: '[name].js',
         chunkFilename: '[name].chunk.js'
     },

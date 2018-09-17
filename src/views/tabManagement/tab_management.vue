@@ -35,9 +35,9 @@
             <FormItem prop="precision" label="精度：" label-position="right" :label-width="100" v-show='categoryDetails.labelType==3'>
                     <Input v-model="categoryDetails.precision" placeholder="请输入名称" style="width: 300px" />
             </FormItem>
-            <FormItem prop="classification" label="分类：" label-position="right" :label-width="100">
+            <FormItem prop="classification" label="分类：" placeholder="请选择" label-position="right" :label-width="100">
                         <Select v-model="categoryDetails.classification" style="width:300px" >
-                             <Option  value=" " >请选择</Option>
+                             <!--<Option  value=" " >请选择</Option>-->
                             <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{item.parentName +'-'+ item.categoryName}}</Option>
                         </Select>
             </FormItem>
@@ -183,6 +183,9 @@ export default {
                     type: "error",
                     size: "small"
                   },
+                    style:{
+                      background:params.row.available == 0?'#2d8cf0': '#e13c13'
+                    },
                   on: {
                     click: () => {
                       this.available(params.row.id, params.row.available);

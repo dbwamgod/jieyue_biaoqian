@@ -15,7 +15,7 @@ module.exports = {
     },
     output: {
 
-        path: path.resolve(__dirname, "../dist")
+        path: path.resolve(__dirname, "../galaxy-label-admin")
     },
     module: {
         rules: [
