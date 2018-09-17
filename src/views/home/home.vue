@@ -155,8 +155,11 @@ export default {
           this.categoryList = res.data.data;
           this.dataCount = res.data.page.totalRecords;
           if(res.data.data.length==0 || res.data.data==[]){
-              this.page.pageIndex= this.page.pageIndex!=0?this.page.pageIndex-1:this.page.pageIndex;
-              this.init();
+              if(res.data.page.totalRecords!=0){
+                  this.page.pageIndex= this.page.pageIndex!=0?this.page.pageIndex-1:this.page.pageIndex;
+                  this.init();
+              }
+
             }
         } else {
           this.$Message.info({
