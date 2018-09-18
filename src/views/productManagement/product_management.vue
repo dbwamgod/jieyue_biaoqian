@@ -5,7 +5,7 @@
             <h2 style="margin: 6px 0 0 20px">产品管理</h2>
             </Col>
             <Col span="3" style='text-align:right;margin-right:5px;'>
-            <Button type="primary" @click="newCreate" style="    position: absolute;top: 0px;right: 200px;">新建
+            <Button type="primary" @click="newCreate" style="    position: absolute;top: 0px;right: 200px;">新建产品
             </Button>
             <Input v-model="labelname" icon="ios-search" search placeholder="请搜索..." style=" width:170px;"
                    @on-change='searchChange'/>
