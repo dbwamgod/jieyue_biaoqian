@@ -1,66 +1,71 @@
 <template>
     <div class="check_container">
-    <Tree :data="data3" class="menu_product_list" :load-data="loadData" ref="data3"></Tree>
 
+        <Row style="margin: 0;">
+            <Col span="2">
+            <h3 style="    display: inline-block;font-size: 23px">产品:</h3>
 
-        <Row>
-            <Col span="3">
-            <span class="check_container_product">产品</span>
             </Col>
-            <Col span="3">
-            <span class="check_container_list">分类</span>
+            <Col span="3" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+            <span class="check_container_product">{{defaultRules.productName}}</span>
             </Col>
         </Row>
-        <Row>
-            <Col span="3">
-            <p class="Default_rule">预设规则</p>
-            </Col>
-        </Row>
-        <Row style="margin-top: 30px;">
 
-            <Col span="6">
-            <span>{{defaultRules.id}}</span>
+        <Row style="margin: 20px 0 0 0 ;">
+            <Col span="2">
+            <h3 style="    display: inline-block;font-size: 22px">类别:</h3>
             </Col>
-            <Col span="6">
-            <span>{{defaultRules.modifier}}</span>
-            </Col>
-            <Col span="6">
-            <span>{{defaultRules.creator}}</span>
-            </Col>
-            <Col span="6">
-            <span>{{defaultRules.categoryId}}</span>
-            </Col>
-        </Row>
-        <Row>
             <Col span="3">
-            <p class="check_inpout">查询输出</p>
+            <span class="check_container_list">{{defaultRules.categoryName}}</span>
             </Col>
         </Row>
-        <Row style="margin-top: 10px;">
 
-            <Col span="4" offset="7">
+        <Row style="margin-top: 40px;">
+            <Col span="2" >
+            <p class="Default_rule">预设规则:</p>
+            </Col>
+            <Col span="18" style="border: 1px solid #dddee1;min-width: 300px;min-height: 40px;padding: 10px;">
+            <span style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;display: block;">{{defaultRules.queryParam}}</span>
+            </Col>
+        </Row>
+
+        <Row style="margin-top: 40px">
+            <Col span="2">
+            <p class="check_inpout">查询输出:</p>
+            </Col>
+            <Col span="18">
             <div class="container_label_check" ref="container_label_check">
-                <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">标签{{ item + 1 }}
+                <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName"
+                     @on-close="handleClose2" style="height: 35px;line-height: 35px; padding: 0 15px;background: #e1e1e1;     margin: 5px 2.5px 2.5px 5px;
+">{{ item.labelName }}
                 </Tag>
             </div>
             </Col>
         </Row>
-        <Row style="margin-top: 141px;">
-            <Col span="4" offset="12">
-            <Button type="primary" @click="checkInfo">查询</Button>
-            </Col>
-        </Row>
-        <Row>
-            <Col span="3">
-            <p class="detail_list">详情列表</p>
-            </Col>
-        </Row>
 
-        <Row style="margin-top: 30px;">
-            <Col span="24">
+        <Row style="margin-top: 40px;">
+            <Col span="3" offset="6">
+            <Button type="primary" @click="checkInfo" style="margin-right: 40px;">查询</Button>
+            <Button type="primary" @click="comeout">导出</Button>
+            </Col>
+        </Row>
+        <Row style=" margin-top: 50px;">
+            <Col span="2" >
+            <p class="detail_list">查询结果:</p>
+            </Col>
+            <Col span="18">
             <Table :columns="columns1" :data="data2"></Table>
             </Col>
         </Row>
+
+
+        <Row style="margin-top: 30px;">
+            <Col type="flex" justify="center" align="middle" offset="18">
+            <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" style="float: right;"
+                  @on-change="changepage"/>
+            </Col>
+        </Row>
+
     </div>
 </template>
 
@@ -69,170 +74,139 @@
     import Cookies from 'js-cookie';
 
     export default {
+
         name: 'check_product'
         ,
         data () {
             return {
-                columns1: [
-                    {
-                        title: 'Name',
-                        key: 'name'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age'
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    }
-                ],
+                content: '',
+                dataCount: 0,
+                page: {
+                    pageSize: 10,
+                    pageIndex: 1
+                },
+                columns1: [],
                 defaultRules: {},
                 data2: [],
                 data3: [{}],
-                flag: 1,
-                count: [0, 1, 2]
+                check_list: [],
+
             };
         },
+        watch: {
+            '$route' (to, form) {
+                if (to.query.id) {
+                    this.product_getDetail(to.query.id);
+                }
+            }
+        },
         created () {
-            this.product_First_list();
-            this.product_productOutput_list();
-            this.product_getDetail();
+            this.product_getDetail(this.$route.query.id);
+            this.content = this.defaultRules.queryParam;
         },
         methods: {
+            comeout () {
+                if (this.check_list.length) {
+                    if (this.data2.length !== 0) {
+                        window.open(api.product_out(encodeURIComponent(JSON.stringify({
+                            'queryParam': this.defaultRules.queryParam,
+                            'outputVos': this.check_list,
+                            'pageSize': 0,
+                            'pageIndex': 0
+                        }))), '_blank');
+                        window.open(api.product_out(encodeURIComponent(JSON.stringify({
+                            'queryParam': this.defaultRules.queryParam,
+                            'outputVos': this.check_list,
+                            'pageSize': 0,
+                            'pageIndex': 0
+                        }))), '_blank');
+                    } else {
+                        this.$Message.error('没有数据,不能导出');
+                    }
+
+                } else {
+                    this.$Message.info('请先点击查询');
+                }
+
+            },
+            changepage (index) {
+                this.page.pageIndex = index;
+                this.product_productOutput_list();
+            },
             //获取输出列表
             product_productOutput_list () {
-                this.$axios({
-                    method: 'get',
-                    url: api.product_productOutput_list()
-                }).then(res => {
-                });
-            },
-            loadData (item, callback) {
 
-                setTimeout(() => {
-
-                    if (this.flag === 1) {
-                        this.$axios({
-                            method: 'post',
-                            url: api.product_Second_list(),
-                            data: {
-                                form: {
-                                    parentId: item.id
-                                },
-                                pageIndex: 0,
-                                pageSize: 0
-                            }
-
-                        }).then(res => {
-                            if (res.data.code == 200) {
-                                this.flag = 2;
-                                if (res.data.data.length !== 0) {
-                                    const data = res.data.data.map((item, index) => {
-                                        return {
-                                            title: item.categoryName || '',
-                                            id: item.id || '',
-                                            loading: false,
-                                            children: []
-                                        };
-                                    });
-
-                                    callback(data);
-                                } else {
-                                    this.$Message.info('没有数据');
-                                }
-                            }
-                        });
-                    } else if (this.flag === 2) {
-                        this.$axios({
-                            method: 'post',
-                            url: api.queryLabels(),
-                            data: {
-                                'form': {
-                                    'parentId': item.id,
-                                },
-                                'pageIndex': 0,
-                                'pageSize': 0,
-                            }
-                        }).then(res => {
-                            if (res.data.code == 200) {
-                                this.flag === 1;
-                                if (res.data.data.length !== 0) {
-                                    const data = res.data.data.map((item, index) => {
-                                        return {
-                                            title: item.labelName || '',
-                                            id: item.id || '',
-                                            loading: false,
-                                            /*  render:(h, params) => {
-                                                  console.log(params);
-                                                  on: {
-                                                      click: () => {
-                                                          console.log(1);
-                                                      }
-                                                  }
-                                                  return h('span', {
-                                                      style: {
-                                                          display: 'inline-block',
-                                                          width: '100%'
-                                                      }
-                                                  })
-                                              }*/
-                                        };
-                                    });
-                                    callback(data);
-                                } else {
-                                    this.$Message.info('没有数据');
-                                }
-                            }
-                        });
-                    }
-
-                }, 1000);
-            },
-            product_First_list () {
+                this.check_list = this.defaultRules.labelNameVoList;
                 this.$axios({
                     method: 'post',
-                    url: api.product_First_list(),
+                    url: api.product_productOutput_list(),
                     data: {
-                        form: {},
-                        pageIndex: 0,
-                        pageSize: 0
+                        'queryParam': this.defaultRules.queryParam,//"q=*%3A*&wt=json&indent=true&fl=id", encodeURIComponent(
+                        'outputVos': this.check_list,//{"labelCode":"name"},{"labelCode":"tel"},{"labelCode":"addr"},{"labelCode":"phone"},{"labelCode":"age"},{"labelCode":"empt"}
+                        'pageSize': this.page.pageSize,
+                        'pageIndex': this.page.pageIndex - 1
                     }
+                    /*  {
+                        outputVos: {
+                            labelCode: [
+                                this.check_list
+                            ]
+                        },
+                        'pageIndex': 1,
+                        'pageSize': 3,
+                        'productId': this.defaultRules.id,
+                        'queryParam': this.defaultRules.queryParam
+                    }*/
                 }).then(res => {
                     if (res.data.code == 200) {
-                        let result = res.data.data.map((item, index) => {
-                            return {
-                                title: item.categoryName || '',
-                                id: item.id || '',
-                                loading: false,
-                                children: []
-                            };
-                        });
-                        this.data3 = result;
+                        if (res.data.data.length !== 0) {
+                            this.data2 = res.data.data;
+                            this.dataCount = res.data.page.totalRecords;
+                        } else {
+                            this.$Message.error('标签内容没有数据!');
+                        }
 
+                    } else {
+                        this.$Message.info(res.data.msg);
                     }
                 });
             },
-            product_getDetail () {
+
+            product_getDetail (id) {
                 this.$axios({
                     method: 'get',
-                    url: api.product_getDetail(this.$route.query.id),
+                    url: api.product_getDetail(id),
                 }).then(res => {
-                    this.defaultRules = res.data.data;
+
+                    if (res.data.code == 200) {
+                        if (res.data.data !== null) {
+                            this.defaultRules = res.data.data;
+                            this.columns1 = this.defaultRules.labelNameVoList.map((item, index) => {
+                                return {
+                                    title: item.labelName,
+                                    key: item.labelCode
+                                };
+                            });
+                        } else {
+                            this.$Message.info(res.data.msg);
+                        }
+                    } else {
+                        this.$Message.info(res.data.msg + ',没有数据');
+                        let a = setTimeout(() => {
+                            this.$router.back(-1);
+                            clearTimeout(a);
+                        }, 1700);
+                    }
                 });
             },
-            //关闭标签
+
+            //查询
+            checkInfo () {
+                this.product_productOutput_list();
+            },
             handleClose2 (event, name) {
                 const index = this.count.indexOf(name);
                 this.count.splice(index, 1);
-            },
-            //查询
-            checkInfo(){
-                if (this.count.length) {
-                    this.count.push(this.count[this.count.length - 1] + 1);
-                } else {
-                    this.count.push(0);
-                }
             }
         }
     };
@@ -240,43 +214,42 @@
 
 <style scoped>
     .check_container {
-        padding: 40px 32px 0 170px;
+        padding: 40px 32px 0 55px;
     }
 
     .check_container_product {
         font-size: 22px;
+        color: #515a6e;
     }
 
     .check_container_list {
-        font-size: 22px;
+        font-size: 19px;
+        color: #515a6e;
+
     }
 
     .Default_rule {
-        margin-top: 40px;
-        font-size: 22px;
+        font-size: 21px;
+        font-weight: 600;
     }
 
     .check_inpout {
-        margin-top: 40px;
-        font-size: 22px;
+        font-size: 21px;
+        font-weight: 600;
+        border-radius: 5px;
     }
 
     .detail_list {
-        margin-top: 40px;
-        font-size: 22px;
+
+        font-size: 21px;
+        font-weight: 600;
     }
 
-    .menu_product_list {
-        position: absolute;
-        top: 40%;
-        left: 25px;
-    }
     .container_label_check {
-        position: absolute;
-        top: 35%;
-        left: -100%;
-        width: 479px;
-        height: 115px;
+
+        /*overflow-y: scroll;*/
+
+        height: 145px;
         border: 1px solid #dddee1;
         border-radius: 4px;
     }
