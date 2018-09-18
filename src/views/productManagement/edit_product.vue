@@ -126,7 +126,7 @@
                         });
                         this.formValidate = res.data.data;
                         Cookies.set('categoryId', res.data.data.categoryId);
-                        // this.check_out.push(res.data.data.outputParamList);
+                        this.check_out.push(res.data.data.outputParamList);
                         //console.log(this.check_out);
                     } else {
                         this.$Message.info(res.data.msg);
@@ -218,7 +218,7 @@
                                                 'span',
                                                 {
                                                     style: this.check_out_flag || this.defaultFlag.find(r => params.data.id === r) ? {
-                                                        /*color: '#9ea7b4',*/ display: 'inline-block',
+                                                        color: '#9ea7b4', display: 'inline-block',
                                                         maxWidth: '90px',
                                                         overflow: 'hidden',
                                                         textOverflow: 'ellipsis',
@@ -238,7 +238,8 @@
                                                             // this.judge ? ev.path[0].style.color = '#9ea7b4' : ev.path[0].style.color = '#495060';
                                                             //this.big_container.push(ev.path[0]);
                                                             //console.log(this.big_container);
-                                                            //ev.path[0].style.color = '#9ea7b4';
+                                                            ev.path[0].style.color = '#9ea7b4';
+/*
 
                                                             let flag=this.title.find(r =>  { return r.labelId === params.data.id });
                                                             if(!flag){
@@ -247,18 +248,22 @@
                                                                     this.title.push(params.data);
                                                                 }
                                                             }
+*/
 
-                                                        /*    let flag = this.title.find(r => r.labelId === params.data.id);
+                                                            let flag = this.title.find(r => r.labelId === params.data.id);
 
                                                             if (!flag) {
+                                                                console.log(this.title.filter(r => {
+                                                                    console.log(r);
+                                                                    return r.labelId === params.data.id
+                                                                })[0]);
                                                                 if (this.title.filter(r => r.labelId=== params.data.id)[0]) {
                                                                 }else {
-
                                                                     this.title.push(params.data);
                                                                     this.check_out.push(ev.path[0]);
                                                                     // this.big_container.push(ev.path[0])
                                                                 }
-                                                            }*/
+                                                            }
                                                         }
                                                     }
                                                 },
