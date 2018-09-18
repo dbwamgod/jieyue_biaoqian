@@ -180,12 +180,9 @@ export default {
                 {
                   props: {
                     //available 可用
-                    type: "error",
+                    type: params.row.available == 0?'primary':"error",
                     size: "small"
                   },
-                    style:{
-                      background:params.row.available == 0?'#2d8cf0': '#e13c13'
-                    },
                   on: {
                     click: () => {
                       this.available(params.row.id, params.row.available);
