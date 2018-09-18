@@ -184,7 +184,8 @@ export default {
                     size: "small"
                   },
                     style:{
-                      background:params.row.available == 0?'#2d8cf0': '#e13c13'
+                      background:params.row.available == 0?'#2d8cf0': '#e13c13',
+                      borderColor:params.row.available == 0?'#2d8cf0': '#e13c13',
                     },
                   on: {
                     click: () => {
