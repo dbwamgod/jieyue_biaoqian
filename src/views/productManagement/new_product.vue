@@ -5,8 +5,8 @@
             <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData"></Tree>
             </Col>
         </Row>
-        <div  style="margin-left: 10%;">
-            <Row >
+        <div style="margin-left: 10%;">
+            <Row>
                 <Col>
                 <div class="new_product_fir">
                     <!--<p class="new_text"></p>-->
@@ -29,10 +29,10 @@
                 </Col>
             </Row>
             <Row>
-                <Col  span="1" offset="1">
+                <Col span="1" offset="1">
                 <span style="padding: 7px;">查询规则</span>
                 </Col>
-                <Col span="18" >
+                <Col span="18">
                 <Form style="display:inline-block; width: 100%;">
                     <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
                            placeholder="Enter something..."></Input>
@@ -44,18 +44,19 @@
                 <Col span="1" offset="1">
                 <p style="padding: 7px;">输出标签</p>
                 </Col>
-                <Col span="18" >
+                <Col span="18">
                 <div class="container_label" ref="container_label">
                     <Tag v-for="(item,index) in title" :key="index" :name="item.title" closable
-                         @on-close="handleClose2" style=" background: #dddee1;height: 40px;line-height: 40px;padding: 0 15px;">{{ item.title}}
+                         @on-close="handleClose2"
+                         style=" background: #dddee1;height: 40px;line-height: 40px;padding: 0 15px;">{{ item.title}}
                     </Tag>
                 </div>
                 </Col>
 
             </Row>
             <Row style="margin-top: 40px">
-                <Col  span="3" offset="6">
-                <Button type="primary" @click="submit" >保存</Button>
+                <Col span="3" offset="6">
+                <Button type="primary" @click="submit">保存</Button>
                 </Col>
             </Row>
 
@@ -79,21 +80,21 @@
                     categoryName: '',
                     queryParam: '',
                 },
-                data3: [{}],
+                data3: [],
                 title: [],
                 out: [],
                 select: [],
-                style_active:{
-                    color:"#dddee1",
-                    cursor:'pointer',
+                style_active: {
+                    color: '#dddee1',
+                    cursor: 'pointer',
                     display: 'inline-block',
                     maxWidth: '80px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
-                    lineHeight:'14px'
+                    lineHeight: '14px'
                 },
-                formValidate_list:{},
+                formValidate_list: {},
                 big_container: [],
                 check_out: [],
                 check_out_flag: false
@@ -105,45 +106,169 @@
             this.product_First_list();
         },
         methods: {
+            init () {
+                //类型
+                this.$axios({
+                    method: 'get',
+                    url: api.product_getDetail_name_list(),
+                }).then(res => {
+                    this.formValidate_list = res.data.data;
+                });
+            },
+            //页面fenlei列表
+            product_First_list () {
+                this.$axios({
+                    method: 'get',
+                    url: api.product_First_list(),
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        this.data3 = res.data.data.map((item, index) => {
+                            return {
+                                title: item.categoryName,
+                                id: item.id,
+                                loading: false,
+                                children: [],
+                                expand: false,
+                                type: 1,
+                                render: (h, params) => {
+                                    return h('span', {
+                                        style: {
+                                            cursor: 'pointer',
+                                            display: 'inline-block',
+                                            maxWidth: '110px',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap',
+                                            lineHeight: '14px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.treeHandClick(params);
+                                            }
+                                        }
+                                    }, item.categoryName);
+                                }
+                            };
+                        });
+
+                    }
+                });
+            },
+            treeHandClick (params) {
+                if (params.data.children.length == 0) {
+                    this.loadData(params.data, data => {
+                        if (data.length == 0 || JSON.stringify(data) === '[]') {
+                            return params.data.expand = false;
+                        }
+                        params.data.children = data;
+                        params.data.expand = true;
+                    });
+                } else {
+                    params.data.expand = !params.data.expand;
+                }
+            },
+            //保存
+            submit () {
+
+                //保存的接口
+                this.title.map((item, index) => {
+                    return this.out.push(item.id);
+                });
+
+                this.$axios({
+                    method: 'post',
+                    url: api.product_add(),
+                    data: {
+                        productName: this.formValidate.productName,//产品名称
+                        queryParam: this.formValidate.queryParam,//查询参数(规则)
+                        categoryId: this.formValidate_list.id,//产品类别ID
+                        outputParamIdList: this.out,//输出参数id列表(数组)
+                        userId: Cookies.get('userId'),//用户ID
+                    }
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        this.out = [];
+                        this.$router.back(-1);
+
+                    } else {
+                        this.out = [];
+                        this.$Message.info(res.data.msg);
+                    }
+                });
+
+            },
+            handleClose2 (event, name) {
+                /*     let myError
+                     if (!myError) {
+                         let index;
+                         this.title.map((r, m) => {
+                             if (r.title === name) {
+                                 index = m;
+
+                             }
+                         });
+                         this.title.splice(index, 1);
+                         this.style_active = {};
+                     }*/
+
+                let myError;
+                if (!myError) {
+                    let index;
+                    let designation;
+                    this.title.map((r, m) => {
+                        if (r.title === name) {
+                            index = m;
+                            designation = name;
+                        }
+                    });
+                    if (this.check_out.length) {
+                        this.check_out.forEach((r, i) => {
+                            if (r.textContent === designation) {
+                                if (this.title) {
+                                    this.check_out[i].style.color = '#dddee1';
+                                }
+                            }
+                        });
+                    }
+                    this.title.splice(index, 1);
+                    this.check_out_flag = false;
+                }
+
+            },
             loadData (item, callback) {
                 if (item.type === 1) {
                     this.$axios({
-                        method: 'post',
-                        url: api.product_Second_list(),
-                        data: {
-                            form: {
-                                parentId: item.id
-                            },
-                            pageIndex: 0,
-                            pageSize: 0
-                        }
+                        method: 'get',
+                        url: api.product_Second_list(item.id),
                     }).then(res => {
                         if (res.data.code == 200) {
                             if (res.data.data.length !== 0) {
                                 const data = res.data.data.map((item, index) => {
                                     return {
                                         title: item.categoryName || '',
-                                        id: item.parentId || '',
+                                        id: item.id || '',
                                         type: 2,
                                         loading: false,
                                         expand: false,
                                         children: [],
-                                        render:(h,params)=>{
+                                        render: (h, params) => {
 
-                                            return h('span',{
-                                                style:{  cursor: 'pointer',
+                                            return h('span', {
+                                                style: {
+                                                    cursor: 'pointer',
                                                     display: 'inline-block',
                                                     maxWidth: '110px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap',
-                                                    lineHeight:'14px'},
-                                                on :{
-                                                    click:()=>{
-                                                        this.treeHandClick(params)
+                                                    lineHeight: '14px'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.treeHandClick(params);
                                                     }
                                                 }
-                                            },item.categoryName)
+                                            }, item.categoryName);
                                         }
                                     };
                                 });
@@ -167,7 +292,7 @@
                         url: api.queryLabels(),
                         data: {
                             'form': {
-                                'parentId': item.id,
+                                'categoryId': item.id,
                             },
                             'pageIndex': 0,
                             'pageSize': 0,
@@ -242,143 +367,6 @@
                 }
 
             },
-            init () {
-                //类型
-                this.$axios({
-                    method: 'get',
-                    url: api.product_getDetail_name_list(),
-                }).then(res => {
-
-                    this.formValidate_list = res.data.data;
-
-                });
-            },
-            //页面fenlei列表
-            product_First_list () {
-                this.$axios({
-                    method: 'post',
-                    url: api.product_First_list(),
-                    data: {
-                        form: {},
-                        pageIndex: 0,
-                        pageSize: 0
-                    }
-                }).then(res => {
-                    if (res.data.code == 200) {
-                        let result = res.data.data.map((item, index) => {
-                            return {
-                                title: item.categoryName,
-                                id: item.id,
-                                loading: false,
-                                children: [],
-                                expand: false,
-                                type: 1,
-                                render:(h,params)=>{
-                                    return h('span',{
-                                        style:{
-                                            cursor: 'pointer',
-                                            display: 'inline-block',
-                                            maxWidth: '110px',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap',
-                                            lineHeight:'14px'
-                                        },
-                                        on :{
-                                            click:()=>{
-                                                this.treeHandClick(params)
-                                            }
-                                        }
-                                    },item.categoryName)
-                                }
-                            };
-                        });
-                        this.data3 = result;
-                    }
-                });
-            },
-
-            treeHandClick (params) {
-                if (params.data.children.length == 0) {
-                    this.loadData(params.data, data => {
-                        if (data.length == 0 || JSON.stringify(data) === '[]') {
-                            return params.data.expand = false;
-                        }
-                        params.data.children = data;
-                        params.data.expand = true;
-                    });
-                } else {
-                    params.data.expand = !params.data.expand;
-                }
-            },
-            //保存
-            submit () {
-
-                //保存的接口
-                this.title.map((item, index) => {
-                    return this.out.push(item.id);
-                });
-
-                this.$axios({
-                    method: 'post',
-                    url: api.product_add(),
-                    data: {
-                        productName: this.formValidate.productName,//产品名称
-                        queryParam: this.formValidate.queryParam,//查询参数(规则)
-                        categoryId: this.formValidate_list.id,//产品类别ID
-                        outputParamIdList: this.out,//输出参数id列表(数组)
-                        userId: Cookies.get('userId'),//用户ID
-                    }
-                }).then(res => {
-                    if (res.data.code == 200) {
-                        this.out=[]
-                        this.$router.back(-1);
-
-                    } else {
-                        this.out=[]
-                        this.$Message.info(res.data.msg);
-                    }
-                });
-
-            },
-            handleClose2 (event, name) {
-           /*     let myError
-                if (!myError) {
-                    let index;
-                    this.title.map((r, m) => {
-                        if (r.title === name) {
-                            index = m;
-
-                        }
-                    });
-                    this.title.splice(index, 1);
-                    this.style_active = {};
-                }*/
-
-                let myError;
-                if (!myError) {
-                    let index;
-                    let designation;
-                    this.title.map((r, m) => {
-                        if (r.title === name) {
-                            index = m;
-                            designation = name;
-                        }
-                    });
-                    if (this.check_out.length) {
-                        this.check_out.forEach((r, i) => {
-                            if (r.textContent === designation) {
-                                if (this.title) {
-                                    this.check_out[i].style.color = '#dddee1';
-                                }
-                            }
-                        });
-                    }
-                    this.title.splice(index, 1);
-                    this.check_out_flag = false;
-                }
-
-            }
         }
     };
 </script>
@@ -389,6 +377,7 @@
         margin-left: 10%;
 
     }
+
     .new_product_fir {
         display: flex;
         margin: 30px 0 20px 0;

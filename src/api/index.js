@@ -16,11 +16,11 @@ export default {
     },
     //获取一级分类
     product_First_list() {
-        return _baseUrlA+'/category/queryLabelCategorys';
+        return _baseUrlA+'/category/queryUsefulLabelCategorys';
     },
     //获取二级分类
-    product_Second_list() {
-        return _baseUrlA+'/secondaryCategory/queryLabelCategorys';
+    product_Second_list(id) {
+        return _baseUrlA+'/secondaryCategory/queryUsefulLabelCategorys/'+id;
     },
     /**/
     //导出

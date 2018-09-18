@@ -102,7 +102,7 @@
         },
         watch: {
             '$route.query.data6.id' (to, form) {
-                // console.log(to.query.data6.id,1111111111111,this.find_id);
+
                 if (to.query.data6.id) {
                     this.detail_type_list(to.query.data6.id);
                 }
@@ -113,21 +113,23 @@
         },
         methods: {
             //编辑的当前数据
-            detail_type_list (id) {
-                // console.log(id);
+            detail_type_list () {
+
                 this.$axios({
                     method: 'post',
-                    url: api.product_productOutput_find(this.find_id.id || id),
+                    url: api.product_productOutput_find(this.find_id.id),
                 }).then(res => {
                     if (res.data.code == 200) {
                         this.title = res.data.data.outputParamList;
                         this.title.map(r => {
                             this.defaultFlag.push(r.labelId);
                         });
+
                         this.formValidate = res.data.data;
+
                         Cookies.set('categoryId', res.data.data.categoryId);
                         this.check_out.push(res.data.data.outputParamList);
-                        //console.log(this.check_out);
+
                     } else {
                         this.$Message.info(res.data.msg);
                     }
@@ -136,22 +138,15 @@
             loadData (item, callback) {
                 if (item.type === 1) {
                     this.$axios({
-                        method: 'post',
-                        url: api.product_Second_list(),
-                        data: {
-                            form: {
-                                parentId: item.id
-                            },
-                            pageIndex: 0,
-                            pageSize: 0
-                        }
+                        method: 'get',
+                        url: api.product_Second_list(item.id),
                     }).then(res => {
                         if (res.data.code == 200) {
                             if (res.data.data.length !== 0) {
                                 const data = res.data.data.map((item, index) => {
                                     return {
                                         title: item.categoryName || '',
-                                        id: item.parentId || '',
+                                        id: item.id || '',
                                         type: 2,
                                         loading: false,
                                         expand: false,
@@ -198,7 +193,7 @@
                         url: api.queryLabels(),
                         data: {
                             form: {
-                                parentId: item.id
+                                categoryId: item.id
                             },
                             pageIndex: 0,
                             pageSize: 0
@@ -237,26 +232,22 @@
                                                         click: ev => {
                                                             // this.judge ? ev.path[0].style.color = '#9ea7b4' : ev.path[0].style.color = '#495060';
                                                             //this.big_container.push(ev.path[0]);
-                                                            //console.log(this.big_container);
-                                                            ev.path[0].style.color = '#9ea7b4';
-/*
 
-                                                            let flag=this.title.find(r =>  { return r.labelId === params.data.id });
-                                                            if(!flag){
-                                                                if (this.title.filter(r => r.id === params.data.id)[0]) {
-                                                                } else {
-                                                                    this.title.push(params.data);
-                                                                }
-                                                            }
-*/
+                                                            ev.path[0].style.color = '#9ea7b4';
+                                                            /*
+
+                                                                                                                        let flag=this.title.find(r =>  { return r.labelId === params.data.id });
+                                                                                                                        if(!flag){
+                                                                                                                            if (this.title.filter(r => r.id === params.data.id)[0]) {
+                                                                                                                            } else {
+                                                                                                                                this.title.push(params.data);
+                                                                                                                            }
+                                                                                                                        }
+                                                            */
 
                                                             let flag = this.title.find(r => r.labelId === params.data.id);
 
                                                             if (!flag) {
-                                                                console.log(this.title.filter(r => {
-                                                                    console.log(r);
-                                                                    return r.labelId === params.data.id
-                                                                })[0]);
                                                                 if (this.title.filter(r => r.labelId=== params.data.id)[0]) {
                                                                 }else {
                                                                     this.title.push(params.data);
@@ -305,13 +296,8 @@
             //分类页面列表
             product_First_list () {
                 this.$axios({
-                    method: 'post',
+                    method: 'get',
                     url: api.product_First_list(),
-                    data: {
-                        form: {},
-                        pageIndex: 0,
-                        pageSize: 0
-                    }
                 }).then(res => {
                     if (res.data.code == 200) {
                         let result = res.data.data.map((item, index) => {
@@ -404,7 +390,7 @@
                             designation = name;
                         }
                     });
-                    console.log(this.check_out);
+
                     if (this.check_out.length) {
                         this.check_out.forEach((r, i) => {
                             if (r.textContent === designation) {

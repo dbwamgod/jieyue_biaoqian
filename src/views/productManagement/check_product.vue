@@ -247,9 +247,9 @@
 
     .container_label_check {
 
-        /*overflow-y: scroll;*/
+        overflow-y: scroll;
 
-        height: 145px;
+        max-height: 145px;
         border: 1px solid #dddee1;
         border-radius: 4px;
     }
