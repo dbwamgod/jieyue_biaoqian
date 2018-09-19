@@ -32,7 +32,7 @@
                 </Col>
             </Row>
             <Row>
-                <Col  offset="1" style="    float: left;width: 80px;">
+                <Col offset="1" style="    float: left;width: 80px;">
                 <span style="padding: 7px;">查询规则</span>
                 </Col>
                 <Col span="18" style="    margin-left: 3%;">
@@ -46,7 +46,7 @@
             </Row>
 
             <Row style="margin-top: 40px">
-                <Col  offset="1" style="     float: left;width: 80px;  ">
+                <Col offset="1" style="     float: left;width: 80px;  ">
                 <p style="padding: 7px;">输出标签</p>
                 </Col>
                 <Col span="18" style="    margin-left: 3%;">
@@ -63,7 +63,7 @@
             <Row style="margin-top: 40px">
                 <Col span="3" offset="6">
                 <Button type="primary" @click="submit">保存</Button>
-                <Button  @click="oncanel" style="margin-left: 3%;">取消</Button>
+                <Button @click="oncanel" style="margin-left: 3%;">取消</Button>
                 </Col>
             </Row>
 
@@ -99,6 +99,7 @@
         },
         created () {
             this.find_id = JSON.parse(this.$route.query.data6);
+
             this.init();
         },
         watch: {
@@ -113,27 +114,24 @@
             Cookies.remove('categoryId');
         },
         methods: {
-            oncanel(){
-                this.$router.back(-1)
+            oncanel () {
+                this.$router.back(-1);
             },
             //编辑的当前数据
-            detail_type_list () {
-
+            detail_type_list (id) {
+                console.log(this.find_id.id);
                 this.$axios({
                     method: 'post',
-                    url: api.product_productOutput_find(this.find_id.id),
+                    url: api.product_productOutput_find(this.find_id.id||id),
                 }).then(res => {
                     if (res.data.code == 200) {
                         this.title = res.data.data.outputParamList;
                         this.title.map(r => {
                             this.defaultFlag.push(r.labelId);
                         });
-
                         this.formValidate = res.data.data;
-
                         Cookies.set('categoryId', res.data.data.categoryId);
                         this.check_out.push(res.data.data.outputParamList);
-
                     } else {
                         this.$Message.info(res.data.msg);
                     }
@@ -238,22 +236,13 @@
                                                             //this.big_container.push(ev.path[0]);
 
                                                             ev.path[0].style.color = '#9ea7b4';
-                                                            /*
 
-                                                                                                                        let flag=this.title.find(r =>  { return r.labelId === params.data.id });
-                                                                                                                        if(!flag){
-                                                                                                                            if (this.title.filter(r => r.id === params.data.id)[0]) {
-                                                                                                                            } else {
-                                                                                                                                this.title.push(params.data);
-                                                                                                                            }
-                                                                                                                        }
-                                                            */
 
                                                             let flag = this.title.find(r => r.labelId === params.data.id);
 
                                                             if (!flag) {
-                                                                if (this.title.filter(r => r.labelId=== params.data.id)[0]) {
-                                                                }else {
+                                                                if (this.title.filter(r => r.labelId === params.data.id)[0]) {
+                                                                } else {
                                                                     this.title.push(params.data);
                                                                     this.check_out.push(ev.path[0]);
                                                                     // this.big_container.push(ev.path[0])
@@ -388,7 +377,7 @@
                     let index;
                     let designation;
                     this.title.map((r, m) => {
-                        let nameTitle=r.title||r.labelName
+                        let nameTitle = r.title || r.labelName;
                         if (nameTitle === name) {
                             index = m;
                             designation = name;

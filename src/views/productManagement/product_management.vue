@@ -7,8 +7,8 @@
             <Col span="6" style='text-align:right;margin-right:5px;'>
             <Button type="primary" @click="newCreate" style="margin-right: 4%;">新建
             </Button>
-            <Input v-model="labelname" icon="ios-search" search placeholder="请搜索..."style="    width: 40%;"
-                   @on-change='searchChange'/>
+            <Input v-model="labelname" icon="ios-search" placeholder="请搜索..." style="width: 40%;"/>
+            <Button type="primary" @click="searchChange">搜索</Button>
             </Col>
         </Row>
         <Table border :columns="columns7" :data="data6"></Table>
@@ -42,7 +42,6 @@
                     {
                         title: '序号',
                         key: 'id',
-
                     },
                     {
                         title: '名称',
@@ -128,7 +127,11 @@
         },
         methods: {
             searchChange () {
-                this.init();
+                if (this.data6||this.labelname) {
+                    this.init();
+                }else{
+                    this.$Message.info("请输入搜索词")
+                }
             },
             newCreate () {
                 this.$router.push({name: 'new_product'});
@@ -144,6 +147,7 @@
                         data6: JSON.stringify(index)
                     },
                 });
+                this.reload()
             },
             init () {
                 this.$axios({
@@ -152,29 +156,13 @@
                     data: {
                         keyword: this.labelname,
                         desc: true,
-                        currentPage: this.page.pageIndex,
+                        currentPage: this.page.pageIndex===0?1:this.page.pageIndex,
                         pageSize: this.page.pageSize
                     }
                 }).then(res => {
                     if (res.data.code == 200) {
                         if (res.data.data == null) {
-                            this.$axios({
-                                method: 'post',
-                                url: api.product_list(),
-                                data: {
-                                    keyword: this.labelname,
-                                    desc: true,
-                                    currentPage: res.data.page.totalPages,
-                                    pageSize: res.data.page.pageSize
-                                }
-                            }).then(res => {
-                                if (res.data.code == 200) {
-                                    this.data6 = res.data.data;
-                                    this.dataCount = res.data.page.totalRecords;
-                                } else {
-                                    this.data6 = [];
-                                }
-                            });
+                            this.data6 = []
                         } else {
                             this.data6 = res.data.data;
                             this.dataCount = res.data.page.totalRecords;
