@@ -44,7 +44,7 @@
         </Row>
 
         <Row style="margin-top: 40px;">
-            <Col span="3" offset="6">
+            <Col span="6" offset="8">
             <Button type="primary" @click="checkInfo" style="margin-right: 40px;">查询</Button>
             <Button type="primary" @click="comeout">导出</Button>
             </Col>
@@ -60,8 +60,8 @@
 
 
         <Row style="margin-top: 30px;">
-            <Col type="flex" justify="center" align="middle" offset="18">
-            <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" style="float: right;"
+            <Col   style="margin-left: 52%;    width: 31%; text-align: right;">
+            <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex"
                   @on-change="changepage"/>
             </Col>
         </Row>
