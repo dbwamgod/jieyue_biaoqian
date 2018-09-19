@@ -2,26 +2,29 @@
     <div class="check_container">
 
         <Row style="margin: 0;">
-            <Col span="2">
+            <Col span="3" >
             <h3 style="    display: inline-block;font-size: 23px">产品:</h3>
 
-            </Col>
-            <Col span="3" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+            </Col  >
+            <Col span="3" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 300px;">
             <span class="check_container_product">{{defaultRules.productName}}</span>
             </Col>
         </Row>
 
         <Row style="margin: 20px 0 0 0 ;">
-            <Col span="2">
+            <Col span="3">
             <h3 style="    display: inline-block;font-size: 22px">类别:</h3>
             </Col>
-            <Col span="3">
+            <Col span="3" style="text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    ">
             <span class="check_container_list">{{defaultRules.categoryName}}</span>
             </Col>
         </Row>
 
         <Row style="margin-top: 40px;">
-            <Col span="2" >
+            <Col span="3" >
             <p class="Default_rule">预设规则:</p>
             </Col>
             <Col span="18" style="border: 1px solid #dddee1;min-width: 300px;min-height: 40px;padding: 10px;">
@@ -30,7 +33,7 @@
         </Row>
 
         <Row style="margin-top: 40px">
-            <Col span="2">
+            <Col span="3">
             <p class="check_inpout">查询输出:</p>
             </Col>
             <Col span="18">
@@ -50,7 +53,7 @@
             </Col>
         </Row>
         <Row style=" margin-top: 50px;">
-            <Col span="2" >
+            <Col span="3" >
             <p class="detail_list">查询结果:</p>
             </Col>
             <Col span="18">
@@ -214,7 +217,7 @@
 
 <style scoped>
     .check_container {
-        padding: 40px 32px 0 55px;
+        padding: 4% 5% 0 5%;
     }
 
     .check_container_product {

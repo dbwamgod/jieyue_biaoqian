@@ -29,19 +29,19 @@
                 </Col>
             </Row>
             <Row>
-                <Col span="1" offset="1">
+                <Col style="    float: left;width: 80px;" offset="1">
                 <span style="padding: 7px;">查询规则</span>
                 </Col>
                 <Col span="18">
                 <Form style="display:inline-block; width: 100%;">
                     <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
-                           placeholder="Enter something..."></Input>
+                           placeholder="请输入查询规则"></Input>
                 </Form>
                 </Col>
             </Row>
 
             <Row style="margin-top: 40px">
-                <Col span="1" offset="1">
+                <Col style="    float: left;width: 80px;" offset="1">
                 <p style="padding: 7px;">输出标签</p>
                 </Col>
                 <Col span="18">
@@ -57,6 +57,7 @@
             <Row style="margin-top: 40px">
                 <Col span="3" offset="6">
                 <Button type="primary" @click="submit">保存</Button>
+                <Button style="margin-left: 10px" @click="oncanel">返回</Button>
                 </Col>
             </Row>
 
@@ -97,7 +98,8 @@
                 formValidate_list: {},
                 big_container: [],
                 check_out: [],
-                check_out_flag: false
+                check_out_flag: false,
+                intermediateVariable:[]
 
             };
         },
@@ -106,6 +108,10 @@
             this.product_First_list();
         },
         methods: {
+            oncanel(){
+                this.$router.back(-1)
+            },
+            //类别分类
             init () {
                 //类型
                 this.$axios({
@@ -115,15 +121,14 @@
                     this.formValidate_list = res.data.data;
                 });
             },
-            //页面fenlei列表
+            //tree初始化页面列表
             product_First_list () {
                 this.$axios({
                     method: 'get',
                     url: api.product_First_list(),
                 }).then(res => {
                     if (res.data.code == 200) {
-                        this.data3 = res.data.data.map((item, index) => {
-                            return {
+                        this.data3  = res.data.data.map((item, index) => {return {
                                 title: item.categoryName,
                                 id: item.id,
                                 loading: false,
@@ -148,8 +153,8 @@
                                         }
                                     }, item.categoryName);
                                 }
-                            };
-                        });
+                            };});
+
 
                     }
                 });
@@ -188,6 +193,10 @@
                 }).then(res => {
                     if (res.data.code == 200) {
                         this.out = [];
+                        this.formValidate={}
+                        this.title=[]
+                        this.init()
+                        this.product_First_list()
                         this.$router.back(-1);
 
                     } else {
@@ -197,20 +206,8 @@
                 });
 
             },
+            //关闭tag标签
             handleClose2 (event, name) {
-                /*     let myError
-                     if (!myError) {
-                         let index;
-                         this.title.map((r, m) => {
-                             if (r.title === name) {
-                                 index = m;
-
-                             }
-                         });
-                         this.title.splice(index, 1);
-                         this.style_active = {};
-                     }*/
-
                 let myError;
                 if (!myError) {
                     let index;
@@ -235,6 +232,7 @@
                 }
 
             },
+            //异步加载tree
             loadData (item, callback) {
                 if (item.type === 1) {
                     this.$axios({
@@ -327,7 +325,6 @@
                                                     click: (ev) => {
                                                         this.big_container.push(ev.path[0]);
                                                         ev.path[0].style.color = '#9ea7b4';
-
                                                         let flag = this.title.find(r => {
                                                             return r.labelId === params.data.id;
                                                         });
@@ -385,7 +382,7 @@
 
     .container_label {
         padding-left: 2px;
-        /*overflow-y: scroll;*/
+        overflow-y: scroll;
         height: 115px;
         max-height: 200px;
         border: 2px solid #dddee1;

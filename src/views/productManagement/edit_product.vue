@@ -14,13 +14,13 @@
                           style="flex: 0;padding-top: 10px;    padding-left: 4.6%;">
                         <FormItem label="产品名称" prop="product_id" style="float: left;width: 360px;">
                             <Input v-model="formValidate.productName" placeholder="请输入产品名称"
-                                   style="width: 230px;"></Input>
+                                   style="width: 230px;margin-left: 14%;"></Input>
                         </FormItem>
                         <FormItem label="产品类别" prop="product_type" style="float: left;width: 360px;">
 
                             <Select v-model="formValidate.categoryId"
                                     placeholder="请输入产品类别"
-                                    style="width: 230px;">
+                                    style="width: 230px;margin-left: 14%;">
                                 <Option v-for="(item,index) in formValidate_list" :key="index"
                                         :value="item.id">
                                     {{item.categoryName || ''}}
@@ -32,10 +32,10 @@
                 </Col>
             </Row>
             <Row>
-                <Col span="1" offset="1">
+                <Col  offset="1" style="    float: left;width: 80px;">
                 <span style="padding: 7px;">查询规则</span>
                 </Col>
-                <Col span="18">
+                <Col span="18" style="    margin-left: 3%;">
                 <Form style="display: inline-block;  width: 100%;">
                     <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
                            placeholder="Enter something..."></Input>
@@ -46,10 +46,10 @@
             </Row>
 
             <Row style="margin-top: 40px">
-                <Col span="1" offset="1">
+                <Col  offset="1" style="     float: left;width: 80px;  ">
                 <p style="padding: 7px;">输出标签</p>
                 </Col>
-                <Col span="18">
+                <Col span="18" style="    margin-left: 3%;">
                 <div class="container_label" ref="container_label">
                     <Tag v-for="(item,index) in title" :key="index" :name="item.labelName||item.title"
                          closable @on-close="handleClose2"
@@ -63,6 +63,7 @@
             <Row style="margin-top: 40px">
                 <Col span="3" offset="6">
                 <Button type="primary" @click="submit">保存</Button>
+                <Button  @click="oncanel" style="margin-left: 3%;">取消</Button>
                 </Col>
             </Row>
 
@@ -112,6 +113,9 @@
             Cookies.remove('categoryId');
         },
         methods: {
+            oncanel(){
+                this.$router.back(-1)
+            },
             //编辑的当前数据
             detail_type_list () {
 
@@ -422,7 +426,7 @@
 
     .container_label {
         padding-left: 2px;
-        /*overflow-y: scroll;*/
+        overflow-y: scroll;
         height: 115px;
         max-height: 200px;
         border: 2px solid #dddee1;
