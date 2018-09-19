@@ -108,8 +108,13 @@
             this.product_First_list();
         },
         methods: {
+            //取消
             oncanel(){
                 this.$router.back(-1)
+                this.formValidate={}
+                this.title=[]
+                this.init()
+                this.product_First_list()
             },
             //类别分类
             init () {
