@@ -1,11 +1,11 @@
 <template>
     <div ref="container_box" id="container_box" class="container_box">
-        <Row style="position: fixed;width: 8.5%; height: 100%;background:#585b6d;color: #dddee1;opacity: .7;">
+        <Row style="position: fixed;width: 160px; height: 100%;background:#585b6d;color: #dddee1;opacity: .7;">
             <Col class="Col_product_new">
             <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData"></Tree>
             </Col>
         </Row>
-        <div style="margin-left: 10%">
+        <div style="margin-left: 160px">
             <Row>
                 <Col>
                 <div class="new_product_fir">
@@ -61,7 +61,7 @@
             </Row>
 
             <Row style="margin-top: 40px">
-                <Col span="3" offset="6">
+                <Col span="12" offset="6">
                 <Button type="primary" @click="submit">保存</Button>
                 <Button @click="oncanel" style="margin-left: 3%;">取消</Button>
                 </Col>
