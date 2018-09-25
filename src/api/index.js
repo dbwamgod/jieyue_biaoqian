@@ -32,6 +32,9 @@ export default {
     product_Second_list(id) {
         return _baseUrlA+'/secondaryCategory/queryUsefulLabelCategorys/'+id;
     },
+    product_queryLabels(id){
+        return _baseUrlA + '/manage/queryUsefulLabels/'+id;
+    },
     /**/
     //导出
     product_out(json) {

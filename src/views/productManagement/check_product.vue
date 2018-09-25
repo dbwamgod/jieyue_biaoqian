@@ -252,7 +252,7 @@
 
     .container_label_check {
 
-        overflow-y: scroll;
+        overflow-y: auto;
 
         max-height: 145px;
         border: 1px solid #dddee1;

@@ -4,8 +4,10 @@
 
 <template>
     <Menu ref="sideMenu" :active-name="activeName" :open-names="['0']" :theme="menuTheme" width="auto"
-          @on-select="menuSelect"  :accordion="false">
-        <Submenu name="1" style='margin-top: 10px;'>
+          @on-select="menuSelect" style="" :accordion="false">
+        <Submenu name="1" >
+
+
             <template slot="title">
                 <Icon type="ios-analytics"></Icon>
                 <router-link tag="span" to="/typeFirst">分类管理</router-link>
