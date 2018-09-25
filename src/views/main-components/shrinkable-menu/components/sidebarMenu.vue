@@ -36,7 +36,7 @@
                 </router-link>
             </div>
         </MenuItem>
-        <MenuItem name="3" style="padding: 0;font-weight: 100;margin: 10px 0;">
+        <MenuItem name="3" style="padding: 0;font-weight: 100;">
             <div style="margin: 0 24px;">
                 <router-link tag="li" to="/product_management/index"
                              style="width:100%; height: 50px; line-height: 50px; ">

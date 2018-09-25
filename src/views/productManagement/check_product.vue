@@ -47,7 +47,7 @@
         </Row>
 
         <Row style="margin-top: 40px;">
-            <Col span="6" offset="8">
+            <Col span="12" offset="8">
             <Button type="primary" @click="checkInfo" style="margin-right: 40px;">查询</Button>
             <Button type="primary" @click="comeout">导出</Button>
             </Col>
@@ -130,7 +130,6 @@
                 } else {
                     this.$Message.info('请先点击查询');
                 }
-
             },
             changepage (index) {
                 this.page.pageIndex = index;
@@ -139,13 +138,17 @@
             //获取输出列表
             product_productOutput_list () {
 
-                this.check_list = this.defaultRules.labelNameVoList;
+                // this.check_list = this.defaultRules.labelNameVoList;
+                this.defaultRules.labelNameVoList.forEach(r=>{
+                    this.check_list.push(r.labelCode)
+                })
+               // console.log(this.check_list,111);
                 this.$axios({
                     method: 'post',
                     url: api.product_productOutput_list(),
                     data: {
                         'queryParam': this.defaultRules.queryParam,//"q=*%3A*&wt=json&indent=true&fl=id", encodeURIComponent(
-                        'outputVos': this.check_list,//{"labelCode":"name"},{"labelCode":"tel"},{"labelCode":"addr"},{"labelCode":"phone"},{"labelCode":"age"},{"labelCode":"empt"}
+                        'codeIds': this.check_list,//{"labelCode":"name"},{"labelCode":"tel"},{"labelCode":"addr"},{"labelCode":"phone"},{"labelCode":"age"},{"labelCode":"empt"}
                         'pageSize': this.page.pageSize,
                         'pageIndex': this.page.pageIndex - 1
                     }
