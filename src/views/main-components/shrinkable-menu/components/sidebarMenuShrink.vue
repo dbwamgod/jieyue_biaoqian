@@ -12,6 +12,7 @@
                         </template>
                     </DropdownMenu>
                 </Dropdown>
+
                 <Dropdown transfer v-else placement="right-start" :key="index" @on-click="changeMenu">
                     <Button @click="changeMenu(item.children[0].name)" style="width: 70px;margin-left: -5px;padding:10px 0;" type="text">
                         <Icon :size="20" :color="iconColor" :type="item.children[0].icon || item.icon"></Icon>

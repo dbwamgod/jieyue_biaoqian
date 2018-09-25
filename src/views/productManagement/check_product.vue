@@ -38,7 +38,7 @@
             </Col>
             <Col span="18">
             <div class="container_label_check" ref="container_label_check">
-                <Tag v-for="(item,index) in defaultRules.labelNameVoList" :key="index" :name="item.labelName"
+                <Tag v-for="(item,index) in defaultRules.labelVos" :key="index" :name="item.labelName"
                      @on-close="handleClose2" style="height: 35px;line-height: 35px; padding: 0 15px;background: #e1e1e1;     margin: 5px 2.5px 2.5px 5px;
 ">{{ item.labelName }}
                 </Tag>
@@ -139,10 +139,9 @@
             product_productOutput_list () {
 
                 // this.check_list = this.defaultRules.labelNameVoList;
-                this.defaultRules.labelNameVoList.forEach(r=>{
-                    this.check_list.push(r.labelCode)
+                this.defaultRules.labelVos.forEach(r=>{
+                    this.check_list.push(r.labelId)
                 })
-               // console.log(this.check_list,111);
                 this.$axios({
                     method: 'post',
                     url: api.product_productOutput_list(),
@@ -187,7 +186,7 @@
                     if (res.data.code == 200) {
                         if (res.data.data !== null) {
                             this.defaultRules = res.data.data;
-                            this.columns1 = this.defaultRules.labelNameVoList.map((item, index) => {
+                            this.columns1 = this.defaultRules.labelVos.map((item, index) => {
                                 return {
                                     title: item.labelName,
                                     key: item.labelCode

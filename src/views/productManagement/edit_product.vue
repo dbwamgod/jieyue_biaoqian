@@ -119,7 +119,6 @@
             },
             //编辑的当前数据
             detail_type_list (id) {
-                console.log(this.find_id.id);
                 this.$axios({
                     method: 'post',
                     url: api.product_productOutput_find(this.find_id.id||id),
