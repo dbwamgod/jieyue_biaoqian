@@ -190,15 +190,8 @@
                     });
                 } else if (item.type === 2) {
                     this.$axios({
-                        method: 'post',
-                        url: api.queryLabels(),
-                        data: {
-                            form: {
-                                categoryId: item.id
-                            },
-                            pageIndex: 0,
-                            pageSize: 0
-                        }
+                        method: 'get',
+                        url: api.product_queryLabels(item.id),
                     }).then(res => {
                         if (res.data.code == 200) {
                             if (res.data.data.length !== 0) {
