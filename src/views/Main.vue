@@ -13,27 +13,26 @@
                         :open-names="openedSubmenuArr"
                         :menu-list="menuList">
                     <div slot="top" class="logo-con">
-                        <img v-show="!shrink" src="../images/logo.jpg" key="max-logo"/>
-                        <img v-show="shrink" src="../images/logo-min.jpg" key="min-logo"/>
+                        <h1 class="platform" style="color: #fff">用户标签平台</h1>
                     </div>
                 </shrinkable-menu>
             </scroll-bar>
         </div>
-        <div class="main-header-con" style="padding-left: 0;">
+        <div class="main-header-con">
             <div class="main-header">
                 <div class="navicon-con">
                     <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text"
                             @click="toggleClick">
-                        <Icon type="android-list" style="font-size: 40px;"></Icon>
+                        <Icon type="navicon" size="32"></Icon>
                     </Button>
-                    <h1 class="platform">用户标签平台</h1>
+
                     <!-- <p class="data_platform">数据平台</p> -->
                 </div>
-              <!--  <div class="header-middle-con">
+                <div class="header-middle-con">
                     <div class="main-breadcrumb">
                         <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav>
                     </div>
-                </div>-->
+                </div>
                 <div class="header-avator-con">
                     <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
                     <lock-screen></lock-screen>
@@ -185,7 +184,6 @@
 
             scrollBarResize () {
 
-                this.$refs.scrollBar.resize();
             }
         },
         watch: {
