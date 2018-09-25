@@ -47,7 +47,7 @@ export const locking = {
 export const otherRouter = {
     path: '/',
     name: 'otherRouter',
-
+    title:'标签平台',
     redirect: '/typeFirst',
     component: Main,
     children: [
