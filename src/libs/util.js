@@ -76,6 +76,7 @@ util.handleTitle = function (vm, item) {
 };
 
 util.setCurrentPath = function (vm, name) {
+    console.log('name', name);
     let title = '';
     let isOtherRouter = false;
     vm.$store.state.app.routers.forEach(item => {
