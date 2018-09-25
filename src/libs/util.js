@@ -69,14 +69,15 @@ util.getRouterObjByName = function (routers, name) {
 
 util.handleTitle = function (vm, item) {
     if (typeof item.title === 'object') {
+        console.log('true',item)
         return vm.$t(item.title.i18n);
     } else {
+        console.log('false', item)
         return item.title;
     }
 };
 
 util.setCurrentPath = function (vm, name) {
-    console.log('name', name);
     let title = '';
     let isOtherRouter = false;
     vm.$store.state.app.routers.forEach(item => {
@@ -109,13 +110,23 @@ util.setCurrentPath = function (vm, name) {
         ];
     } else if ((name.indexOf('_index') >= 0 || isOtherRouter) && name !== 'home_index') {
         currentPathArr = [
+            // {
+            //     title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, name)),
+            //     path: '/home',
+            //     name: 'home_index'
+            // },
+            // {
+            //     title: title,
+            //     path: '',
+            //     name: name
+            // }
             {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
+                title: '标签平台',
                 path: '/home',
                 name: 'home_index'
             },
             {
-                title: title,
+                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, name)),
                 path: '',
                 name: name
             }

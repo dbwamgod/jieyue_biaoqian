@@ -59,7 +59,7 @@ export const otherRouter = {
 export const appRouter = [
     //二级分类
     {
-        path: '/typeSecond', icon: 'key', name: 'typeSecond', title: '二级分类', component: Main,
+        path: '/typeSecond', icon: 'key', name: 'typeSecond', title: '分类管理', component: Main,
         children: [
             {path: 'index', title: '二级分类', name: 'typeSecond_index', component: () => import('@/views/type_second/type_second.vue')},
         ]
