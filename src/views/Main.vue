@@ -18,7 +18,7 @@
                 </shrinkable-menu>
             </scroll-bar>
         </div>
-        <div class="main-header-con">
+        <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
             <div class="main-header">
                 <div class="navicon-con">
                     <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text"
@@ -143,8 +143,8 @@
                 this.$store.commit('setMessageCount', 3);
             },
             toggleClick () {
-                this.$router.push({name: 'home_index'});
-                // this.shrink = !this.shrink;
+                // this.$router.push({name: 'home_index'});
+                this.shrink = !this.shrink;
             },
             handleClickUserDropdown (name) {
                 if (name === 'ownSpace') {
