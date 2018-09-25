@@ -2,7 +2,7 @@
     <div style='position: relative;height:100%;padding:10px;'>
         <Row type="flex" justify="space-between" align="middle" class="code-row-bg" style='margin-bottom:10px;'>
             <Col span="6">
-            <h2 style="margin: 6px 0 0 20px">分类列表</h2>
+            <h2 style="margin: 6px 0 0 20px">标签列表</h2>
             </Col>
             <Col span="6" style='text-align:right;margin-right:5px;'>
             <Button type="primary" @click="newCreate" style=" ">新建</Button>
@@ -68,11 +68,11 @@
     </Modal>
      <Modal
         v-model="modal2"
-        title="删除分类"
+        title="删除标签"
         @on-ok="okDelete"
         :closable="false"
         @on-cancel="cancel2">
-        <p>确定要删除此分类么？</p>
+        <p>确定要删除此标签么？</p>
     </Modal>
     </div>
 </template>
