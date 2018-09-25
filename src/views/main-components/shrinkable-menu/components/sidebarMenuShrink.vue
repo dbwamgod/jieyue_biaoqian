@@ -1,25 +1,32 @@
 <template>
     <div>
-        <template v-for="(item, index) in menuList">
-            <div style="text-align: center;" :key="index">
-                <Dropdown transfer v-if="item.children.length !== 1" placement="right-start" :key="index" @on-click="changeMenu">
+        <template>
+            <div style="text-align: center;" key="grala">
+                <Dropdown transfer  placement="right-start" :key="1" @on-click="changeMenu">
                     <Button style="width: 70px;margin-left: -5px;padding:10px 0;" type="text">
-                        <Icon :size="20" :color="iconColor" :type="item.icon"></Icon>
+                        <Icon type="ionic" :size='20' color="#fff"></Icon>
                     </Button>
                     <DropdownMenu style="width: 200px;" slot="list">
-                        <template v-for="(child, i) in item.children">
-                            <DropdownItem :name="child.name" :key="i"><Icon :type="child.icon"></Icon><span style="padding-left:10px;">{{ itemTitle(child) }}</span></DropdownItem>
-                        </template>
+                        <DropdownItem name="home_index" key="1-1"><span style="padding-left:10px;">一级分类</span></DropdownItem>
+                        <DropdownItem name="typeSecond_index" key="1-2"><span style="padding-left:10px;">二级分类</span></DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
-
-                <Dropdown transfer v-else placement="right-start" :key="index" @on-click="changeMenu">
-                    <Button @click="changeMenu(item.children[0].name)" style="width: 70px;margin-left: -5px;padding:10px 0;" type="text">
-                        <Icon :size="20" :color="iconColor" :type="item.children[0].icon || item.icon"></Icon>
-                        <Icon type="ios-analytics"></Icon>
+                <Dropdown transfer  placement="right-start" :key="2" @on-click="changeMenu">
+                    <Button style="width: 70px;margin-left: -5px;padding:10px 0;" type="text">
+                        <!-- <Icon :size="20" :color="iconColor" :type="item.icon"></Icon> -->
+                        <Icon type="pricetags" :size='20' color="#fff"></Icon>
                     </Button>
                     <DropdownMenu style="width: 200px;" slot="list">
-                        <DropdownItem :name="item.children[0].name" :key="'d' + index"><Icon :type="item.children[0].icon || item.icon"></Icon><span style="padding-left:10px;">{{ itemTitle(item.children[0]) }}</span></DropdownItem>
+                        <DropdownItem name="Tab_management" key="2-1"><span style="padding-left:10px;">标签管理</span></DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+                <Dropdown transfer  placement="right-start" :key="3" @on-click="changeMenu">
+                    <Button style="width: 70px;margin-left: -5px;padding:10px 0;" type="text">
+                        <!-- <Icon :size="20" :color="iconColor" :type="item.icon"></Icon> -->
+                        <Icon type="filing" :size='20' color="#fff"></Icon>
+                    </Button>
+                    <DropdownMenu style="width: 200px;" slot="list">
+                        <DropdownItem name="product_management_index" key="3-1"><span style="padding-left:10px;">产品管理</span></DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
             </div>
