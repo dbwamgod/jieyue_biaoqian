@@ -4,7 +4,7 @@
 
 <template>
     <Menu ref="sideMenu" :active-name="activeName" :open-names="['0']" :theme="menuTheme" width="auto"
-          @on-select="menuSelect" style="margin-top: 20px;" :accordion="false">
+          @on-select="menuSelect"  :accordion="false">
         <Submenu name="1" style='margin-top: 10px;'>
             <template slot="title">
                 <Icon type="ios-analytics"></Icon>
