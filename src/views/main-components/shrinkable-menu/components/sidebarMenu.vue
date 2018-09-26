@@ -10,19 +10,20 @@
 
             <template slot="title">
                 <Icon type="ios-analytics"></Icon>
-                <router-link tag="span" to="/typeFirst">分类管理</router-link>
+                <!--<router-link tag="span" to="/typeFirst">分类管理</router-link>-->
+                分类管理
             </template>
 
             <MenuItem name="1-1" style="padding: 0">
 
-                <router-link tag="li" to="/typeFirst"
+                <router-link tag="li" to="/typeFirst/index"
                              style="width:100%;height: 50px;text-align: center;line-height: 50px;">一级分类
                 </router-link>
 
             </MenuItem>
             <MenuItem name="1-2" style="padding: 0">
 
-                <router-link tag="li" to="/typeSecond/index"
+                <router-link tag="li" to="/typeFirst/second"
                              style="width:100%;height: 50px;text-align: center; line-height: 50px;">二级分类
                 </router-link>
 
@@ -76,8 +77,8 @@
         watch: {
             '$route' (to, form) {
                 const pathNameObj = {
-                    home_index: '1-1', typeSecond_index: '1-2', Tab_management_index: '2',
-                    product_management_index: '3'
+                    home_list: '1-1', typeSecond_two: '1-2', Tab_management_list: '2',
+                    product_management_list: '3'
                 };
                 if (pathNameObj[to.name]) {
                     this.activeName = pathNameObj[to.name];

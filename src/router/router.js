@@ -47,7 +47,6 @@ export const locking = {
 export const otherRouter = {
     path: '/',
     name: 'otherRouter',
-    title:'标签平台',
     redirect: '/typeFirst',
     component: Main,
     children: [
@@ -57,18 +56,28 @@ export const otherRouter = {
 };
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
-    //二级分类
+
     {
-        path: '/typeSecond', icon: 'key', name: 'typeSecond', title: '分类管理', component: Main,
+        path: '/typeFirst', icon: 'key', name: 'index', title: '分类管理', component: Main,
         children: [
-            {path: 'index', title: '二级分类', name: 'typeSecond_index', component: () => import('@/views/type_second/type_second.vue')},
+            {path: 'index', title: '一级分类', name: 'home_list',  component: () => import('@/views/home/home.vue')},
+            {path: 'second', title: '二级分类', name: 'typeSecond_two', component: () => import('@/views/type_second/type_second.vue')},
         ]
     },
+
+    //二级分类
+    // {
+    //     path: '/typeSecond', icon: 'key', name: 'typeSecond', title: '分类管理', component: Main,
+    //     children: [
+    //         {path: 'index', title: '二级分类', name: 'typeSecond_two', component: () => import('@/views/type_second/type_second.vue')},
+    //     ]
+    // },
+
     //标签管理
     {
         path: '/Tab_management', icon: 'lock-combination', title: '标签管理', name: 'Tab_management', component: Main,
         children: [
-            {path: 'index', title: '标签管理', name: 'Tab_management_index', component: () => import('@/views/tabManagement/tab_management.vue')},
+            {path: 'index', title: '标签详情', name: 'Tab_management_list', component: () => import('@/views/tabManagement/tab_management.vue')},
         ]
     },
     //international
@@ -91,7 +100,7 @@ export const appRouter = [
     {
         path: '/product_management', icon: 'key', name: 'product_management', title: '产品管理', component: Main,
         children: [
-            {path: 'index', title: '产品管理', name: 'product_management_index', component: () => import('@/views/productManagement/product_management.vue')},
+            {path: 'index', title: '产品列表', name: 'product_management_list', component: () => import('@/views/productManagement/product_management.vue')},
             {path: 'check_product', title: '产品信息', name: 'check_product', component: () => import('@/views/productManagement/check_product.vue')},
             {path: 'new_product', title: '新建产品', name: 'new_product', component: () => import('@/views/productManagement/new_product.vue')},
             {path: 'edit_product', title: '编辑产品', name: 'edit_product', component: () => import('@/views/productManagement/edit_product.vue')},

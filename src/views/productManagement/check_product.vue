@@ -64,7 +64,7 @@
                 </Col>
             </Row>
             <Row style="margin-top: 30px;">
-                <Col style="margin-left: 52%;    width: 31%; text-align: right;">
+                <Col style="margin-left: 43%;    width: 40%; text-align: right;">
                 <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex"
                       @on-change="changepage"/>
                 </Col>

@@ -114,7 +114,8 @@
                         }
                     }
                 ],
-                data6: []
+                data6: [],
+                searchInfo:false
             };
         },
         created () {
@@ -151,6 +152,9 @@
                 this.reload()
             },
             init () {
+                if(this.labelname&&this.searchInfo){
+                    this.page.pageIndex--
+                }
                 this.$axios({
                     method: 'post',
                     url: api.product_list(),
@@ -162,8 +166,13 @@
                     }
                 }).then(res => {
                     if (res.data.code == 200) {
+                        if(this.labelName){
+                            this.searchInfo=true
+                        }
+
                         if (res.data.data == null) {
                             this.data6 = []
+                            this.dataCount = res.data.page.totalRecords;
                         } else {
                             this.data6 = res.data.data;
                             this.dataCount = res.data.page.totalRecords;

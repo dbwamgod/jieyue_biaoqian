@@ -7,8 +7,8 @@
                         <Icon type="ionic" :size='20' color="#fff"></Icon>
                     </Button>
                     <DropdownMenu style="width: 200px;" slot="list">
-                        <DropdownItem name="home_index" key="1-1"><span style="padding-left:10px;">一级分类</span></DropdownItem>
-                        <DropdownItem name="typeSecond_index" key="1-2"><span style="padding-left:10px;">二级分类</span></DropdownItem>
+                        <DropdownItem name="home_list" key="1-1"><span style="padding-left:10px;">一级分类</span></DropdownItem>
+                        <DropdownItem name="typeSecond_two" key="1-2"><span style="padding-left:10px;">二级分类</span></DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
                 <Dropdown transfer  placement="right-start" :key="2" @on-click="changeMenu">
@@ -17,7 +17,7 @@
                         <Icon type="pricetags" :size='20' color="#fff"></Icon>
                     </Button>
                     <DropdownMenu style="width: 200px;" slot="list">
-                        <DropdownItem name="Tab_management" key="2-1"><span style="padding-left:10px;">标签管理</span></DropdownItem>
+                        <DropdownItem name="Tab_management_list" key="2-1"><span style="padding-left:10px;">标签管理</span></DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
                 <Dropdown transfer  placement="right-start" :key="3" @on-click="changeMenu">
@@ -26,7 +26,7 @@
                         <Icon type="filing" :size='20' color="#fff"></Icon>
                     </Button>
                     <DropdownMenu style="width: 200px;" slot="list">
-                        <DropdownItem name="product_management_index" key="3-1"><span style="padding-left:10px;">产品管理</span></DropdownItem>
+                        <DropdownItem name="product_management_list" key="3-1"><span style="padding-left:10px;">产品管理</span></DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
             </div>

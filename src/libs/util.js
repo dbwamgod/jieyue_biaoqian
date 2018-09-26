@@ -108,23 +108,13 @@ util.setCurrentPath = function (vm, name) {
         ];
     } else if ((name.indexOf('_index') >= 0 || isOtherRouter) && name !== 'home_index') {
         currentPathArr = [
-            // {
-            //     title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, name)),
-            //     path: '/home',
-            //     name: 'home_index'
-            // },
-            // {
-            //     title: title,
-            //     path: '',
-            //     name: name
-            // }
             {
-                title: '标签平台',
+                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
                 path: '/home',
                 name: 'home_index'
             },
             {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, name)),
+                title: title,
                 path: '',
                 name: name
             }
@@ -149,18 +139,18 @@ util.setCurrentPath = function (vm, name) {
         if (currentPathObj.children.length <= 1 && currentPathObj.name === 'home') {
             currentPathArr = [
                 {
-                    title: '首页',
+                    title: '标签平台',
                     path: '',
                     name: 'home_index'
                 }
             ];
         } else if (currentPathObj.children.length <= 1 && currentPathObj.name !== 'home') {
             currentPathArr = [
-                {
-                    title: '首页',
-                    path: '/home',
-                    name: 'home_index'
-                },
+                // {
+                //     title: '标签平台',
+                //     path: '/home',
+                //     name: 'home_index'
+                // },
                 {
                     title: currentPathObj.title,
                     path: '',
@@ -172,11 +162,11 @@ util.setCurrentPath = function (vm, name) {
                 return child.name === name;
             })[0];
             currentPathArr = [
-                {
-                    title: '首页',
-                    path: '/home',
-                    name: 'home_index'
-                },
+                // {
+                //     title: '标签平台',
+                //     path: '/home',
+                //     name: 'home_index'
+                // },
                 {
                     title: currentPathObj.title,
                     path: '',

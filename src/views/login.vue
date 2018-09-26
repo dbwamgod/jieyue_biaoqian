@@ -94,7 +94,7 @@
                                     Cookies.set('userId', res.data.principal.id);
                                 });
                                 this.$router.push({
-                                    name: 'home_index'
+                                    name: 'home_list'
                                 });
 
                             }else{
