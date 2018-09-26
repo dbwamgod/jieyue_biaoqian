@@ -44,7 +44,6 @@
                 </Col>
 
             </Row>
-
             <Row style="margin-top: 40px">
                 <Col offset="1" style="     float: left;width: 80px;  ">
                 <p style="padding: 7px;">输出标签</p>
@@ -59,15 +58,12 @@
                 </div>
                 </Col>
             </Row>
-
             <Row style="margin-top: 40px">
                 <Col span="12" offset="6">
                 <Button type="primary" @click="submit">保存</Button>
                 <Button @click="oncanel" style="margin-left: 3%;">取消</Button>
                 </Col>
             </Row>
-
-
         </div>
     </div>
 </template>
@@ -92,7 +88,6 @@
                 out: [],
                 formValidate_list: {},
                 find_id: {},
-                big_container: [],
                 check_out: [],
                 check_out_flag: false
             };

@@ -1,74 +1,74 @@
 <template>
     <div class="check_container">
 
-        <Row style="margin: 0;">
-            <Col span="3" >
-            <h3 style="    display: inline-block;font-size: 23px">产品:</h3>
-
-            </Col  >
-            <Col span="3" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 300px;">
-            <span class="check_container_product">{{defaultRules.productName}}</span>
+        <Row style="position: fixed;width: 160px; height: 100%;background:#585b6d;color: #dddee1;opacity: .7;">
+            <Col class="Col_product_new">
+            <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData"></Tree>
             </Col>
         </Row>
 
-        <Row style="margin: 20px 0 0 0 ;">
-            <Col span="3">
-            <h3 style="    display: inline-block;font-size: 22px">类别:</h3>
-            </Col>
-            <Col span="3" style="text-overflow: ellipsis;
+        <div style="margin-left: 160px;padding-top: 35px;    padding-left: 4.6%;">
+            <Row style="margin: 0;">
+                <Col span="3">
+                <span style="    display: inline-block;">产品名称:</span>
+                </Col  >
+                <Col span="3" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 300px;">
+                <span class="check_container_product">{{defaultRules.productName}}</span>
+                </Col>
+            </Row>
+            <Row style="margin: 20px 0 0 0 ;">
+                <Col span="3" >
+                <span style="display: inline-block;">产品类别:</span>
+                </Col>
+                <Col span="3" style="text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
     ">
-            <span class="check_container_list">{{defaultRules.categoryName}}</span>
-            </Col>
-        </Row>
-
-        <Row style="margin-top: 40px;">
-            <Col span="3" >
-            <p class="Default_rule">预设规则:</p>
-            </Col>
-            <Col span="18" style="border: 1px solid #dddee1;min-width: 300px;min-height: 40px;padding: 10px;">
-            <span style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;display: block;">{{defaultRules.queryParam}}</span>
-            </Col>
-        </Row>
-
-        <Row style="margin-top: 40px">
-            <Col span="3">
-            <p class="check_inpout">查询输出:</p>
-            </Col>
-            <Col span="18">
-            <div class="container_label_check" ref="container_label_check">
-                <Tag v-for="(item,index) in defaultRules.labelVos" :key="index" :name="item.labelName"
-                     @on-close="handleClose2" style="height: 35px;line-height: 35px; padding: 0 15px;background: #e1e1e1;     margin: 5px 2.5px 2.5px 5px;
+                <span class="check_container_list">{{defaultRules.categoryName}}</span>
+                </Col>
+            </Row>
+            <Row style="margin-top: 40px;">
+                <Col span="3">
+                <p class="Default_rule">预设规则:</p>
+                </Col>
+                <Col span="18" style="border: 1px solid #dddee1;min-width: 300px;min-height: 40px;padding: 10px;">
+                <span style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;display: block;">{{defaultRules.queryParam}}</span>
+                </Col>
+            </Row>
+            <Row style="margin-top: 40px">
+                <Col span="3">
+                <p class="check_inpout">查询输出:</p>
+                </Col>
+                <Col span="18">
+                <div class="container_label_check" ref="container_label_check">
+                    <Tag v-for="(item,index) in defaultRules.labelVos" :key="index" :name="item.labelName"
+                         @on-close="handleClose2" style="height: 35px;line-height: 35px; padding: 0 15px;background: #e1e1e1;     margin: 5px 2.5px 2.5px 5px;
 ">{{ item.labelName }}
-                </Tag>
-            </div>
-            </Col>
-        </Row>
-
-        <Row style="margin-top: 40px;">
-            <Col span="12" offset="8">
-            <Button type="primary" @click="checkInfo" style="margin-right: 40px;">查询</Button>
-            <Button type="primary" @click="comeout">导出</Button>
-            </Col>
-        </Row>
-        <Row style=" margin-top: 50px;">
-            <Col span="3" >
-            <p class="detail_list">查询结果:</p>
-            </Col>
-            <Col span="18">
-            <Table :columns="columns1" :data="data2"></Table>
-            </Col>
-        </Row>
-
-
-        <Row style="margin-top: 30px;">
-            <Col   style="margin-left: 52%;    width: 31%; text-align: right;">
-            <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex"
-                  @on-change="changepage"/>
-            </Col>
-        </Row>
-
+                    </Tag>
+                </div>
+                </Col>
+            </Row>
+            <Row style="margin-top: 40px;">
+                <Col span="12" offset="8">
+                <Button type="primary" @click="checkInfo" style="margin-right: 40px;">查询</Button>
+                <Button type="primary" @click="comeout">导出</Button>
+                </Col>
+            </Row>
+            <Row style=" margin-top: 50px;">
+                <Col span="3">
+                <p class="detail_list">查询结果:</p>
+                </Col>
+                <Col span="18">
+                <Table :columns="columns1" :data="data2"></Table>
+                </Col>
+            </Row>
+            <Row style="margin-top: 30px;">
+                <Col style="margin-left: 52%;    width: 31%; text-align: right;">
+                <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex"
+                      @on-change="changepage"/>
+                </Col>
+            </Row>
+        </div>
     </div>
 </template>
 
@@ -93,7 +93,10 @@
                 data2: [],
                 data3: [{}],
                 check_list: [],
-
+                title: [],
+                defaultFlag: [],
+                check_out: [],
+                check_out_flag: false
             };
         },
         watch: {
@@ -106,8 +109,194 @@
         created () {
             this.product_getDetail(this.$route.query.id);
             this.content = this.defaultRules.queryParam;
+            this.product_First_list();
         },
         methods: {
+
+            loadData (item, callback) {
+                if (item.type === 1) {
+                    this.$axios({
+                        method: 'get',
+                        url: api.product_Second_list(item.id),
+                    }).then(res => {
+                        if (res.data.code == 200) {
+                            if (res.data.data.length !== 0) {
+                                const data = res.data.data.map((item, index) => {
+                                    return {
+                                        title: item.categoryName || '',
+                                        id: item.id || '',
+                                        type: 2,
+                                        loading: false,
+                                        expand: false,
+                                        children: [],
+                                        render: (h, params) => {
+                                            return h(
+                                                'span',
+                                                {
+                                                    style: {
+                                                        cursor: 'pointer',
+                                                        display: 'inline-block',
+                                                        maxWidth: '110px',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        lineHeight: '14px'
+                                                    },
+                                                    on: {
+                                                        click: () => this.treeHandClick(params)
+                                                    }
+                                                },
+                                                item.categoryName
+                                            );
+                                        }
+                                    };
+                                });
+                                callback(data);
+                            } else {
+                                const data = res.data.data.map((item, index) => {
+                                    return {
+                                        title: item.categoryName || '',
+                                        id: item.parentId || '',
+                                        type: 2
+                                    };
+                                });
+                                callback(data);
+                                this.$Message.info('没有数据');
+                            }
+                        }
+                    });
+                } else if (item.type === 2) {
+                    this.$axios({
+                        method: 'get',
+                        url: api.product_queryLabels(item.id),
+                    }).then(res => {
+                        if (res.data.code == 200) {
+                            if (res.data.data.length !== 0) {
+
+                                const data = res.data.data.map((item, index) => {
+                                    return {
+                                        title: item.labelName,
+                                        id: item.id,
+                                        type: 3,
+                                        disabled: true,
+                                        render: (h, params) => {
+                                            return h(
+                                                'span',
+                                                {
+                                                    style: this.check_out_flag || this.defaultFlag.find(r => params.data.id === r) ? {
+                                                        color: '#9ea7b4', display: 'inline-block',
+                                                        maxWidth: '90px',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        lineHeight: '14px',
+                                                    } : {
+                                                        cursor: 'pointer',
+                                                        display: 'inline-block',
+                                                        maxWidth: '90px',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        lineHeight: '14px',
+                                                    },
+                                                    on: {
+                                                        click: ev => {
+                                                            // this.judge ? ev.path[0].style.color = '#9ea7b4' : ev.path[0].style.color = '#495060';
+                                                            //this.big_container.push(ev.path[0]);
+
+                                                            ev.path[0].style.color = '#9ea7b4';
+
+                                                            let flag = this.title.find(r => r.labelId === params.data.id);
+
+                                                            if (!flag) {
+                                                                if (this.title.filter(r => r.labelId === params.data.id)[0]) {
+                                                                } else {
+                                                                    this.title.push(params.data);
+                                                                    this.check_out.push(ev.path[0]);
+                                                                    // this.big_container.push(ev.path[0])
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                item.labelName
+                                            );
+                                        }
+                                    };
+                                });
+
+                                callback(data);
+                            } else {
+                                const data = res.data.data.map((item, index) => {
+                                    return {
+                                        title: item.labelName || '',
+                                        id: item.id || '',
+                                        type: 3
+                                    };
+                                });
+                                callback(data);
+                                this.$Message.info('没有数据');
+
+                            }
+                        }
+                    });
+                }
+            },
+            product_First_list () {
+                this.$axios({
+                    method: 'get',
+                    url: api.product_First_list(),
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        let result = res.data.data.map((item, index) => {
+                            return {
+                                title: item.categoryName,
+                                id: item.id,
+                                loading: false,
+                                children: [],
+                                expand: false,
+                                type: 1,
+                                render: (h, params) => {
+                                    return h(
+                                        'span',
+                                        {
+                                            style: {
+                                                cursor: 'pointer',
+                                                display: 'inline-block',
+                                                maxWidth: '100px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                lineHeight: '14px',
+                                                whiteSpace: 'nowrap'
+                                            },
+                                            on: {
+                                                click: () => this.treeHandClick(params)
+                                            }
+                                        },
+                                        item.categoryName
+                                    );
+                                }
+                            };
+                        });
+                        this.data3 = result;
+                    }
+                });
+            },
+            treeHandClick (params) {
+
+                if (params.data.children.length == 0) {
+                    this.loadData(params.data, data => {
+                        if (data.length == 0 || JSON.stringify(data) === '[]') {
+                            return params.data.expand = false;
+                        }
+                        params.data.children = data;
+                        params.data.expand = true;
+                    });
+                } else {
+                    params.data.expand = !params.data.expand;
+                }
+            },
+
             comeout () {
                 if (this.check_list.length) {
                     if (this.data2.length !== 0) {
@@ -139,9 +328,9 @@
             product_productOutput_list () {
 
                 // this.check_list = this.defaultRules.labelNameVoList;
-                this.defaultRules.labelVos.forEach(r=>{
-                    this.check_list.push(r.labelId)
-                })
+                this.defaultRules.labelVos.forEach(r => {
+                    this.check_list.push(r.labelId);
+                });
                 this.$axios({
                     method: 'post',
                     url: api.product_productOutput_list(),
@@ -176,7 +365,6 @@
                     }
                 });
             },
-
             product_getDetail (id) {
                 this.$axios({
                     method: 'get',
@@ -204,50 +392,56 @@
                     }
                 });
             },
-
             //查询
             checkInfo () {
                 this.product_productOutput_list();
             },
             handleClose2 (event, name) {
-                const index = this.count.indexOf(name);
-                this.count.splice(index, 1);
+                let myError;
+                if (!myError) {
+                    let index;
+                    let designation;
+                    this.title.map((r, m) => {
+                        let nameTitle = r.title || r.labelName;
+                        if (nameTitle === name) {
+                            index = m;
+                            designation = name;
+                        }
+                    });
+
+                    if (this.check_out.length) {
+                        this.check_out.forEach((r, i) => {
+                            if (r.textContent === designation) {
+                                if (this.title) {
+                                    this.check_out[i].style.color = '#dddee1';
+                                }
+                            }
+                        });
+                    }
+                    this.title.splice(index, 1);
+                }
             }
         }
     };
 </script>
 
 <style scoped>
-    .check_container {
-        padding: 4% 5% 0 5%;
-    }
 
     .check_container_product {
-        font-size: 22px;
         color: #515a6e;
     }
 
     .check_container_list {
-        font-size: 19px;
         color: #515a6e;
 
     }
 
-    .Default_rule {
-        font-size: 21px;
-        font-weight: 600;
-    }
-
     .check_inpout {
-        font-size: 21px;
-        font-weight: 600;
         border-radius: 5px;
     }
 
     .detail_list {
 
-        font-size: 21px;
-        font-weight: 600;
     }
 
     .container_label_check {
@@ -259,4 +453,9 @@
         border-radius: 4px;
     }
 
+    .menu_product_list {
+        margin-top: 15%;
+        margin-left: 10%;
+
+    }
 </style>
