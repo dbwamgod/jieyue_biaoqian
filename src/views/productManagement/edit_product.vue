@@ -32,7 +32,7 @@
                 </Col>
             </Row>
             <Row>
-                <Col offset="1" style="    float: left;width: 80px;">
+                <Col offset="1" style="    float: left;width: 71px;">
                 <span style="padding: 7px;">查询规则</span>
                 </Col>
                 <Col span="18" style="    margin-left: 3%;">
@@ -45,7 +45,7 @@
 
             </Row>
             <Row style="margin-top: 40px">
-                <Col offset="1" style="     float: left;width: 80px;  ">
+                <Col offset="1" style="     float: left;width: 71px;  ">
                 <p style="padding: 7px;">输出标签</p>
                 </Col>
                 <Col span="18" style="    margin-left: 3%;">
@@ -402,7 +402,7 @@
 
     .container_label {
         padding-left: 2px;
-        overflow-y: scroll;
+        overflow-y: auto;
         height: 115px;
         max-height: 200px;
         border: 2px solid #dddee1;
