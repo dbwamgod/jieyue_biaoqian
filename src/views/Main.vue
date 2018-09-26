@@ -34,8 +34,11 @@
                     </div>
                 </div>
                 <div class="header-avator-con">
-                    <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
-                    <lock-screen></lock-screen>
+
+                        <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
+                        <lock-screen style="    margin-right: 26px;"></lock-screen>
+
+
                     <!-- <message-tip v-model="mesCount"></message-tip> -->
 
 
