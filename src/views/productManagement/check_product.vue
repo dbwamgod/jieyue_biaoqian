@@ -115,7 +115,7 @@
         methods: {
             canel(){
                 this.$router.back(-1)
-            }
+            },
             loadData (item, callback) {
                 if (item.type === 1) {
                     this.$axios({
