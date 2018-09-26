@@ -50,8 +50,9 @@
             </Row>
             <Row style="margin-top: 40px;">
                 <Col span="12" offset="8">
-                <Button type="primary" @click="checkInfo" style="margin-right: 40px;">查询</Button>
-                <Button type="primary" @click="comeout">导出</Button>
+                <Button type="primary" @click="checkInfo" style="margin-right: 20px;">查询</Button>
+                <Button type="primary" @click="comeout" style="margin-right: 20px;">导出</Button>
+                <Button type="primary" @click="canel">返回</Button>
                 </Col>
             </Row>
             <Row style=" margin-top: 50px;">
@@ -112,7 +113,9 @@
             this.product_First_list();
         },
         methods: {
-
+            canel(){
+                this.$router.back(-1)
+            }
             loadData (item, callback) {
                 if (item.type === 1) {
                     this.$axios({
