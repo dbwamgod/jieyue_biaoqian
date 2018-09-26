@@ -305,13 +305,13 @@
                     if (this.data2.length !== 0) {
                         window.open(api.product_out(encodeURIComponent(JSON.stringify({
                             'queryParam': this.defaultRules.queryParam,
-                            'outputVos': this.check_list,
+                            'codeIds': this.check_list,
                             'pageSize': 0,
                             'pageIndex': 0
                         }))), '_blank');
                         window.open(api.product_out(encodeURIComponent(JSON.stringify({
                             'queryParam': this.defaultRules.queryParam,
-                            'outputVos': this.check_list,
+                            'codeIds': this.check_list,
                             'pageSize': 0,
                             'pageIndex': 0
                         }))), '_blank');
