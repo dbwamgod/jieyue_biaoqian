@@ -128,6 +128,7 @@
         methods: {
             searchChange () {
                 if (this.data6||this.labelname) {
+                    this.page.pageIndex=1;
                     this.init();
                 }else{
                     this.$Message.info("请输入搜索词")
