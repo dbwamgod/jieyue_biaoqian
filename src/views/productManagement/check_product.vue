@@ -9,7 +9,7 @@
 
         <div style="margin-left: 160px;padding-top: 35px;    padding-left: 4.6%;">
             <Row style="margin: 0;">
-                <Col span="3">
+                <Col span="2">
                 <span style="    display: inline-block;">产品名称:</span>
                 </Col  >
                 <Col span="3" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 300px;">
@@ -17,7 +17,7 @@
                 </Col>
             </Row>
             <Row style="margin: 20px 0 0 0 ;">
-                <Col span="3" >
+                <Col span="2" >
                 <span style="display: inline-block;">产品类别:</span>
                 </Col>
                 <Col span="3" style="text-overflow: ellipsis;
@@ -28,7 +28,7 @@
                 </Col>
             </Row>
             <Row style="margin-top: 40px;">
-                <Col span="3">
+                <Col span="2">
                 <p class="Default_rule">预设规则:</p>
                 </Col>
                 <Col span="18" style="border: 1px solid #dddee1;min-width: 300px;min-height: 40px;padding: 10px;">
@@ -36,7 +36,7 @@
                 </Col>
             </Row>
             <Row style="margin-top: 40px">
-                <Col span="3">
+                <Col span="2">
                 <p class="check_inpout">查询输出:</p>
                 </Col>
                 <Col span="18">
@@ -56,7 +56,7 @@
                 </Col>
             </Row>
             <Row style=" margin-top: 50px;">
-                <Col span="3">
+                <Col span="2">
                 <p class="detail_list">查询结果:</p>
                 </Col>
                 <Col span="18">
@@ -78,7 +78,7 @@
     import Cookies from 'js-cookie';
 
     export default {
-
+inject:["reload"],
         name: 'check_product'
         ,
         data () {
@@ -301,34 +301,33 @@
             },
 
             comeout () {
-                if (this.check_list.length) {
-                    if (this.data2.length !== 0) {
-                        window.open(api.product_out(encodeURIComponent(JSON.stringify({
-                            'queryParam': this.defaultRules.queryParam,
-                            'codeIds': this.check_list,
-                            'pageSize': 0,
-                            'pageIndex': 0
-                        }))), '_blank');
-                        window.open(api.product_out(encodeURIComponent(JSON.stringify({
-                            'queryParam': this.defaultRules.queryParam,
-                            'codeIds': this.check_list,
-                            'pageSize': 0,
-                            'pageIndex': 0
-                        }))), '_blank');
-                    } else {
-                        this.$Message.error('没有数据,不能导出');
-                    }
+                new Promise((res,rej)=>{
+                   res(this.product_productOutput_list(1))
+                }).then(res=>{
+                    window.open(api.product_out(encodeURIComponent(JSON.stringify({
+                        'queryParam': this.defaultRules.queryParam,
+                        'codeIds': this.check_list,
+                        'pageSize': 0,
+                        'pageIndex': 0
+                    }))), '_blank');
+                    window.open(api.product_out(encodeURIComponent(JSON.stringify({
+                        'queryParam': this.defaultRules.queryParam,
+                        'codeIds': this.check_list,
+                        'pageSize': 0,
+                        'pageIndex': 0
+                    }))), '_blank');
+                }).catch(res=>{
+                    this.reload()
+                })
 
-                } else {
-                    this.$Message.info('请先点击查询');
-                }
+
             },
             changepage (index) {
                 this.page.pageIndex = index;
                 this.product_productOutput_list();
             },
             //获取输出列表
-            product_productOutput_list () {
+            product_productOutput_list (arg) {
 
                 // this.check_list = this.defaultRules.labelNameVoList;
                 this.defaultRules.labelVos.forEach(r => {
@@ -343,20 +342,11 @@
                         'pageSize': this.page.pageSize,
                         'pageIndex': this.page.pageIndex - 1
                     }
-                    /*  {
-                        outputVos: {
-                            labelCode: [
-                                this.check_list
-                            ]
-                        },
-                        'pageIndex': 1,
-                        'pageSize': 3,
-                        'productId': this.defaultRules.id,
-                        'queryParam': this.defaultRules.queryParam
-                    }*/
                 }).then(res => {
                     if (res.data.code == 200) {
-                        if (res.data.data.length !== 0) {
+                        if(arg){
+
+                        }else if (res.data.data.length !== 0) {
                             this.data2 = res.data.data;
                             this.dataCount = res.data.page.totalRecords;
                         } else {
@@ -443,15 +433,10 @@
         border-radius: 5px;
     }
 
-    .detail_list {
-
-    }
-
     .container_label_check {
-
         overflow-y: auto;
-
         max-height: 145px;
+        min-height: 48px;
         border: 1px solid #dddee1;
         border-radius: 4px;
     }
