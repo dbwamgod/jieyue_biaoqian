@@ -5,9 +5,10 @@
             <h2 style="margin: 6px 0 0 20px">标签列表</h2>
             </Col>
             <Col span="6" style='text-align:right;margin-right:5px;'>
-            <Button type="primary" @click="newCreate" style=" ">新建</Button>
-                <Input v-model="labelname" icon="ios-search" search placeholder="请搜索..." style=" width:160px;" @on-change='searchChange'/>
-            </Col>
+                <Button type="primary" @click="newCreate" style=" ">新建</Button>
+                <Input v-model="labelname" icon="ios-search" search placeholder="请搜索..." style=" width:160px;" />
+                <Button type="primary" @click="searchChange" >搜索</Button>
+            </Col>        
         </Row>
         <Table border :columns="columns7" :data="data6"></Table>
         <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" class="paging"
@@ -279,6 +280,7 @@ export default {
       );
     },
     searchChange() {
+      this.page.pageIndex=1;
       this.init();
     },
     getCategoryListSecondary() {
