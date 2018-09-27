@@ -105,7 +105,6 @@
                                     },
                                     on: {
                                         click: () => {
-                                            // console.log(this.data6,111111111);
 
                                             this.product_delete(this.data6[params.index].id);
 
@@ -205,7 +204,7 @@
                             }).then(res => {
                                 if (res.data.code == 200) {
                                     this.$Message.info('已删除');
-                                    console.log(this.data6.length,this.labelname);
+
 
                                     if (this.data6.length < 2 && !this.labelname) {
 
