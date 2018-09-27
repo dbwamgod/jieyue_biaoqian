@@ -185,9 +185,9 @@
 
             },
 
-            scrollBarResize () {
-                this.$refs.scrollBar && this.$refs.scrollBar.resize();
-            }
+            // scrollBarResize () {
+            //     this.$refs.scrollBar && this.$refs.scrollBar.resize();
+            // }
         },
         watch: {
             '$route' (to) {
@@ -203,11 +203,11 @@
             lang () {
                 util.setCurrentPath(this, this.$route.name); // 在切换语言时用于刷新面包屑
             },
-            openedSubmenuArr () {
-                setTimeout(() => {
-                    this.scrollBarResize();
-                }, 300);
-            }
+            // openedSubmenuArr () {
+            //     setTimeout(() => {
+            //         this.scrollBarResize();
+            //     }, 300);
+            // }
         },
         mounted () {
             this.init();
