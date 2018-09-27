@@ -82,18 +82,20 @@
                 };
                 if (pathNameObj[to.name]) {
                     this.activeName = pathNameObj[to.name];
-                    Cookies.set("pages",pathNameObj[to.name])
+                    sessionStorage.setItem("pages",pathNameObj[to.name])
                 }
             }
         },
         created () {
-            this.activeName = Cookies.get('pages') || '1-1';
+            if (sessionStorage.getItem('pages')) {
+                this.activeName = sessionStorage.getItem('pages') || '1-1';
+            }
         },
 
 
         methods: {
             menuSelect (name) {
-                Cookies.set('pages', name);
+                sessionStorage.setItem('pages', name);
                 this.$store.commit('addOpenSubmenu', name);
             }
         },
