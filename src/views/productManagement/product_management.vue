@@ -105,8 +105,10 @@
                                     },
                                     on: {
                                         click: () => {
+                                            // console.log(this.data6,111111111);
 
                                             this.product_delete(this.data6[params.index].id);
+
                                         }
                                     }
                                 }, '删除')
@@ -155,6 +157,7 @@
                 if(this.labelname&&this.searchInfo){
                     this.page.pageIndex--
                 }
+
                 this.$axios({
                     method: 'post',
                     url: api.product_list(),
@@ -191,6 +194,7 @@
                     loading: true,
                     onOk: () => {
                         setTimeout(() => {
+
                             this.$axios({
                                 method: 'post',
                                 url: api.product_delete(index),
@@ -201,6 +205,9 @@
                             }).then(res => {
                                 if (res.data.code == 200) {
                                     this.$Message.info('已删除');
+                                    if(this.data6.length<2){
+                                        this.page.pageIndex--
+                                    }
                                     this.init();
                                     this.$Modal.remove();
                                 } else {

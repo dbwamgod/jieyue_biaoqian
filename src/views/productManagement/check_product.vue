@@ -299,7 +299,6 @@ inject:["reload"],
                     params.data.expand = !params.data.expand;
                 }
             },
-
             comeout () {
                 new Promise((res,rej)=>{
                    res(this.product_productOutput_list(1))
@@ -310,12 +309,7 @@ inject:["reload"],
                         'pageSize': 0,
                         'pageIndex': 0
                     }))), '_blank');
-                    window.open(api.product_out(encodeURIComponent(JSON.stringify({
-                        'queryParam': this.defaultRules.queryParam,
-                        'codeIds': this.check_list,
-                        'pageSize': 0,
-                        'pageIndex': 0
-                    }))), '_blank');
+
                 }).catch(res=>{
                     this.reload()
                 })
