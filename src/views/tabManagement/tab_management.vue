@@ -407,6 +407,7 @@ export default {
       });
     },
     changepage(index) {
+      this.labelname='';
       this.page.pageIndex = index;
       this.init();
     },
