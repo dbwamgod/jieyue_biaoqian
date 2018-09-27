@@ -117,7 +117,7 @@
                     }
                 ],
                 data6: [],
-                searchInfo:false
+                searchInfo: false
             };
         },
         created () {
@@ -130,11 +130,11 @@
         },
         methods: {
             searchChange () {
-                if (this.data6||this.labelname) {
-                    this.page.pageIndex=1;
+                if (this.data6 || this.labelname) {
+                    this.page.pageIndex = 1;
                     this.init();
-                }else{
-                    this.$Message.info("请输入搜索词")
+                } else {
+                    this.$Message.info('请输入搜索词');
                 }
             },
             newCreate () {
@@ -151,11 +151,11 @@
                         data6: JSON.stringify(index)
                     },
                 });
-                this.reload()
+                this.reload();
             },
             init () {
-                if(this.labelname&&this.searchInfo){
-                    this.page.pageIndex--
+                if (this.labelname && this.searchInfo) {
+                    this.page.pageIndex || this.page.pageIndex--;
                 }
 
                 this.$axios({
@@ -164,17 +164,17 @@
                     data: {
                         keyword: this.labelname,
                         desc: true,
-                        currentPage: this.page.pageIndex===0?1:this.page.pageIndex,
+                        currentPage: this.page.pageIndex === 0 ? 1 : this.page.pageIndex,
                         pageSize: this.page.pageSize
                     }
                 }).then(res => {
                     if (res.data.code == 200) {
-                        if(this.labelName){
-                            this.searchInfo=true
+                        if (this.labelName) {
+                            this.searchInfo = true;
                         }
 
                         if (res.data.data == null) {
-                            this.data6 = []
+                            this.data6 = [];
                             this.dataCount = res.data.page.totalRecords;
                         } else {
                             this.data6 = res.data.data;
@@ -205,8 +205,11 @@
                             }).then(res => {
                                 if (res.data.code == 200) {
                                     this.$Message.info('已删除');
-                                    if(this.data6.length<2){
-                                        this.page.pageIndex--
+                                    console.log(this.data6.length,this.labelname);
+
+                                    if (this.data6.length < 2 && !this.labelname) {
+
+                                        this.page.pageIndex--;
                                     }
                                     this.init();
                                     this.$Modal.remove();
