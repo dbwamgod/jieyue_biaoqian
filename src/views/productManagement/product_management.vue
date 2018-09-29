@@ -105,9 +105,7 @@
                                     },
                                     on: {
                                         click: () => {
-
                                             this.product_delete(this.data6[params.index].id);
-
                                         }
                                     }
                                 }, '删除')
@@ -129,12 +127,14 @@
         },
         methods: {
             searchChange () {
-                if (this.data6 || this.labelname) {
+               /* if (this.data6 || this.labelname) {
                     this.page.pageIndex = 1;
                     this.init();
                 } else {
                     this.$Message.info('请输入搜索词');
-                }
+                }*/
+                this.page.pageIndex=1;
+                this.init();
             },
             newCreate () {
                 this.$router.push({name: 'new_product'});
@@ -153,9 +153,9 @@
                 this.reload();
             },
             init () {
-                if (this.labelname && this.searchInfo) {
-                    this.page.pageIndex || this.page.pageIndex--;
-                }
+                // if (this.labelname && this.searchInfo) {
+                //     this.page.pageIndex || this.page.pageIndex--;
+                // }
 
                 this.$axios({
                     method: 'post',
@@ -163,27 +163,41 @@
                     data: {
                         keyword: this.labelname,
                         desc: true,
-                        currentPage: this.page.pageIndex === 0 ? 1 : this.page.pageIndex,
+                        currentPage: this.page.pageIndex /*=== 0 ? 1 : this.page.pageIndex*/,
                         pageSize: this.page.pageSize
                     }
                 }).then(res => {
                     if (res.data.code == 200) {
-                        if (this.labelName) {
-                            this.searchInfo = true;
-                        }
+                        // if (this.labelName) {
+                        //     this.searchInfo = true;
+                        // }
 
-                        if (res.data.data == null) {
-                            this.data6 = [];
+                        // if (res.data.data == null) {
+                        //     this.data6 = [];
+                        //     this.dataCount = res.data.page.totalRecords;
+                        // } else {
+                            this.data6 = res.data.data||[];
                             this.dataCount = res.data.page.totalRecords;
-                        } else {
-                            this.data6 = res.data.data;
-                            this.dataCount = res.data.page.totalRecords;
+                        // }
+                        // console.log( res.data.data==null);
+                        if (res.data.data==null || res.data.data == []) {
+                            if(res.data.page.totalRecords!=0){
+                                this.page.pageIndex =
+                                    this.page.pageIndex != 0
+                                        ? this.page.pageIndex - 1
+                                        : this.page.pageIndex;
+                                this.init();
+                            }
+
                         }
 
                     } else {
-                        this.data6 = [];
+                        this.data6=[]
                         this.$Message.info(res.data.msg);
                     }
+                },
+                err=>{
+                    this.$Message.warning("服务器错误");
                 });
             },
             product_delete (index) {

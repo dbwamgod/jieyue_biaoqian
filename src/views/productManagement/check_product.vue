@@ -324,9 +324,11 @@ inject:["reload"],
             product_productOutput_list (arg) {
 
                 // this.check_list = this.defaultRules.labelNameVoList;
+
                 this.defaultRules.labelVos.forEach(r => {
                     this.check_list.push(r.labelId);
                 });
+                console.log(this.check_list);
                 this.$axios({
                     method: 'post',
                     url: api.product_productOutput_list(),
@@ -337,6 +339,7 @@ inject:["reload"],
                         'pageIndex': this.page.pageIndex - 1
                     }
                 }).then(res => {
+                    this.check_list=[]
                     if (res.data.code == 200) {
                         if(arg){
 

@@ -105,6 +105,9 @@
                 }
             }
         },
+        computed:{
+
+        },
         beforeDestroy () {
             Cookies.remove('categoryId');
         },
