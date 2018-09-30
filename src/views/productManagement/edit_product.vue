@@ -89,7 +89,9 @@
                 formValidate_list: {},
                 find_id: {},
                 check_out: [],
-                check_out_flag: false
+                check_out_flag: true,
+                a: 1,
+                b: 2
             };
         },
         created () {
@@ -99,15 +101,16 @@
         },
         watch: {
             '$route.query.data6.id' (to, form) {
-
                 if (to.query.data6.id) {
                     this.detail_type_list(to.query.data6.id);
                 }
             }
         },
-        computed:{
-
-        },
+        // computed: {
+        //     change_style: function () {
+        //
+        //     }
+        // },
         beforeDestroy () {
             Cookies.remove('categoryId');
         },
@@ -119,7 +122,7 @@
             detail_type_list (id) {
                 this.$axios({
                     method: 'post',
-                    url: api.product_productOutput_find(this.find_id.id||id),
+                    url: api.product_productOutput_find(this.find_id.id || id),
                 }).then(res => {
                     if (res.data.code == 200) {
                         this.title = res.data.data.outputParamList;
@@ -201,11 +204,20 @@
                                         type: 3,
                                         disabled: true,
                                         render: (h, params) => {
+                                         /*   let check_flag=true
+                                            for (var i = 0; i < this.title.length; i++) {
+                                                var tag = this.title[i];
+                                                if (this.title[i] == params.data.title) {
+                                                    check_flag = false;
+                                                }
+                                            }
+                                            console.log(this.title,tag, params,this.check_flag);*/
+                                            // console.log(params.data);
                                             return h(
                                                 'span',
                                                 {
-                                                    style: this.check_out_flag || this.defaultFlag.find(r => params.data.id === r) ? {
-                                                        color: '#9ea7b4', display: 'inline-block',
+                                                        style: this.check_out_flag || this.defaultFlag.find(r => params.data.id === r) ? {
+                                                            color: '#9ea7b4', display: 'inline-block',
                                                         maxWidth: '90px',
                                                         overflow: 'hidden',
                                                         textOverflow: 'ellipsis',
@@ -226,7 +238,6 @@
                                                             //this.big_container.push(ev.path[0]);
 
                                                             ev.path[0].style.color = '#9ea7b4';
-
 
                                                             let flag = this.title.find(r => r.labelId === params.data.id);
 

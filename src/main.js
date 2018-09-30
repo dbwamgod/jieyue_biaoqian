@@ -13,7 +13,7 @@ import util from './libs/util';
 import axios from 'axios';
 Vue.prototype.$axios=axios;
 import qs from 'qs';
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
  // axios.defaults.headers['authorization'] = '';
 
 Vue.prototype.$qs=qs;

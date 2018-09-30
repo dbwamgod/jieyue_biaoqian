@@ -16,6 +16,7 @@ module.exports = merge(webpackBaseConfig, {
     devtool: '#source-map',
     output: {
         publicPath: '/galaxy-label-admin/',
+        // publicPath: '/dist/',
         filename: '[name].js',
         chunkFilename: '[name].chunk.js'
     },
