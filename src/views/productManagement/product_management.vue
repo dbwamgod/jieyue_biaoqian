@@ -73,6 +73,7 @@
                                     on: {
                                         click: () => {
                                             Cookies.set('now_index', this.page.pageIndex);
+
                                             this.$router.push({
                                                 name: 'check_product',
                                                 query: {
@@ -92,9 +93,7 @@
                                     on: {
                                         click: () => {
                                             Cookies.set('now_index', this.page.pageIndex);
-
                                             this.edit(this.data6[params.index]);
-
                                         }
                                     }
                                 }, '编辑'),
@@ -114,7 +113,8 @@
                     }
                 ],
                 data6: [],
-                searchInfo: false
+                searchInfo: false,
+                keyword: ''
             };
         },
         created () {
@@ -122,22 +122,27 @@
                 this.page.pageIndex = Number(Cookies.get('now_index'));
                 Cookies.remove('now_index');
             }
-
+            this.labelname = this.$store.state.app.productSearch;
             this.init();
         },
         methods: {
             searchChange () {
-               /* if (this.data6 || this.labelname) {
-                    this.page.pageIndex = 1;
-                    this.init();
-                } else {
-                    this.$Message.info('请输入搜索词');
-                }*/
-                this.page.pageIndex=1;
+                /* if (this.data6 || this.labelname) {
+                     this.page.pageIndex = 1;
+                     this.init();
+                 } else {
+                     this.$Message.info('请输入搜索词');
+                 }*/
+
+                this.keyword = this.labelname;
+                this.$store.commit('SearchFunction', this.keyword);
+                this.page.pageIndex = 1;
                 this.init();
             },
             newCreate () {
                 this.$router.push({name: 'new_product'});
+                this.$store.commit('SearchFunction');
+
             },
             changepage (index) {
                 this.page.pageIndex = index;
@@ -153,52 +158,41 @@
                 this.reload();
             },
             init () {
-                // if (this.labelname && this.searchInfo) {
-                //     this.page.pageIndex || this.page.pageIndex--;
-                // }
 
                 this.$axios({
                     method: 'post',
                     url: api.product_list(),
                     data: {
-                        keyword: this.labelname,
+                        keyword: this.$store.state.app.productSearch.replace(/\s/g, '') || this.keyword.replace(/\s/g, ''),
                         desc: true,
                         currentPage: this.page.pageIndex /*=== 0 ? 1 : this.page.pageIndex*/,
                         pageSize: this.page.pageSize
                     }
                 }).then(res => {
-                    if (res.data.code == 200) {
-                        // if (this.labelName) {
-                        //     this.searchInfo = true;
-                        // }
-
-                        // if (res.data.data == null) {
-                        //     this.data6 = [];
-                        //     this.dataCount = res.data.page.totalRecords;
-                        // } else {
-                            this.data6 = res.data.data||[];
+                        if (res.data.code == 200) {
+                            this.data6 = res.data.data || [];
                             this.dataCount = res.data.page.totalRecords;
-                        // }
-                        // console.log( res.data.data==null);
-                        if (res.data.data==null || res.data.data == []) {
-                            if(res.data.page.totalRecords!=0){
-                                this.page.pageIndex =
-                                    this.page.pageIndex != 0
-                                        ? this.page.pageIndex - 1
-                                        : this.page.pageIndex;
-                                this.init();
+                            // }
+                            // console.log( res.data.data==null);
+                            if (res.data.data == null || res.data.data == []) {
+                                if (res.data.page.totalRecords != 0) {
+                                    this.page.pageIndex =
+                                        this.page.pageIndex != 0
+                                            ? this.page.pageIndex - 1
+                                            : this.page.pageIndex;
+                                    this.init();
+                                }
+
                             }
 
+                        } else {
+                            this.data6 = [];
+                            this.$Message.info(res.data.msg);
                         }
-
-                    } else {
-                        this.data6=[]
-                        this.$Message.info(res.data.msg);
-                    }
-                },
-                err=>{
-                    this.$Message.warning("服务器错误");
-                });
+                    },
+                    err => {
+                        this.$Message.warning('服务器错误');
+                    });
             },
             product_delete (index) {
                 this.$Modal.confirm({
@@ -218,10 +212,7 @@
                             }).then(res => {
                                 if (res.data.code == 200) {
                                     this.$Message.info('已删除');
-
-
-                                    if (this.data6.length < 2 && !this.labelname) {
-
+                                    if (this.data6.length < 2 && !this.keyword) {
                                         this.page.pageIndex--;
                                     }
                                     this.init();

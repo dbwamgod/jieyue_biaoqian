@@ -11,6 +11,7 @@ const app = {
         openedSubmenuArr: [], // 要展开的菜单数组
         menuTheme: 'dark', // 主题
         themeColor: '',
+        productSearch:"",
         pageOpenedList: [{
             title: '首页',
             path: '',
@@ -183,6 +184,7 @@ const app = {
         setMessageCount (state, count) {
             state.messageCount = count;
         },
+
         increateTag (state, tagObj) {
             if (!Util.oneOf(tagObj.name, state.dontCache)) {
                 state.cachePage.push(tagObj.name);
@@ -190,7 +192,10 @@ const app = {
             }
             state.pageOpenedList.push(tagObj);
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
-        }
+        },
+        SearchFunction (state, word="") {
+            state.productSearch = word;
+        },
     }
 };
 
