@@ -89,9 +89,7 @@
                 formValidate_list: {},
                 find_id: {},
                 check_out: [],
-                check_out_flag: true,
-                a: 1,
-                b: 2
+                check_out_flag: false,
             };
         },
         created () {
@@ -127,6 +125,7 @@
                     if (res.data.code == 200) {
                         this.title = res.data.data.outputParamList;
                         this.title.map(r => {
+                            console.log(r);
                             this.defaultFlag.push(r.labelId);
                         });
                         this.formValidate = res.data.data;
@@ -204,20 +203,12 @@
                                         type: 3,
                                         disabled: true,
                                         render: (h, params) => {
-                                         /*   let check_flag=true
-                                            for (var i = 0; i < this.title.length; i++) {
-                                                var tag = this.title[i];
-                                                if (this.title[i] == params.data.title) {
-                                                    check_flag = false;
-                                                }
-                                            }
-                                            console.log(this.title,tag, params,this.check_flag);*/
-                                            // console.log(params.data);
                                             return h(
                                                 'span',
                                                 {
-                                                        style: this.check_out_flag || this.defaultFlag.find(r => params.data.id === r) ? {
-                                                            color: '#9ea7b4', display: 'inline-block',
+                                                    style: this.check_out_flag || this.title.find(r => params.data.id === r.id||params.data.id===r.labelId) ? {
+                                                        color: '#9ea7b4',
+                                                        display: 'inline-block',
                                                         maxWidth: '90px',
                                                         overflow: 'hidden',
                                                         textOverflow: 'ellipsis',
@@ -239,10 +230,10 @@
 
                                                             ev.path[0].style.color = '#9ea7b4';
 
-                                                            let flag = this.title.find(r => r.labelId === params.data.id);
+                                                            let flag = this.title.find(r => r.id === params.data.id);
 
                                                             if (!flag) {
-                                                                if (this.title.filter(r => r.labelId === params.data.id)[0]) {
+                                                                if (this.title.filter(r => r.Id === params.data.id)[0]) {
                                                                 } else {
                                                                     this.title.push(params.data);
                                                                     this.check_out.push(ev.path[0]);

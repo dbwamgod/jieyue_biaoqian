@@ -30,21 +30,21 @@
             </MenuItem>
         </Submenu>
         <MenuItem name="2" style="padding: 0; margin:0;">
-            <div style="margin: 0 24px;">
+            <div style="text-align: center;">
                 <router-link tag="li" to="/Tab_management/index"
                              style="width:100%;  height: 50px;line-height: 50px; font-size:14px; ">
-                    <Icon type="pricetags" style='margin-right:8px;'></Icon>
+                    <Icon type="pricetags" style='margin-right:8px;margin-left: -72px; '></Icon>
                     标签管理
 
                 </router-link>
             </div>
         </MenuItem>
         <MenuItem name="3" style="padding: 0;font-weight: 100;">
-            <div style="margin: 0 24px;">
+            <div style="text-align: center;">
                 <router-link tag="li" to="/product_management/index"
                              style="width:100%; height: 50px; line-height: 50px; ">
 
-                    <Icon type="filing" style='margin-right:8px;'></Icon>
+                    <Icon type="filing" style='margin-right:8px;margin-left: -72px; '></Icon>
                     产品管理
                 </router-link>
             </div>

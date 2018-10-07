@@ -310,14 +310,15 @@
                                         type: 3,
                                         render: (h, params) => {
                                             return h('span', {
-                                                style: this.check_out_flag ? {
-                                                    color: '#dddee1', display: 'inline-block',
+                                                style: this.check_out_flag ||this.title.find(r=>r.id===params.data.id)? {
+                                                    color: '#9ea7b4',
+                                                    display: 'inline-block',
                                                     maxWidth: '110px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap',
                                                     lineHeight: '14px',
-                                                } : {
+                                                }  :{
                                                     cursor: 'pointer',
                                                     display: 'inline-block',
                                                     maxWidth: '110px',
@@ -326,26 +327,19 @@
                                                     whiteSpace: 'nowrap',
                                                     lineHeight: '14px',
                                                 },
-                                                on: {
+                                            on: {
                                                     click: (ev) => {
-                                                        this.big_container.push(ev.path[0]);
                                                         ev.path[0].style.color = '#9ea7b4';
                                                         let flag = this.title.find(r => {
-                                                            return r.labelId === params.data.id;
+                                                            return r.Id === params.data.id;
                                                         });
                                                         if (!flag) {
                                                             if (this.title.filter(r => r.id === params.data.id)[0]) {
                                                             } else {
                                                                 this.title.push(params.data);
                                                                 this.check_out.push(ev.path[0]);
-                                                                // this.big_container.push(ev.path[0])
                                                             }
                                                         }
-
-                                                        // if (this.title.filter(r => r.id == params.data.id)[0]) {
-                                                        // } else {
-                                                        //     this.title.push(params.data);
-                                                        // }
                                                     }
                                                 }
                                             }, item.labelName);
