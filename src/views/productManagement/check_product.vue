@@ -324,19 +324,21 @@ inject:["reload"],
             product_productOutput_list (arg) {
 
                 // this.check_list = this.defaultRules.labelNameVoList;
+
                 this.defaultRules.labelVos.forEach(r => {
                     this.check_list.push(r.labelId);
                 });
                 this.$axios({
-                    method: 'post',
+                    method: 'POST',
                     url: api.product_productOutput_list(),
                     data: {
-                        'queryParam': this.defaultRules.queryParam,//"q=*%3A*&wt=json&indent=true&fl=id", encodeURIComponent(
-                        'codeIds': this.check_list,//{"labelCode":"name"},{"labelCode":"tel"},{"labelCode":"addr"},{"labelCode":"phone"},{"labelCode":"age"},{"labelCode":"empt"}
+                        'queryParam': this.defaultRules.queryParam,
+                        'codeIds': this.check_list,
                         'pageSize': this.page.pageSize,
                         'pageIndex': this.page.pageIndex - 1
-                    }
+                    },
                 }).then(res => {
+                    this.check_list=[]
                     if (res.data.code == 200) {
                         if(arg){
 

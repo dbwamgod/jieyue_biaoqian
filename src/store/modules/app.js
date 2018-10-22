@@ -5,12 +5,21 @@ import Vue from 'vue';
 
 const app = {
     state: {
+        editInlineAndCellData:[{
+            labelCode: '',
+            labelName: '',
+            dataType: '',
+            defaultVal: '',
+            indexStatus: '',
+            rule: '',
+        },],
         cachePage: [],
         lang: '',
         isFullScreen: false,
         openedSubmenuArr: [], // 要展开的菜单数组
         menuTheme: 'dark', // 主题
         themeColor: '',
+        productSearch:"",
         pageOpenedList: [{
             title: '首页',
             path: '',
@@ -190,7 +199,20 @@ const app = {
             }
             state.pageOpenedList.push(tagObj);
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
-        }
+        },
+        SearchFunction (state, word="") {
+            state.productSearch = word;
+        },
+        addEditTable (state, add) {
+            state.editInlineAndCellData.push(add)
+        },
+        delEditTable (state, index) {
+              state.editInlineAndCellData.splice(index,1)
+        },
+        dataEditTable (state, data) {
+            state.editInlineAndCellData=data
+              // state.editInlineAndCellData.splice(index,1)
+        },
     }
 };
 

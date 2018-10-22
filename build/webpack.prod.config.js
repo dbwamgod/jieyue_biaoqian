@@ -24,6 +24,7 @@ module.exports = merge(webpackBaseConfig, {
         chunkFilename: '[name].[hash].chunk.js'
     },
     plugins: [
+        // new cleanWebpackPlugin(['dist/*'], {
         new cleanWebpackPlugin(['galaxy-label-admin/*'], {
             root: path.resolve(__dirname, '../')
         }),

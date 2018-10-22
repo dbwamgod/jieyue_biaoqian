@@ -97,23 +97,32 @@ export default {
     updateLabelCategoryT() {// 二级分类修改
         return _baseUrlA + '/secondaryCategory/updateLabelCategory';
     },
-    queryLabels() {// 标签列表
-        return _baseUrlA + '/manage/queryLabels';
+    //博哥
+    // queryLabels() {// 标签列表
+    //     return _baseUrlA + '/manage/queryLabels';
+    // },
+
+    //冯更更
+    queryLabels(id) {// 标签列表
+        return _baseUrlA + '/manage/queryUsefulLabels/'+id;
+    },
+    queryGroupsLabels() {// 标签列表
+        return _baseUrlA + '/manage/queryLabelGroupPage'
     },
     queryLabelDataTypes() {// 查询标签数据类型
         return _baseUrlA + '/labelDataType/queryLabelDataTypes';
     },
     saveLabel() {// 保存标签
-        return _baseUrlA + '/manage/saveLabel';
+        return _baseUrlA + '/manage/saveLabelGroup';
     },
-    removeLabelByIds() {// 删除标签
-        return _baseUrlA + '/manage/removeLabelByIds';
+    removeLabelByIds(i) {// 删除标签
+        return _baseUrlA + '/manage/removeLabelGroupById/'+i;
     },
     updateLabelConfigById() {// 修改标签
-        return _baseUrlA + '/manage/updateLabelConfigById';
+        return _baseUrlA + '/manage/updateLabelGroupById';
     },
     changeLabelAvailable() {//启用停用
-        return _baseUrlA + '/manage/changeLabelAvailable';
+        return _baseUrlA + '/manage/changeLabelGroupAvailable';
     },
     queryLabelById(id) {//获取规则
         return _baseUrlA + '/manage/queryLabelById/' + id;
