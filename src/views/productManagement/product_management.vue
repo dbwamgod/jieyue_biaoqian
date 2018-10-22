@@ -226,7 +226,9 @@
                     }
                 });
             },
-
+        },
+        beforeDestroy(){
+            this.$store.commit('SearchFunction');
         }
     };
 </script>

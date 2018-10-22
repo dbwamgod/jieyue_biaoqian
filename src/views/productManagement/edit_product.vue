@@ -50,6 +50,7 @@
                 </Col>
                 <Col span="18" style="    margin-left: 3%;">
                 <div class="container_label" ref="container_label">
+
                     <Tag v-for="(item,index) in title" :key="index" :name="item.labelName||item.title"
                          closable @on-close="handleClose2"
                          style="background: #dddee1;height: 40px;line-height: 40px;padding: 0 15px;">
@@ -123,9 +124,9 @@
                     url: api.product_productOutput_find(this.find_id.id || id),
                 }).then(res => {
                     if (res.data.code == 200) {
+
                         this.title = res.data.data.outputParamList;
                         this.title.map(r => {
-                            console.log(r);
                             this.defaultFlag.push(r.labelId);
                         });
                         this.formValidate = res.data.data;
@@ -285,6 +286,7 @@
                     url: api.product_First_list(),
                 }).then(res => {
                     if (res.data.code == 200) {
+
                         let result = res.data.data.map((item, index) => {
                             return {
                                 title: item.categoryName,
@@ -315,12 +317,11 @@
                                 }
                             };
                         });
-                        this.data3 = result;
+                        this.data3 = result||0;
                     }
                 });
             },
             treeHandClick (params) {
-
                 if (params.data.children.length == 0) {
                     this.loadData(params.data, data => {
                         if (data.length == 0 || JSON.stringify(data) === '[]') {
@@ -336,32 +337,68 @@
             //保存
             submit () {
                 //保存的接口
+                // console.log( this.formValidate.categoryId);
                 this.title.map((item, index) => {
                     return this.out.push(item.labelId || item.id);
                 });
                 this.out = [...new Set(this.out)];
-                this.$axios({
-                    method: 'post',
-                    url: api.product_to_update(),
-                    data: {
-                        productName: this.formValidate.productName, //产品名称
-                        queryParam: this.formValidate.queryParam, //查询参数(规则)
-                        categoryId: this.formValidate.categoryId || Cookies.get('categoryId'), //产品类别ID
-                        id: this.formValidate.id,
-                        outputParamIdList: this.out, //输出参数id列表(数组)
-                        userId: Cookies.get('userId') //用户ID
-                    }
-                }).then(res => {
-                    Cookies.remove('categoryId');
-                    if (res.data.code == 200) {
-                        this.out = [];
-                        this.$router.back(-1);
+                if(!Cookies.get('userId')){
+                    this.$axios({
+                        method: 'get',
+                        url: api.userId(),
+                        headers: {
+                            'content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    }).then(res => {
+                        Cookies.set('userId', res.data.principal.id);
+                        this.$axios({
+                            method: 'post',
+                            url: api.product_to_update(),
+                            data: {
+                                productName: this.formValidate.productName, //产品名称
+                                queryParam: this.formValidate.queryParam, //查询参数(规则)
+                                categoryId: this.formValidate.categoryId || Cookies.get('categoryId'), //产品类别ID
+                                id: this.formValidate.id,
+                                outputParamIdList: this.out, //输出参数id列表(数组)
+                                userId: Cookies.get('userId') //用户ID
+                            }
+                        }).then(res => {
+                            Cookies.remove('categoryId');
+                            if (res.data.code == 200) {
+                                this.out = [];
+                                this.$router.back(-1);
 
-                    } else {
-                        this.out = [];
-                        this.$Message.info(res.data.msg);
-                    }
-                });
+                            } else {
+                                this.out = [];
+                                this.$Message.info(res.data.msg);
+                            }
+                        });
+                    });
+                }else{
+                    this.$axios({
+                        method: 'post',
+                        url: api.product_to_update(),
+                        data: {
+                            productName: this.formValidate.productName, //产品名称
+                            queryParam: this.formValidate.queryParam, //查询参数(规则)
+                            categoryId: this.formValidate.categoryId || Cookies.get('categoryId'), //产品类别ID
+                            id: this.formValidate.id,
+                            outputParamIdList: this.out, //输出参数id列表(数组)
+                            userId: Cookies.get('userId') //用户ID
+                        }
+                    }).then(res => {
+                        Cookies.remove('categoryId');
+                        if (res.data.code == 200) {
+                            this.out = [];
+                            this.$router.back(-1);
+
+                        } else {
+                            this.out = [];
+                            this.$Message.info(res.data.msg);
+                        }
+                    });
+                }
+
             },
             handleClose2 (event, name) {
                 let myError;
@@ -369,6 +406,7 @@
                     let index;
                     let designation;
                     this.title.map((r, m) => {
+
                         let nameTitle = r.title || r.labelName;
                         if (nameTitle === name) {
                             index = m;
@@ -410,7 +448,7 @@
         overflow-y: auto;
         height: 115px;
         max-height: 200px;
-        border: 2px solid #dddee1;
+        border: 1px solid #dddee1;
         border-radius: 4px;
     }
 

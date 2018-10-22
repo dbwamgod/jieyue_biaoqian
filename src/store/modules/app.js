@@ -5,6 +5,14 @@ import Vue from 'vue';
 
 const app = {
     state: {
+        editInlineAndCellData:[{
+            labelCode: '',
+            labelName: '',
+            dataType: '',
+            defaultVal: '',
+            indexStatus: '',
+            rule: '',
+        },],
         cachePage: [],
         lang: '',
         isFullScreen: false,
@@ -184,7 +192,6 @@ const app = {
         setMessageCount (state, count) {
             state.messageCount = count;
         },
-
         increateTag (state, tagObj) {
             if (!Util.oneOf(tagObj.name, state.dontCache)) {
                 state.cachePage.push(tagObj.name);
@@ -195,6 +202,16 @@ const app = {
         },
         SearchFunction (state, word="") {
             state.productSearch = word;
+        },
+        addEditTable (state, add) {
+            state.editInlineAndCellData.push(add)
+        },
+        delEditTable (state, index) {
+              state.editInlineAndCellData.splice(index,1)
+        },
+        dataEditTable (state, data) {
+            state.editInlineAndCellData=data
+              // state.editInlineAndCellData.splice(index,1)
         },
     }
 };

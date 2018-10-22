@@ -46,7 +46,7 @@
                 </Col>
                 <Col span="18">
                 <div class="container_label" ref="container_label">
-                    <Tag v-for="(item,index) in title" :key="index" :name="item.title" closable
+                    <Tag v-for="(item,index) in title" :key="index" :name="item.id" closable
                          @on-close="handleClose2"
                          style=" background: #dddee1;height: 40px;line-height: 40px;padding: 0 15px;">{{ item.title}}
                     </Tag>
@@ -99,7 +99,7 @@
                 big_container: [],
                 check_out: [],
                 check_out_flag: false,
-                intermediateVariable:[]
+                intermediateVariable: []
 
             };
         },
@@ -109,12 +109,12 @@
         },
         methods: {
             //取消
-            oncanel(){
-                this.$router.back(-1)
-                this.formValidate={}
-                this.title=[]
-                this.init()
-                this.product_First_list()
+            oncanel () {
+                this.$router.back(-1);
+                this.formValidate = {};
+                this.title = [];
+                this.init();
+                this.product_First_list();
             },
             //类别分类
             init () {
@@ -133,7 +133,8 @@
                     url: api.product_First_list(),
                 }).then(res => {
                     if (res.data.code == 200) {
-                        this.data3  = res.data.data.map((item, index) => {return {
+                        this.data3 = res.data.data.map((item, index) => {
+                            return {
                                 title: item.categoryName,
                                 id: item.id,
                                 loading: false,
@@ -158,8 +159,8 @@
                                         }
                                     }, item.categoryName);
                                 }
-                            };});
-
+                            };
+                        });
 
                     }
                 });
@@ -167,11 +168,14 @@
             treeHandClick (params) {
                 if (params.data.children.length == 0) {
                     this.loadData(params.data, data => {
-                        if (data.length == 0 || JSON.stringify(data) === '[]') {
-                            return params.data.expand = false;
+                        if (data) {
+                            if (data.length == 0 || JSON.stringify(data) === '[]') {
+                                return params.data.expand = false;
+                            }
+                            params.data.children = data;
+                            params.data.expand = true;
                         }
-                        params.data.children = data;
-                        params.data.expand = true;
+
                     });
                 } else {
                     params.data.expand = !params.data.expand;
@@ -198,10 +202,10 @@
                 }).then(res => {
                     if (res.data.code == 200) {
                         this.out = [];
-                        this.formValidate={}
-                        this.title=[]
-                        this.init()
-                        this.product_First_list()
+                        this.formValidate = {};
+                        this.title = [];
+                        this.init();
+                        this.product_First_list();
                         this.$router.back(-1);
 
                     } else {
@@ -217,21 +221,21 @@
                 if (!myError) {
                     let index;
                     let designation;
-                    this.title.map((r, m) => {
-                        if (r.title === name) {
-                            index = m;
+                    this.title.map((tr, tm) => {
+                        if (tr.id === name) {
+                            index = tm;
                             designation = name;
                         }
-                    });
                     if (this.check_out.length) {
-                        this.check_out.forEach((r, i) => {
-                            if (r.textContent === designation) {
+                        this.check_out.forEach((xr, xi) => {
+                            if (xr.textContent === designation&&tr.id===designation) {
                                 if (this.title) {
-                                    this.check_out[i].style.color = '#dddee1';
+                                    this.check_out[xi].style.color = '#dddee1';
                                 }
                             }
                         });
                     }
+                    });
                     this.title.splice(index, 1);
                     this.check_out_flag = false;
                 }
@@ -248,7 +252,7 @@
                             if (res.data.data.length !== 0) {
                                 const data = res.data.data.map((item, index) => {
                                     return {
-                                        title: item.categoryName || '',
+                                        title: item.categoryName || item.categoryName == 0 ? item.categoryName : '',
                                         id: item.id || '',
                                         type: 2,
                                         loading: false,
@@ -291,26 +295,19 @@
                     });
                 } else if (item.type === 2) {
                     this.$axios({
-                        method: 'post',
-                        url: api.queryLabels(),
-                        data: {
-                            'form': {
-                                'categoryId': item.id,
-                            },
-                            'pageIndex': 0,
-                            'pageSize': 0,
-                        }
+                        method: 'get',
+                        url: api.queryLabels( item.id),
                     }).then(res => {
                         if (res.data.code == 200) {
                             if (res.data.data.length !== 0) {
                                 const data = res.data.data.map((item, index) => {
                                     return {
-                                        title: item.labelName || '',
-                                        id: item.id || '',
+                                        title: item.labelName,
+                                        id: item.id,
                                         type: 3,
                                         render: (h, params) => {
                                             return h('span', {
-                                                style: this.check_out_flag ||this.title.find(r=>r.id===params.data.id)? {
+                                                style: this.check_out_flag || this.title.find(r => r.id === params.data.id) ? {
                                                     color: '#9ea7b4',
                                                     display: 'inline-block',
                                                     maxWidth: '110px',
@@ -318,7 +315,7 @@
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap',
                                                     lineHeight: '14px',
-                                                }  :{
+                                                } : {
                                                     cursor: 'pointer',
                                                     display: 'inline-block',
                                                     maxWidth: '110px',
@@ -327,8 +324,9 @@
                                                     whiteSpace: 'nowrap',
                                                     lineHeight: '14px',
                                                 },
-                                            on: {
+                                                on: {
                                                     click: (ev) => {
+
                                                         ev.path[0].style.color = '#9ea7b4';
                                                         let flag = this.title.find(r => {
                                                             return r.Id === params.data.id;
@@ -337,6 +335,7 @@
                                                             if (this.title.filter(r => r.id === params.data.id)[0]) {
                                                             } else {
                                                                 this.title.push(params.data);
+
                                                                 this.check_out.push(ev.path[0]);
                                                             }
                                                         }
@@ -346,6 +345,7 @@
                                         }
                                     };
                                 });
+
                                 callback(data);
                             } else {
                                 const data = res.data.data.map((item, index) => {
@@ -384,7 +384,7 @@
         overflow-y: auto;
         height: 115px;
         max-height: 200px;
-        border: 2px solid #dddee1;
+        border: 1px solid #dddee1;
         border-radius: 4px;
     }
 
