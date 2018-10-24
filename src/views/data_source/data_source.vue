@@ -142,7 +142,7 @@
         },
         methods: {
             test(){
-                this.$Message.error("小猫咪正在开发中...")
+                this.$Message.error("正在开发中...")
             },
             dataList () {
                 this.$axios({
