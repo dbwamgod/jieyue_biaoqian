@@ -38,7 +38,7 @@
                 <Col span="18" style="    margin-left: 3%;">
                 <Form style="display: inline-block;  width: 100%;">
                     <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
-                           placeholder="Enter something..."></Input>
+                           placeholder="请输入查询规则"></Input>
                 </Form>
 
                 </Col>
@@ -105,11 +105,6 @@
                 }
             }
         },
-        // computed: {
-        //     change_style: function () {
-        //
-        //     }
-        // },
         beforeDestroy () {
             Cookies.remove('categoryId');
         },
@@ -125,13 +120,17 @@
                 }).then(res => {
                     if (res.data.code == 200) {
 
-                        this.title = res.data.data.outputParamList;
-                        this.title.map(r => {
-                            this.defaultFlag.push(r.labelId);
-                        });
-                        this.formValidate = res.data.data;
-                        Cookies.set('categoryId', res.data.data.categoryId);
-                        this.check_out.push(res.data.data.outputParamList);
+                        if(res.data.data.outputParamList){
+                            this.title = res.data.data.outputParamList;
+                           this.title.map(r => {
+                                if(r){
+                                    this.defaultFlag.push(r.labelId);
+                                }
+                            });
+                            this.formValidate = res.data.data;
+                            Cookies.set('categoryId', res.data.data.categoryId);
+                            this.check_out.push(res.data.data.outputParamList);
+                        }
                     } else {
                         this.$Message.info(res.data.msg);
                     }
@@ -317,7 +316,9 @@
                                 }
                             };
                         });
-                        this.data3 = result||0;
+
+
+                        this.data3 = result&&result
                     }
                 });
             },

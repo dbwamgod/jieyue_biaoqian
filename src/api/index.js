@@ -127,6 +127,32 @@ export default {
     queryLabelById(id) {//获取规则
         return _baseUrlA + '/manage/queryLabelById/' + id;
     },
+/*数据源*/
+    //数据源配置
+    //数据源
+    queryAllDataSources() {//标签管理的数据源接口
+        return _baseUrlA + '/dataSource/queryAllDataSources';
+    },
+    //数据源
+    queryDataSourcePage() {//数据源列表(list)
+        return _baseUrlA + '/dataSource/queryDataSourcePage';
+    },
+    //数据源
+    removeDataSource(id) {//删除
+        return _baseUrlA + '/dataSource/removeDataSource/' + id;
+    },
+    //数据源
+    saveDataSource() {//保存||新增
+        return _baseUrlA + '/dataSource/saveDataSource';
+    },
+    //数据源
+    updateDataSource() {//修改
+        return _baseUrlA + '/dataSource/updateDataSource';
+    },
+
+
+
+
 
 }
 

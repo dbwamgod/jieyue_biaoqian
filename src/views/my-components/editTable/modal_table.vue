@@ -349,7 +349,7 @@
                                 ? this.categoryDetails.precision
                                 : '';
                         if (this.isEdit == '新建') {
-                            console.log(this.categoryDetails);
+
                             this.$axios({
                                 method: 'post',
                                 url: api.saveLabel(),

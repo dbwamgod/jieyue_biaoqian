@@ -5,7 +5,7 @@
 <template>
     <Menu ref="sideMenu" :active-name="activeName" :open-names="['0']" :theme="menuTheme" width="auto"
           @on-select="menuSelect" style="" :accordion="false">
-        <Submenu name="1" >
+        <Submenu name="1">
 
 
             <template slot="title">
@@ -29,6 +29,13 @@
 
             </MenuItem>
         </Submenu>
+        <MenuItem name="4" style="padding: 0; margin:0;">
+            <div style="text-align: center;">
+                <router-link tag="li" to="/queryDataSourcePage/index"
+                             style="width:93%;  height: 50px;line-height: 50px; font-size:14px; ">
+                    <Icon type="android-radio-button-on" style='margin-right:13px;margin-left: -72px; '></Icon>数据源</router-link>
+            </div>
+        </MenuItem>
         <MenuItem name="2" style="padding: 0; margin:0;">
             <div style="text-align: center;">
                 <router-link tag="li" to="/Tab_management/index"
@@ -82,7 +89,7 @@
                 };
                 if (pathNameObj[to.name]) {
                     this.activeName = pathNameObj[to.name];
-                    sessionStorage.setItem("pages",pathNameObj[to.name])
+                    sessionStorage.setItem('pages', pathNameObj[to.name]);
                 }
             }
         },
@@ -91,7 +98,6 @@
                 this.activeName = sessionStorage.getItem('pages') || '1-1';
             }
         },
-
 
         methods: {
             menuSelect (name) {
