@@ -1,61 +1,55 @@
 <template>
-    <div class="check_container">
-
-        <Row style="position: fixed;width: 160px; height: 100%;background:#585b6d;color: #dddee1;opacity: .7;">
+    <div>
+        <Row class="treeData">
             <Col class="Col_product_new">
             <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData"></Tree>
             </Col>
         </Row>
-
-        <div style="margin-left: 160px;padding-top: 35px;    padding-left: 4.6%;">
-            <Row style="margin: 0;">
+        <div class="checkInfo_table">
+            <Row class="checkProduct-container">
                 <Col span="2">
-                <span style="    display: inline-block;">产品名称:</span>
-                </Col  >
-                <Col span="3" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 300px;">
+                <span>产品名称:</span>
+                </Col>
+                <Col span="3" class="productNames">
                 <span class="check_container_product">{{defaultRules.productName}}</span>
                 </Col>
             </Row>
-            <Row style="margin: 20px 0 0 0 ;">
+            <Row class="checkProduct-container">
                 <Col span="2">
-                <span style="display: inline-block;">产品类别:</span>
+                <span>产品类别:</span>
                 </Col>
-                <Col span="3" style="text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    ">
+                <Col span="3" class="check-productType">
                 <span class="check_container_list">{{defaultRules.categoryName}}</span>
                 </Col>
             </Row>
-            <Row style="margin-top: 40px;">
+            <Row class="checkProduct-container">
                 <Col span="2">
                 <p class="Default_rule">预设规则:</p>
                 </Col>
-                <Col span="18" style="border: 1px solid #dddee1;min-width: 300px;min-height: 40px;padding: 10px;">
-                <span style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;display: block;">{{defaultRules.queryParam}}</span>
+                <Col span="18" class="prophesy-rule">
+                <span class="prophesy-rule-text">{{defaultRules.queryParam}}</span>
                 </Col>
             </Row>
-            <Row style="margin-top: 40px">
+            <Row class="checkProduct-container">
                 <Col span="2">
                 <p class="check_inpout">查询输出:</p>
                 </Col>
                 <Col span="18">
                 <div class="container_label_check" ref="container_label_check">
                     <Tag v-for="(item,index) in defaultRules.labelVos" :key="index" :name="item.labelName"
-                         @on-close="handleClose2" style="height: 35px;line-height: 35px; padding: 0 15px;background: #e1e1e1;     margin: 5px 2.5px 2.5px 5px;
-">{{ item.labelName }}
+                         @on-close="handleClose2" class="container_label_check_tag">{{ item.labelName }}
                     </Tag>
                 </div>
                 </Col>
             </Row>
-            <Row style="margin-top: 40px;">
+            <Row class="checkProduct-container-operation">
                 <Col span="12" offset="8">
-                <Button type="primary" @click="checkInfo" style="margin-right: 20px;">查询</Button>
-                <Button type="primary" @click="comeout" style="margin-right: 20px;">导出</Button>
-                <Button type="primary" @click="canel">返回</Button>
+                <Button type="primary" @click="checkInfo" class="handle">查询</Button>
+                <Button type="primary" @click="comeout" class="handle">导出</Button>
+                <Button @click="canel">返回</Button>
                 </Col>
             </Row>
-            <Row style=" margin-top: 50px;">
+            <Row class="check-result">
                 <Col span="2">
                 <p class="detail_list">查询结果:</p>
                 </Col>
@@ -63,8 +57,8 @@
                 <Table border :columns="columns1" :data="data2"></Table>
                 </Col>
             </Row>
-            <Row style="margin-top: 30px;">
-                <Col style="margin-left: 43%;    width: 40%; text-align: right;">
+            <Row class="checkProduct-page">
+                <Col class="page-list">
                 <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex"
                       @on-change="changepage"/>
                 </Col>
@@ -108,7 +102,6 @@
         },
         created () {
             this.product_getDetail(this.$route.query.id);
-            this.content = this.defaultRules.queryParam;
             this.product_First_list();
         },
         methods: {
@@ -204,9 +197,6 @@
                                                     },
                                                     on: {
                                                         click: ev => {
-                                                            // this.judge ? ev.path[0].style.color = '#9ea7b4' : ev.path[0].style.color = '#495060';
-                                                            //this.big_container.push(ev.path[0]);
-
                                                             ev.path[0].style.color = '#9ea7b4';
 
                                                             let flag = this.title.find(r => r.labelId === params.data.id);
@@ -413,7 +403,93 @@
     };
 </script>
 
-<style scoped>
+<style scoped lang="less">
+    .treeData {
+        position: fixed;
+        width: 160px;
+        height: 100%;
+        background: #585b6d;
+        color: #dddee1;
+        opacity: .7;
+        .menu_product_list {
+            margin-top: 15%;
+            margin-left: 10%;
+
+        }
+    }
+
+    /*查询信息列表*/
+    .checkInfo_table {
+        margin-left: 160px;
+        padding-top: 35px;
+        padding-left: 4.6%;
+
+        .productNames {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 300px;
+        }
+        .checkProduct-container {
+            margin-top: 20px;
+            .check-productType {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
+
+        .prophesy-rule {
+            border: 1px solid #dddee1;
+            min-width: 300px;
+            min-height: 40px;
+            padding: 10px;
+            .prophesy-rule-text {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                display: block;
+            }
+
+        }
+        .check_inpout {
+            border-radius: 5px;
+        }
+        .container_label_check {
+            overflow-y: auto;
+            max-height: 145px;
+            min-height: 48px;
+            border: 1px solid #dddee1;
+            border-radius: 4px;
+
+            .container_label_check_tag {
+                height: 35px;
+                line-height: 35px;
+                padding: 0 15px;
+                background: #e1e1e1;
+                margin: 5px 2.5px 2.5px 5px;
+            }
+        }
+        .checkProduct-container-operation {
+            margin-top: 40px;
+            .handle {
+                margin-right: 20px;
+            }
+        }
+
+        .check-result {
+            margin-top: 40px;
+        }
+        .checkProduct-page {
+            margin-top: 30px;
+            .page-list {
+                margin-left: 43%;
+                width: 40%;
+                text-align: right;
+            }
+        }
+
+    }
 
     .check_container_product {
         color: #515a6e;
@@ -424,21 +500,5 @@
 
     }
 
-    .check_inpout {
-        border-radius: 5px;
-    }
 
-    .container_label_check {
-        overflow-y: auto;
-        max-height: 145px;
-        min-height: 48px;
-        border: 1px solid #dddee1;
-        border-radius: 4px;
-    }
-
-    .menu_product_list {
-        margin-top: 15%;
-        margin-left: 10%;
-
-    }
 </style>

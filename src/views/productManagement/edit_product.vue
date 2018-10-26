@@ -1,20 +1,18 @@
 <template>
-    <div ref="container_box" id="container_box" class="container_box">
-        <Row style="position: fixed;width: 160px; height: 100%;background:#585b6d;color: #dddee1;opacity: .7;">
+    <div ref="container_box" id="container_box">
+        <Row class="edit_treeData">
             <Col class="Col_product_new">
             <Tree :data="data3" :load-data="loadData" class="menu_product_list" on-select-change="loadData"></Tree>
             </Col>
         </Row>
-        <div style="margin-left: 160px">
+        <div class="edit_productList">
             <Row>
                 <Col>
                 <div class="new_product_fir">
-                    <!--<p class="new_text">新建</p>-->
-                    <Form ref="formValidate" :model="formValidate"
-                          style="flex: 0;padding-top: 10px;    padding-left: 4.6%;">
-                        <FormItem label="产品名称" prop="product_id" style="float: left;width: 360px;">
+                    <Form ref="formValidate" :model="formValidate" class="form-productList">
+                        <FormItem label="产品名称" prop="product_id" class="edit-productName">
                             <Input v-model="formValidate.productName" placeholder="请输入产品名称"
-                                   style="width: 230px;margin-left: 14%;"></Input>
+                                   class="edit-productName-input"></Input>
                         </FormItem>
                         <FormItem label="产品类别" prop="product_type" style="float: left;width: 360px;">
 
@@ -32,11 +30,11 @@
                 </Col>
             </Row>
             <Row>
-                <Col offset="1" style="    float: left;width: 71px;">
-                <span style="padding: 7px;">查询规则</span>
+                <Col offset="1" class="edit_checkRule">
+                <span class="edit_checkRule_text">查询规则</span>
                 </Col>
-                <Col span="18" style="    margin-left: 3%;">
-                <Form style="display: inline-block;  width: 100%;">
+                <Col span="18" class="edit_checkRule_container">
+                <Form class="edit_checkRule_input">
                     <Input v-model="formValidate.queryParam" type="textarea" :autosize="{minRows: 4,maxRows: 5}"
                            placeholder="请输入查询规则"></Input>
                 </Form>
@@ -44,25 +42,25 @@
                 </Col>
 
             </Row>
-            <Row style="margin-top: 40px">
-                <Col offset="1" style="     float: left;width: 71px;  ">
-                <p style="padding: 7px;">输出标签</p>
+            <Row class="active-info">
+                <Col offset="1" class="edit_checkRule">
+                <p class="edit_checkRule_text">输出标签</p>
                 </Col>
-                <Col span="18" style="    margin-left: 3%;">
+                <Col span="18" class="edit_checkRule_container">
                 <div class="container_label" ref="container_label">
 
                     <Tag v-for="(item,index) in title" :key="index" :name="item.labelName||item.title"
                          closable @on-close="handleClose2"
-                         style="background: #dddee1;height: 40px;line-height: 40px;padding: 0 15px;">
+                         class="edit_tag">
                         {{item.labelName?item.labelName:item.title}}
                     </Tag>
                 </div>
                 </Col>
             </Row>
-            <Row style="margin-top: 40px">
+            <Row class="active-info">
                 <Col span="12" offset="6">
                 <Button type="primary" @click="submit">保存</Button>
-                <Button @click="oncanel" style="margin-left: 3%;">取消</Button>
+                <Button @click="oncanel" class="canel">取消</Button>
                 </Col>
             </Row>
         </div>
@@ -120,10 +118,10 @@
                 }).then(res => {
                     if (res.data.code == 200) {
 
-                        if(res.data.data.outputParamList){
+                        if (res.data.data.outputParamList) {
                             this.title = res.data.data.outputParamList;
-                           this.title.map(r => {
-                                if(r){
+                            this.title.map(r => {
+                                if (r) {
                                     this.defaultFlag.push(r.labelId);
                                 }
                             });
@@ -206,7 +204,7 @@
                                             return h(
                                                 'span',
                                                 {
-                                                    style: this.check_out_flag || this.title.find(r => params.data.id === r.id||params.data.id===r.labelId) ? {
+                                                    style: this.check_out_flag || this.title.find(r => params.data.id === r.id || params.data.id === r.labelId) ? {
                                                         color: '#9ea7b4',
                                                         display: 'inline-block',
                                                         maxWidth: '90px',
@@ -317,8 +315,7 @@
                             };
                         });
 
-
-                        this.data3 = result&&result
+                        this.data3 = result && result;
                     }
                 });
             },
@@ -343,7 +340,7 @@
                     return this.out.push(item.labelId || item.id);
                 });
                 this.out = [...new Set(this.out)];
-                if(!Cookies.get('userId')){
+                if (!Cookies.get('userId')) {
                     this.$axios({
                         method: 'get',
                         url: api.userId(),
@@ -375,7 +372,7 @@
                             }
                         });
                     });
-                }else{
+                } else {
                     this.$axios({
                         method: 'post',
                         url: api.product_to_update(),
@@ -431,26 +428,93 @@
     };
 </script>
 
-<style scoped>
+<style scoped lang="less">
+
+    .ivu-select-dropdown{
+        /*width: 100% !important;*/
+    }
+
+    /*编辑产品树*/
+    .edit_treeData {
+        position: fixed;
+        width: 160px;
+        height: 100%;
+        background: #585b6d;
+        color: #dddee1;
+        opacity: .7;
+    }
+
+    /*编辑产品列表*/
+    .edit_productList {
+        margin-left: 160px;
+        .new_product_fir {
+            display: flex;
+            margin: 30px 0 20px 0;
+            .form-productList {
+                flex: 0;
+                padding-top: 10px;
+                padding-left: 4.6%;
+                .edit-productName {
+                    float: left;
+                    width: 360px;
+                    .edit-productName-input {
+                        width: 230px;
+                        margin-left: 14%;
+                    }
+                }
+                .edit-productType {
+                    float: left;
+                    width: 360px;
+                    .edit-productType-select {
+                        width: 230px;
+                        margin-left: 14%;
+                    }
+                }
+            }
+        }
+
+        .edit_checkRule {
+            float: left;
+            width: 71px;
+            .edit_checkRule_text {
+                padding: 7px;
+            }
+        }
+        .edit_checkRule_container {
+            margin-left: 3%;
+            .edit_checkRule_input {
+                display: inline-block;
+                width: 100%;
+            }
+        }
+
+        .active-info {
+            margin-top: 40px;
+            .container_label {
+                padding-left: 2px;
+                overflow-y: auto;
+                height: 115px;
+                max-height: 200px;
+                border: 1px solid #dddee1;
+                border-radius: 4px;
+                .edit_tag {
+                    background: #dddee1;
+                    height: 40px;
+                    line-height: 40px;
+                    padding: 0 15px;
+                }
+            }
+        }
+        .canel {
+            margin-left: 3%;
+        }
+
+    }
 
     .menu_product_list {
         margin-top: 15%;
         margin-left: 10%;
 
-    }
-
-    .new_product_fir {
-        display: flex;
-        margin: 30px 0 20px 0;
-    }
-
-    .container_label {
-        padding-left: 2px;
-        overflow-y: auto;
-        height: 115px;
-        max-height: 200px;
-        border: 1px solid #dddee1;
-        border-radius: 4px;
     }
 
 

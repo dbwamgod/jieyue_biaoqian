@@ -1,12 +1,12 @@
 <template>
-    <div style='position: relative;height:100%;padding:10px;'>
-        <Row type="flex" justify="space-between" align="middle" class="code-row-bg" style='margin-bottom:10px;'>
+    <div class="all_box">
+        <Row type="flex" justify="space-between" align="middle" class="code-row-bg">
             <Col span="6">
-            <h2 style="margin: 6px 0 0 20px">标签列表</h2>
+            <h2  class="header-title">标签列表</h2>
             </Col>
-            <Col span="8" style='text-align:right;margin-right:5px;'>
+            <Col span="8" class="search-add">
             <Button type="primary" @click="newCreate" style=" ">新建</Button>
-            <Input v-model="labelname" icon="ios-search" search placeholder="请搜索..." style=" width:160px;"/>
+            <Input v-model="labelname" icon="ios-search" search placeholder="请搜索..." class="sea-name"/>
             <Button type="primary" @click="searchChange">搜索</Button>
             </Col>
         </Row>
@@ -23,52 +23,39 @@
                 @on-cancel="cancel">
             <div>
                 <Form ref="formInline" :model="categoryDetails" :rules="ruleInline" inline>
-                    <FormItem prop="groupName" label="组名：" label-position="right" :label-width="100" style="width:97%">
-                        <Input v-model="categoryDetails.groupName" placeholder="请输入组名" style="width: 97%"/>
+                    <FormItem prop="groupName" label="组名：" label-position="right" :label-width="100" class="edit_add" >
+                        <Input v-model="categoryDetails.groupName" placeholder="请输入组名" class="edit_add"/>
                     </FormItem>
-                    <FormItem prop="classification" label="分类：" placeholder="请选择" label-position="right"
-                              :label-width="100"
-                              style="width: 97%;">
-                        <Select v-model="categoryDetails.classification" style="width:97%">
-                            <!--<Option  value=" " >请选择</Option>-->
+                    <FormItem prop="classification" label="分类：" placeholder="请选择" label-position="right" :label-width="100" class="edit_add" >
+                        <Select v-model="categoryDetails.classification" class="edit_add">
                             <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{item.parentName +'-'+
                                 item.categoryName}}
                             </Option>
                         </Select>
                     </FormItem>
                     <FormItem prop="processingType" label="加工类型：" label-position="right" :label-width="100 "
-                              style="width: 97%;">
+                              class="edit_add">
                         <RadioGroup v-model="categoryDetails.processingType" style="width:10%"
                                     v-for="(item,index) in procesing_type" :key="index">
                             <Radio :label="index">{{item}}</Radio>
-
                         </RadioGroup>
                     </FormItem>
-                    <FormItem prop="labels" label="标签：" label-position="right" :label-width="80" style="    width: 92.8%;
-">
+                    <FormItem prop="labels" label="标签：" label-position="right" :label-width="100" style="width: 92.8%;">
                         <Table border :columns="labels" :data="editInlineAndCellData" height="200px"></Table>
                     </FormItem>
-
-
                     <FormItem prop="processing" label="重复加工：" label-position="right" :label-width="100">
-                        <RadioGroup v-model="categoryDetails.processing" style="width:800px">
+                        <RadioGroup v-model="categoryDetails.processing">
                             <Radio label="0">否</Radio>
                             <Radio label="1">是</Radio>
-
                         </RadioGroup>
                     </FormItem>
-                    <FormItem prop="dataSourceId" label="数据源：" label-position="right" :label-width="100 "
-                              style="width: 97%;">
-
-                        <Cascader :data="dataScourseTypes" v-model="categoryDetails.dataSourceId"></Cascader>
+                    <FormItem prop="dataSourceId" label="数据源：" label-position="right" :label-width="100 " class="edit_add">
+                        <Cascader :data="dataScourseTypes" v-model="categoryDetails.dataSourceId"  class="edit_add"></Cascader>
                     </FormItem>
-
                     <FormItem prop="processingRules" label="sql：" label-position="right" :label-width="100">
                         <Input v-model="categoryDetails.processingRules" type="textarea" class='tab_man_textarea'
                                :autosize="{minRows: 2,maxRows: 15}" placeholder="请输入sql..."></Input>
                     </FormItem>
-
-
                 </Form>
             </div>
 
@@ -913,4 +900,12 @@
         float: right;
         margin-top: 10px;
     }
+
+
+    .edit_add{
+        /*formItem  :w97%  是整个宽度   input和select是formItem的97%*/
+        width: 97%;
+    }
+
+
 </style>

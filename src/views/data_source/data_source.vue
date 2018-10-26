@@ -21,7 +21,8 @@
                 :title="addAndEditTitle"
                 :closable="false"
                 :footer-hide='true'
-        >
+        class="sourceModal" >
+            <!--类名在main.less中-->
             <Form ref="formData" :model="formData" :rules="ruleInline">
                 <FormItem prop="connectName" label="名称：" label-position="right">
                     <Input v-model="formData.connectName" placeholder="请输入名称"/>
@@ -77,7 +78,7 @@
                 formData: {
                     connectName: '',
                     pswd: '',
-                    typeNo: [""],
+                    typeNo: [''],
                     url: '',
                     userName: '',
                 },
@@ -215,19 +216,19 @@
                 this.addAndEditTitle = info === 'new' ? '新建数据源' : '修改数据源';
                 if (info === 'edit') {
                     let a = JSON.parse(JSON.stringify(row));
-                    this.formData.connectName = a.connectName
-                    this.formData.pswd = a.pswd
-                    this.formData.typeNo = [String(a.typeNo[0])]
-                    this.formData.url = a.url
-                    this.formData.userName = a.userName
-                    this.formData.id = a.id
+                    this.formData.connectName = a.connectName;
+                    this.formData.pswd = a.pswd;
+                    this.formData.typeNo = [String(a.typeNo[0])];
+                    this.formData.url = a.url;
+                    this.formData.userName = a.userName;
+                    this.formData.id = a.id;
 
                 } else {
                     this.formData = {};
                 }
             },
             ok (e) {
-                this.formData.typeNo= [this.formData.typeNo]
+                this.formData.typeNo = [this.formData.typeNo];
                 this.$refs.formData.validate(valid => {
                     if (valid) {
                         if (this.addAndEditTitle === '新建数据源') {

@@ -7,7 +7,7 @@ let util = {};
 util.title = function (title, vm) {
     let iTitle = '';
     if (title) {
-        iTitle += ' - ' + (title.i18n ? vm.$t(title.i18n) : title);
+        iTitle += '' + (title.i18n ? vm.$t(title.i18n) : title);
     }
     window.document.title = iTitle;
 };
