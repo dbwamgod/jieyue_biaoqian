@@ -76,14 +76,22 @@
                 title: [],
                 out: [],
                 style_active: {
-                    color: '#dddee1',
                     cursor: 'pointer',
                     display: 'inline-block',
-                    maxWidth: '80px',
+                    maxWidth: '110px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     lineHeight: '14px'
+                },
+                style_actives: {
+                    display: 'inline-block',
+                    maxWidth: '110px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    lineHeight: '14px',
+                    color: '#9ea7b4',
                 },
                 formValidate_list: {},
                 big_container: [],
@@ -133,15 +141,7 @@
                                 type: 1,
                                 render: (h, params) => {
                                     return h('span', {
-                                        style: {
-                                            cursor: 'pointer',
-                                            display: 'inline-block',
-                                            maxWidth: '110px',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap',
-                                            lineHeight: '14px'
-                                        },
+                                        style: this.style_active,
                                         on: {
                                             click: () => {
                                                 this.treeHandClick(params);
@@ -165,7 +165,6 @@
                             params.data.children = data;
                             params.data.expand = true;
                         }
-
                     });
                 } else {
                     params.data.expand = !params.data.expand;
@@ -173,12 +172,10 @@
             },
             //保存
             submit () {
-
                 //保存的接口
                 this.title.map((item, index) => {
                     return this.out.push(item.id);
                 });
-
                 this.$axios({
                     method: 'post',
                     url: api.product_add(),
@@ -251,15 +248,7 @@
                                         render: (h, params) => {
 
                                             return h('span', {
-                                                style: {
-                                                    cursor: 'pointer',
-                                                    display: 'inline-block',
-                                                    maxWidth: '110px',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap',
-                                                    lineHeight: '14px'
-                                                },
+                                                style: this.style_active,
                                                 on: {
                                                     click: () => {
                                                         this.treeHandClick(params);
@@ -297,23 +286,7 @@
                                         type: 3,
                                         render: (h, params) => {
                                             return h('span', {
-                                                style: this.check_out_flag || this.title.find(r => r.id === params.data.id) ? {
-                                                    color: '#9ea7b4',
-                                                    display: 'inline-block',
-                                                    maxWidth: '110px',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap',
-                                                    lineHeight: '14px',
-                                                } : {
-                                                    cursor: 'pointer',
-                                                    display: 'inline-block',
-                                                    maxWidth: '110px',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap',
-                                                    lineHeight: '14px',
-                                                },
+                                                style: this.check_out_flag || this.title.find(r => r.id === params.data.id) ? this.style_actives:this.style_active,
                                                 on: {
                                                     click: (ev) => {
 
@@ -335,7 +308,6 @@
                                         }
                                     };
                                 });
-
                                 callback(data);
                             } else {
                                 const data = res.data.data.map((item, index) => {

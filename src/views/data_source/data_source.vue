@@ -21,7 +21,7 @@
                 :title="addAndEditTitle"
                 :closable="false"
                 :footer-hide='true'
-        class="sourceModal" >
+                class="sourceModal">
             <!--类名在main.less中-->
             <Form ref="formData" :model="formData" :rules="ruleInline">
                 <FormItem prop="connectName" label="名称：" label-position="right">
@@ -160,7 +160,32 @@
         },
         methods: {
             test () {
-                this.$Message.error('正在开发中...');
+                this.$refs.formData.validate(valid => {
+                    if (valid) {
+                        this.$axios({
+                            method: 'post',
+                            url: api.checkDataSource(),
+                            data: {
+                                'connectName': this.formData.connectName,
+                                'id': this.formData.id,
+                                'pswd': this.formData.pswd,
+                                'typeNo': this.formData.typeNo[0][0],
+                                'url': this.formData.url,
+                                'userName': this.formData.userName
+                            }
+                        }).then(res=>{
+                            if(res.data.code==200){
+                                this.$Message.success(res.data.msg)
+                            }else{
+                                this.$Message.error(res.data.msg)
+                            }
+                        });
+
+                    } else {
+                        this.$Message.error('你的信息输入有误');
+
+                    }
+                })
             },
             dataList () {
                 this.$axios({
@@ -284,7 +309,6 @@
                 });
 
             },
-
             cancel () {
                 this.dataModal = false;
                 this.formData = {};

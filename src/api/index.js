@@ -149,6 +149,9 @@ export default {
     updateDataSource() {//修改
         return _baseUrlA + '/dataSource/updateDataSource';
     },
+    checkDataSource () {//连接测试
+        return _baseUrlA + '/dataSource/checkDataSource';
+    },
 
 
 
