@@ -1,10 +1,10 @@
 <template>
-    <div style='position: relative;height:100%;padding:10px;'>
-        <Row type="flex" justify="space-between" align="middle" class="code-row-bg" style='margin-bottom:10px;'>
+    <div class="all_box">
+        <Row type="flex" justify="space-between" align="middle" class="code-row-bg">
             <Col span="6">
-            <h2 style="margin: 6px 0 0 20px">二级分类列表</h2>
+            <h2 class="header-title">二级分类列表</h2>
             </Col>
-            <Col span="3" style='text-align:right;margin-right:5px;'>
+            <Col span="3" class="search-add">
             <Button type="primary" @click="newCreate">新建</Button>
             </Col>
         </Row>

@@ -1,12 +1,12 @@
 <template>
-    <div style='position: relative;height:100%;padding:10px;'>
-        <Row type="flex" justify="space-between" align="middle" class="code-row-bg" style='margin-bottom:10px;'>
+    <div class="all_box">
+        <Row type="flex" justify="space-between" align="middle" class="code-row-bg">
             <Col span="6">
-            <h2 style="margin: 6px 0 0 20px">数据源配置</h2>
+            <h2 class="header-title">数据源配置</h2>
             </Col>
-            <Col span="8" style='text-align:right;margin-right:5px;'>
+            <Col span="8" class="search-add">
             <Button type="primary" @click="edit_add('new')">新建</Button>
-            <Input v-model="searchName" icon="ios-search" search placeholder="请搜索..." style=" width:160px;"/>
+            <Input v-model="searchName" icon="ios-search" search placeholder="请搜索..." class="sea-name"/>
             <Button type="primary" @click="searchChange">搜索</Button>
             </Col>
         </Row>
@@ -30,8 +30,9 @@
                     <Input v-model="formData.url" placeholder="请输入连接串"/>
                 </FormItem>
                 <FormItem prop="typeNo" label="类型：" label-position="right">
-                    <Input v-model="formData.typeNo" placeholder="请输入类型"/>
+                    <Cascader :data="cascaderForm" v-model="formData.typeNo"></Cascader>
                 </FormItem>
+
                 <FormItem prop="userName" label="用户名：" label-position="right">
                     <Input v-model="formData.userName" placeholder="请输入用户名"/>
                 </FormItem>
@@ -43,7 +44,6 @@
                     <Button type="primary" @click="test" style="float: left;">连接测试</Button>
                     <Button type="primary" @click='ok' style=" margin-right:10px;">保存</Button>
                     <Button @click='cancel'>取消</Button>
-
                 </div>
 
             </Form>
@@ -60,17 +60,31 @@
         name: 'data_source',
         data () {
             return {
+                cascaderForm: [
+                    {
+                        label: 'hive',
+                        value: '0'
+                    },
+                    {
+                        label: 'mysql',
+                        value: '1'
+                    },
+                    {
+                        label: 'oracle',
+                        value: '2'
+                    },
+                ],
                 formData: {
                     connectName: '',
                     pswd: '',
-                    typeNo: 0,
+                    typeNo: [""],
                     url: '',
                     userName: '',
                 },
                 ruleInline: {
                     connectName: [{required: true, message: '请输入名称', trigger: 'blur'}],
                     pswd: [{required: true, message: '请输入密码', trigger: 'blur'}],
-                    typeNo: [{required: true,type:"number", message: '请输入类型',trigger: 'blur'}],
+                    typeNo: [{required: true, type: 'array', message: '请输入类型', trigger: 'blur'}],
                     url: [{required: true, message: '请输入连接串', trigger: 'blur'}],
                     userName: [{required: true, message: '请输入用户名', trigger: 'blur'}],
                 },
@@ -85,7 +99,10 @@
                         key: 'userName'
                     }, {
                         title: '类型',
-                        key: 'typeNo'
+                        key: 'typeNo',
+                        render: (h, params) => {
+                            return h('div', [h('p', this.cascaderForm[params.row.typeNo].label)]);
+                        }
                     }, {
                         title: '连接串',
                         key: 'url'
@@ -141,8 +158,8 @@
             this.dataList();
         },
         methods: {
-            test(){
-                this.$Message.error("正在开发中...")
+            test () {
+                this.$Message.error('正在开发中...');
             },
             dataList () {
                 this.$axios({
@@ -151,11 +168,14 @@
                     data: {
                         'pageIndex': this.page.pageIndex,
                         'pageSize': this.page.pageSize,
-                        'form':this.searchName,
+                        'form': this.searchName,
                     }
                 }).then(res => {
                     if (res.data.code === 200) {
-                        this.data6 = res.data.data;
+                        this.data6 = res.data.data.map(r => {
+                            r.typeNo = [r.typeNo];
+                            return r;
+                        });
                         this.dataCount = res.data.page.totalRecords;
                         if (res.data.data.length == 0 || res.data.data == []) {
                             if (res.data.page.totalRecords != 0) {
@@ -166,22 +186,16 @@
                                 this.dataList();
                             }
                         }
-
                     }
                 });
-
-            },
-            newCreate () {
-
             },
             searchChange () {
                 this.page.pageIndex = 1;
                 this.dataList();
             },
             changepage () {
-                // this.labelname = '';
                 this.page.pageIndex = index;
-                this.init();
+                this.dataList();
             },
             remove (i, id) {
                 this.$axios({
@@ -189,23 +203,31 @@
                     url: api.removeDataSource(id)
                 }).then(res => {
                     if (res.data.code === 200) {
-                        this.dataList()
-                        this.$Message.success("删除成功")
-                    }else{
-                        this.$Message.error(res.data.msg)
+                        this.dataList();
+                        this.$Message.success('删除成功');
+                    } else {
+                        this.$Message.error(res.data.msg);
                     }
                 });
             },
-            edit_add (info,row) {
+            edit_add (info, row) {
                 this.dataModal = true;
                 this.addAndEditTitle = info === 'new' ? '新建数据源' : '修改数据源';
                 if (info === 'edit') {
-                    this.formData=JSON.parse(JSON.stringify(row))
-                }else{
-                    this.formData={}
+                    let a = JSON.parse(JSON.stringify(row));
+                    this.formData.connectName = a.connectName
+                    this.formData.pswd = a.pswd
+                    this.formData.typeNo = [String(a.typeNo[0])]
+                    this.formData.url = a.url
+                    this.formData.userName = a.userName
+                    this.formData.id = a.id
+
+                } else {
+                    this.formData = {};
                 }
             },
-            ok (name) {
+            ok (e) {
+                this.formData.typeNo= [this.formData.typeNo]
                 this.$refs.formData.validate(valid => {
                     if (valid) {
                         if (this.addAndEditTitle === '新建数据源') {
@@ -215,7 +237,7 @@
                                 data: {
                                     'connectName': this.formData.connectName,
                                     'pswd': this.formData.pswd,
-                                    'typeNo': this.formData.typeNo,
+                                    typeNo: this.formData.typeNo[0][0],
                                     'url': this.formData.url,
                                     'userName': this.formData.userName
                                 }
@@ -223,7 +245,7 @@
                                 if (res.data.code == 200) {
 
                                     this.dataModal = false;
-                                    this.formData={};
+                                    this.formData = {};
                                     this.$Message.success('新建成功');
                                     this.dataList();
                                 } else {
@@ -232,43 +254,40 @@
                             });
 
                         } else {
-
                             this.$axios({
                                 method: 'post',
                                 url: api.updateDataSource(),
                                 data: {
                                     'connectName': this.formData.connectName,
                                     'pswd': this.formData.pswd,
-                                    'typeNo': this.formData.typeNo,
+                                    'typeNo': this.formData.typeNo[0][0],
                                     'url': this.formData.url,
                                     'userName': this.formData.userName,
-                                    id:this.formData.id
+                                    id: this.formData.id
                                 }
                             }).then(res => {
                                 if (res.data.code == 200) {
 
                                     this.dataModal = false;
-                                    this.formData={}
+                                    this.formData = {};
                                     this.$Message.success('修改成功');
                                     this.dataList();
                                 } else {
                                     this.$Message.error(res.data.msg);
                                 }
                             });
-
                         }
-
                     } else {
                         this.$Message.error('你的信息输入有误');
                     }
                 });
+
             },
+
             cancel () {
                 this.dataModal = false;
                 this.formData = {};
                 this.$refs.formData.resetFields();
-
-
             },
         }
     };

@@ -84,7 +84,7 @@
         watch: {
             '$route' (to, form) {
                 const pathNameObj = {
-                    home_list: '1-1', typeSecond_two: '1-2', Tab_management_list: '2',
+                    home_list: '1-1', typeSecond_two: '1-2',SourcePage:"4", Tab_management_list: '2',
                     product_management_list: '3'
                 };
                 if (pathNameObj[to.name]) {

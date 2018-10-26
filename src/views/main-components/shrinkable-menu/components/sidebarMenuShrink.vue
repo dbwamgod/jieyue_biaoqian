@@ -11,6 +11,15 @@
                         <DropdownItem name="typeSecond_two" key="1-2"><span style="padding-left:10px;">二级分类</span></DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
+                <Dropdown transfer  placement="right-start" :key="4" @on-click="changeMenu">
+                    <Button style="width: 70px;margin-left: -5px;padding:10px 0;" type="text">
+                        <!-- <Icon :size="20" :color="iconColor" :type="item.icon"></Icon> -->
+                        <Icon type="android-radio-button-on" :size='20' color="#fff"></Icon>
+                    </Button>
+                    <DropdownMenu style="width: 200px;" slot="list">
+                        <DropdownItem name="SourcePage" key="4-1"><span style="padding-left:10px;">源数据</span></DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
                 <Dropdown transfer  placement="right-start" :key="2" @on-click="changeMenu">
                     <Button style="width: 70px;margin-left: -5px;padding:10px 0;" type="text">
                         <!-- <Icon :size="20" :color="iconColor" :type="item.icon"></Icon> -->

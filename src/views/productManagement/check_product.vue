@@ -17,7 +17,7 @@
                 </Col>
             </Row>
             <Row style="margin: 20px 0 0 0 ;">
-                <Col span="2" >
+                <Col span="2">
                 <span style="display: inline-block;">产品类别:</span>
                 </Col>
                 <Col span="3" style="text-overflow: ellipsis;
@@ -60,7 +60,7 @@
                 <p class="detail_list">查询结果:</p>
                 </Col>
                 <Col span="18">
-                <Table :columns="columns1" :data="data2"></Table>
+                <Table border :columns="columns1" :data="data2"></Table>
                 </Col>
             </Row>
             <Row style="margin-top: 30px;">
@@ -78,9 +78,8 @@
     import Cookies from 'js-cookie';
 
     export default {
-inject:["reload"],
-        name: 'check_product'
-        ,
+        inject: ['reload'],
+        name: 'check_product',
         data () {
             return {
                 content: '',
@@ -113,8 +112,9 @@ inject:["reload"],
             this.product_First_list();
         },
         methods: {
-            canel(){
-                this.$router.back(-1)
+            canel () {
+                this.data2 = [];
+                this.$router.back(-1);
             },
             loadData (item, callback) {
                 if (item.type === 1) {
@@ -300,9 +300,9 @@ inject:["reload"],
                 }
             },
             comeout () {
-                new Promise((res,rej)=>{
-                   res(this.product_productOutput_list(1))
-                }).then(res=>{
+                new Promise((res, rej) => {
+                    res(this.product_productOutput_list(1));
+                }).then(res => {
                     window.open(api.product_out(encodeURIComponent(JSON.stringify({
                         'queryParam': this.defaultRules.queryParam,
                         'codeIds': this.check_list,
@@ -310,10 +310,9 @@ inject:["reload"],
                         'pageIndex': 0
                     }))), '_blank');
 
-                }).catch(res=>{
-                    this.reload()
-                })
-
+                }).catch(res => {
+                    this.reload();
+                });
 
             },
             changepage (index) {
@@ -338,11 +337,11 @@ inject:["reload"],
                         'pageIndex': this.page.pageIndex - 1
                     },
                 }).then(res => {
-                    this.check_list=[]
+                    this.check_list = [];
                     if (res.data.code == 200) {
-                        if(arg){
+                        if (arg) {
 
-                        }else if (res.data.data.length !== 0) {
+                        } else if (res.data.data.length !== 0) {
                             this.data2 = res.data.data;
                             this.dataCount = res.data.page.totalRecords;
                         } else {

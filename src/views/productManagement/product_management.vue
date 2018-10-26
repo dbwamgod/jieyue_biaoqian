@@ -1,10 +1,10 @@
 <template>
-    <div style='position: relative;height:100%;padding:10px;'>
-        <Row type="flex" justify="space-between" align="middle" class="code-row-bg" style='margin-bottom:10px;'>
+    <div class="all_box">
+        <Row type="flex" justify="space-between" align="middle" class="code-row-bg">
             <Col span="6">
-            <h2 style="margin: 6px 0 0 20px">产品管理</h2>
+            <h2 class="header-title">产品管理</h2>
             </Col>
-            <Col span="6" style='text-align:right;margin-right:5px;'>
+            <Col span="6" class="search-add">
             <Button type="primary" @click="newCreate" style="margin-right: 4%;">新建
             </Button>
             <Input v-model="labelname" icon="ios-search" placeholder="请搜索..." style="width: 40%;"/>

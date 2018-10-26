@@ -13,7 +13,7 @@
                         :open-names="openedSubmenuArr"
                         :menu-list="menuList">
                     <div slot="top" class="logo-con">
-                        <h2  style="color: #fff">标签平台</h2>
+                        <h2 style="color: #fff">标签平台</h2>
                     </div>
                 </shrinkable-menu>
             </scroll-bar>

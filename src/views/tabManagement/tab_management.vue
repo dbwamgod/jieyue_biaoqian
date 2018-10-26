@@ -400,11 +400,11 @@
                         title: '标签',
                         key: 'labels',
                         render: (h, params) => {
-                            let b;
-                            let a = params.row.labels && params.row.labels.map((r) => {
+
+                            let labels = params.row.labels && params.row.labels.map((r) => {
                                 return r.labelCode + ':' + r.labelName;
                             });
-                            let pList = a&&a.map(item=>{
+                            let pList = labels.length&&labels.map(item=>{
                                return  h('p', {
                                     style: {
                                         marginRight: '5px'
@@ -534,6 +534,7 @@
                 .all([this.getCategoryListSecondary(), this.queryLabelDataTypes()])
                 .then(this.$axios.spread((acct, perms) => this.init()));
 
+
         },
         methods: {
 
@@ -545,7 +546,6 @@
                 }).then(res => {
                     if (res.data.code == 200) {
                         this.dataScourseTypes = res.data.data.map(r => {
-                            // console.log(r);
                             return {
                                 label: r.connectName,
                                 value: r.id

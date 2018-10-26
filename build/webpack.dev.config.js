@@ -34,17 +34,17 @@ module.exports = merge(webpackBaseConfig, {
             filename: '../index.html',
             inject: false
         }),
-        new CopyWebpackPlugin([
-            {
-                from: 'src/views/main-components/theme-switch/theme'
-            },
-            {
-                from: 'src/views/my-components/text-editor/tinymce'
-            }
-        ], {
-            ignore: [
-                'text-editor.vue'
-            ]
-        })
+        // new CopyWebpackPlugin([
+        //     {
+        //         from: 'src/views/main-components/theme-switch/theme'
+        //     },
+        //     {
+        //         from: 'src/views/my-components/text-editor/tinymce'
+        //     }
+        // ], {
+        //     ignore: [
+        //         'text-editor.vue'
+        //     ]
+        // })
     ]
 });
