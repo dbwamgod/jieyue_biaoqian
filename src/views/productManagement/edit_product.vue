@@ -215,7 +215,7 @@
                                                     on: {
                                                         click: ev => {
                                                             ev.path[0].style.color = '#9ea7b4';
-                                                            let flag = this.title.find(r => r.labelId||r.id === params.data.id);
+                                                            let flag = this.title.find(r => (r.labelId||r.id) === params.data.id);
                                                             if (!flag) {
                                                                 if (this.title.filter(r => r.Id === params.data.id)[0]) {
                                                                 } else {
