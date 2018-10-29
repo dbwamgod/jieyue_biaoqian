@@ -48,7 +48,7 @@
                 </Col>
                 <Col span="18" class="edit_checkRule_container">
                 <div class="container_label" ref="container_label">
-
+{{title.length?"":"没有输出标签"}}
                     <Tag v-for="(item,index) in title" :key="index" :name="item.labelName||item.title"
                          closable @on-close="handleClose2"
                          class="edit_tag">
@@ -76,6 +76,24 @@
         name: 'new_product',
         data () {
             return {
+                active: {
+                    color: '#9ea7b4',
+                    display: 'inline-block',
+                    maxWidth: '90px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    lineHeight: '14px',
+                },
+                view: {
+                    cursor: 'pointer',
+                    display: 'inline-block',
+                    maxWidth: '110px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    lineHeight: '14px'
+                },
                 defaultFlag: [],
                 formValidate: {
                     productName: '',
@@ -117,18 +135,15 @@
                     url: api.product_productOutput_find(this.find_id.id || id),
                 }).then(res => {
                     if (res.data.code == 200) {
-
                         if (res.data.data.outputParamList) {
                             this.title = res.data.data.outputParamList;
                             this.title.map(r => {
-                                if (r) {
-                                    this.defaultFlag.push(r.labelId);
-                                }
+                                r && this.defaultFlag.push(r.labelId);
                             });
-                            this.formValidate = res.data.data;
-                            Cookies.set('categoryId', res.data.data.categoryId);
                             this.check_out.push(res.data.data.outputParamList);
                         }
+                        this.formValidate = res.data.data;
+                        Cookies.set('categoryId', res.data.data.categoryId);
                     } else {
                         this.$Message.info(res.data.msg);
                     }
@@ -154,15 +169,7 @@
                                             return h(
                                                 'span',
                                                 {
-                                                    style: {
-                                                        cursor: 'pointer',
-                                                        display: 'inline-block',
-                                                        maxWidth: '110px',
-                                                        overflow: 'hidden',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap',
-                                                        lineHeight: '14px'
-                                                    },
+                                                    style: this.view,
                                                     on: {
                                                         click: () => this.treeHandClick(params)
                                                     }
@@ -204,38 +211,16 @@
                                             return h(
                                                 'span',
                                                 {
-                                                    style: this.check_out_flag || this.title.find(r => params.data.id === r.id || params.data.id === r.labelId) ? {
-                                                        color: '#9ea7b4',
-                                                        display: 'inline-block',
-                                                        maxWidth: '90px',
-                                                        overflow: 'hidden',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap',
-                                                        lineHeight: '14px',
-                                                    } : {
-                                                        cursor: 'pointer',
-                                                        display: 'inline-block',
-                                                        maxWidth: '90px',
-                                                        overflow: 'hidden',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap',
-                                                        lineHeight: '14px',
-                                                    },
+                                                    style: this.check_out_flag || this.title.find(r => params.data.id === r.id || params.data.id === r.labelId) ? this.active : this.view,
                                                     on: {
                                                         click: ev => {
-                                                            // this.judge ? ev.path[0].style.color = '#9ea7b4' : ev.path[0].style.color = '#495060';
-                                                            //this.big_container.push(ev.path[0]);
-
                                                             ev.path[0].style.color = '#9ea7b4';
-
-                                                            let flag = this.title.find(r => r.id === params.data.id);
-
+                                                            let flag = this.title.find(r => r.labelId||r.id === params.data.id);
                                                             if (!flag) {
                                                                 if (this.title.filter(r => r.Id === params.data.id)[0]) {
                                                                 } else {
                                                                     this.title.push(params.data);
                                                                     this.check_out.push(ev.path[0]);
-                                                                    // this.big_container.push(ev.path[0])
                                                                 }
                                                             }
                                                         }
@@ -296,15 +281,7 @@
                                     return h(
                                         'span',
                                         {
-                                            style: {
-                                                cursor: 'pointer',
-                                                display: 'inline-block',
-                                                maxWidth: '100px',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                                lineHeight: '14px',
-                                                whiteSpace: 'nowrap'
-                                            },
+                                            style: this.view,
                                             on: {
                                                 click: () => this.treeHandClick(params)
                                             }
@@ -335,7 +312,6 @@
             //保存
             submit () {
                 //保存的接口
-                // console.log( this.formValidate.categoryId);
                 this.title.map((item, index) => {
                     return this.out.push(item.labelId || item.id);
                 });
@@ -430,7 +406,7 @@
 
 <style scoped lang="less">
 
-    .ivu-select-dropdown{
+    .ivu-select-dropdown {
         /*width: 100% !important;*/
     }
 

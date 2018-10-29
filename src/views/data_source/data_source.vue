@@ -175,7 +175,7 @@
                             }
                         }).then(res=>{
                             if(res.data.code==200){
-                                this.$Message.success(res.data.msg)
+                                this.$Message.success("连接测试成功")
                             }else{
                                 this.$Message.error(res.data.msg)
                             }
