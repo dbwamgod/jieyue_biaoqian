@@ -78,7 +78,7 @@
 <script>
     import api from '@/api';
     import Cookies from 'js-cookie';
-    import canEditTable from '@/views/my-components/editTable/canEditTable.vue';
+    // import canEditTable from '@/views/my-components/editTable/canEditTable.vue';
 
     export default {
         components: {
