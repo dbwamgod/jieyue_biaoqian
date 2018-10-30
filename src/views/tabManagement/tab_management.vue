@@ -82,7 +82,7 @@
 
     export default {
         components: {
-            canEditTable
+            // canEditTable
         },
         data () {
             return {
