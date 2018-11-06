@@ -149,9 +149,7 @@
                     }
                 }).then(res => {
                     if (res.data.code == 200) {
-                        console.log(res);
                         this.historyData = res.data.data;
-                        console.log(this.historyData, 111111111111111111111111);
                         this.dataCount = res.data.page.totalRecords;
 
                     }

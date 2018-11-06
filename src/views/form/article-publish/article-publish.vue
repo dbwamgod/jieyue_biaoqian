@@ -233,7 +233,6 @@ export default {
     },
     onHandChange(data) {
       this.SpinType = true;
-      console.log(data);
       let params = [];
       this.queryDbPrivilegeList.map(item => {
         if (data.indexOf(item.key) > -1) {
@@ -246,7 +245,7 @@ export default {
       this.queryDbPrivilegeList.map(item => {
         //这里做操作 跟下面一样
         if (item.flag != this.queryDbPrivilegeOldList[item.key]) {
-          console.log("成功的", item);
+
           params.push({
             dbName: this.formItem.dbName, //this.formItem.dbName,
             flag: item.flag,
@@ -382,7 +381,6 @@ export default {
             this.formItem.checkbox.push("updateStatus");
             this.queryDbPrivilegeList[1].flag = 1;
           }
-          console.log(this.formItem.checkbox);
         }else{this.$Message.info(res.data.msg);}
       });
     },

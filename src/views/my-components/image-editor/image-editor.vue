@@ -183,7 +183,6 @@ export default {
           }
       }).then(res => {
         if (res.data.code == 200) {
-          console.log('init=======================',res)
           this.historyData=res.data.data;
           this.dataCount=res.data.page.totalRecords;
            this.SpinType=false;

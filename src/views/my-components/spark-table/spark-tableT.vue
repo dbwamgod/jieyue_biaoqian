@@ -16,7 +16,6 @@
             return {}
         },
         methods() {
-            console.log(from)
             form.submit();
 
         }

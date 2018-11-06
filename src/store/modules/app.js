@@ -5,23 +5,56 @@ import Vue from 'vue';
 
 const app = {
     state: {
+        labelInfo: {
+            "ONE_CLASS-ADD":false,
+            "ONE_CLASS-UPDATE":false,
+            "ONE_CLASS-DEL":false,
+            "TWO_CLASS-ADD":false,
+            "TWO_CLASS-UPDATE":false,
+            "TWO_CLASS-DEL":false,
+            "DATA_SOURCE-ADD":false,
+            "DATA_SOURCE-UPDATE":false,
+            "DATA_SOURCE-DEL":false,
+            "DATA_SOURCE-CHECK":false,
+            "LABEL_MANAGE-ADD":false,
+            "LABEL_MANAGE-UPDATE":false,
+            "LABEL_MANAGE-DEL":false,
+            "LABEL_MANAGE-UPDATE_STATUS":false,
+            "LABEL_MANAGE-F_G_L":false,
+            "LABEL_MANAGE-FIND":false,
+            "PRO-ADD":false,
+            "PRO-UPDATE":false,
+            "PRO-DEL":false,
+            "PRO-DETAIL":false,
+            "PRO-DETAIL-PO_LIST":false,
+            "PRO-DETAIL-PO_EXCEL":false,
+        },
+        editInlineAndCellData: [{
+            labelCode: '',
+            labelName: '',
+            dataType: '',
+            defaultVal: '',
+            indexStatus: '',
+            rule: '',
+        },],
         cachePage: [],
         lang: '',
         isFullScreen: false,
         openedSubmenuArr: [], // 要展开的菜单数组
         menuTheme: 'dark', // 主题
         themeColor: '',
+        productSearch: '',
         pageOpenedList: [{
             title: '首页',
             path: '',
-            name: 'home_index'
+            name: 'home_list'
         }],
         currentPageName: '',
         currentPath: [
             {
                 title: '首页',
                 path: '',
-                name: 'home_index'
+                name: 'home_list'
             }
         ], // 面包屑数组
         menuList: [],
@@ -34,6 +67,42 @@ const app = {
         dontCache: ['text-editor', 'artical-publish'] // 在这里定义你不想要缓存的页面的name属性值(参见路由配置router.js)
     },
     mutations: {
+        labelJurisdiction (state, code) {
+            state.labelInfo[code]=true
+/*
+            switch (code) {
+                case 'ONE_CLASS-ADD':
+                    state.homework.now_status = true;
+                    break;
+                case 'ONE_CLASS-UPDATE':
+                    state.homework.before_status = true;
+                    break;
+                case 'TASK_WARN-LIST':
+                    state.homework.early_warn_list = true;
+                    break;
+                case 'TASK_WARN-KILL':
+                    state.homework.kill_job_task = true;
+                    break;
+                case 'TASK_FIND-LIST':
+                    state.homework.check_list = true;
+                    break;
+                case 'TASK_FIND-LOG':
+                    state.homework.log_info = true;
+                    break;
+                case 'TASK_RECOR-LOG':
+                    state.homework.operation_log_info = true;
+                    break;
+                case 'METADATA_COMPARE-MYSQL_LIST':
+                    state.homework.mysql_list = true;
+                    break;
+                case 'AUTH-USER_AUTH':
+                    state.jur.jurisdiction = true;
+                    break;
+                case 'BATCH-USER_AUTH':
+                    state.jur.batch = true;
+                    break;
+            }*/
+        },
         setTagsList (state, list) {
             state.tagsList.push(...list);
         },
@@ -190,7 +259,20 @@ const app = {
             }
             state.pageOpenedList.push(tagObj);
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
-        }
+        },
+        SearchFunction (state, word = '') {
+            state.productSearch = word;
+        },
+        addEditTable (state, add) {
+            state.editInlineAndCellData.push(add);
+        },
+        delEditTable (state, index) {
+            state.editInlineAndCellData.splice(index, 1);
+        },
+        dataEditTable (state, data) {
+            state.editInlineAndCellData = data;
+            // state.editInlineAndCellData.splice(index,1)
+        },
     }
 };
 

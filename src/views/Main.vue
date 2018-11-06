@@ -13,32 +13,34 @@
                         :open-names="openedSubmenuArr"
                         :menu-list="menuList">
                     <div slot="top" class="logo-con">
-                        <img v-show="!shrink" src="../images/logo.jpg" key="max-logo"/>
-                        <img v-show="shrink" src="../images/logo-min.jpg" key="min-logo"/>
+                        <h2 style="color: #fff">标签平台</h2>
                     </div>
                 </shrinkable-menu>
             </scroll-bar>
         </div>
-        <div class="main-header-con" style="padding-left: 0;">
+        <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
             <div class="main-header">
                 <div class="navicon-con">
                     <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text"
                             @click="toggleClick">
-                        <Icon type="android-list" style="font-size: 40px;"></Icon>
+                        <Icon type="navicon" size="32"></Icon>
                     </Button>
-                    <h1 class="platform">用户标签平台</h1>
+
                     <!-- <p class="data_platform">数据平台</p> -->
                 </div>
-              <!--  <div class="header-middle-con">
+                <div class="header-middle-con">
                     <div class="main-breadcrumb">
                         <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav>
                     </div>
-                </div>-->
+                </div>
                 <div class="header-avator-con">
+
                     <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
-                    <lock-screen></lock-screen>
+                    <!--<lock-screen style="    margin-right: 26px;"></lock-screen>-->
+
+
                     <!-- <message-tip v-model="mesCount"></message-tip> -->
-                    <theme-switch></theme-switch>
+
 
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
@@ -97,6 +99,14 @@
         },
         data () {
             return {
+                codeCompare: {
+                    TWO_CLASS:"home_list",
+                    ONE_CLASS:"typeSecond_two",
+                    CLASS_MANAGE: 'home_list',
+                    DATA_SOURCE: 'SourcePage',
+                    LABEL_MANAGE: 'Tab_management_list',
+                    PRO: 'product_management_list',
+                },
                 shrink: false,
                 userName: '',
                 isFullScreen: false,
@@ -137,15 +147,15 @@
                 if (pathArr.length >= 2) {
                     this.$store.commit('addOpenSubmenu', pathArr[1].name);
                 }
-                this.userName = Cookies.get('user');
+                this.userName = Cookies.get('userB');
                 let messageCount = 3;
                 this.messageCount = messageCount.toString();
                 this.checkTag(this.$route.name);
                 this.$store.commit('setMessageCount', 3);
             },
             toggleClick () {
-                this.$router.push({name: 'home_index'});
-                // this.shrink = !this.shrink;
+                // this.$router.push({name: 'home_index'});
+                this.shrink = !this.shrink;
             },
             handleClickUserDropdown (name) {
                 if (name === 'ownSpace') {
@@ -174,19 +184,18 @@
                 }
             },
             handleSubmenuChange (val) {
-                console.log('ddddddd导航', val);
+
             },
             beforePush (name) {
                 return true;
             },
             fullscreenChange (isFullScreen) {
-                // console.log(isFullScreen);
+
             },
 
-            scrollBarResize () {
-
-                this.$refs.scrollBar.resize();
-            }
+            // scrollBarResize () {
+            //     this.$refs.scrollBar && this.$refs.scrollBar.resize();
+            // }
         },
         watch: {
             '$route' (to) {
@@ -202,17 +211,43 @@
             lang () {
                 util.setCurrentPath(this, this.$route.name); // 在切换语言时用于刷新面包屑
             },
-            openedSubmenuArr () {
-                setTimeout(() => {
-                    this.scrollBarResize();
-                }, 300);
-            }
+            // openedSubmenuArr () {
+            //     setTimeout(() => {
+            //         this.scrollBarResize();
+            //     }, 300);
+            // }
         },
         mounted () {
+            if (localStorage.getItem('labelChild')) {
+                JSON.parse(localStorage.getItem('labelChild')).map(r => {
+                    this.$store.commit('labelJurisdiction', r.resourceCode);
+                });
+            }
             this.init();
             window.addEventListener('resize', this.scrollBarResize);
         },
         created () {
+            //本地权限校验没有存储后 会自动跳到登录页
+            if (!JSON.parse(localStorage.getItem('label-Jurisdiction'))) {
+                this.$store.commit('logout', this);
+                this.$store.commit('clearOpenedSubmenu');
+                this.$router.push({
+                    name: 'login'
+                });
+            }
+
+            //判断已登录后重新加载页面而导致的权限bug
+            if (!Cookies.get('galaxy_info')) {
+                if (localStorage.getItem('label-Jurisdiction')) {
+                    JSON.parse(localStorage.getItem('label-Jurisdiction')).map((r, i) => {
+                        Cookies.set('label-defaultHome', this.codeCompare[r.resourceCode]);
+                        this.$router.push({
+                            name: Cookies.get('label-defaultHome')
+                        });
+                    });
+                }
+            }
+            Cookies.get('galaxy_info') && Cookies.set('galaxy_info', '0');
             // 显示打开的页面的列表
             this.$store.commit('setOpenedList');
         },

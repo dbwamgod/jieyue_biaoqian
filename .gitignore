@@ -1,7 +1,9 @@
 npm-debug.log
 node_modules
+galaxy-label-admin
 .project
 .vscode
+.idea
 .history
 .DS_Store
 \.settings/

@@ -1,5 +1,5 @@
 <style lang="less">
-    @import '../styles/unlock.less';
+@import "../styles/unlock.less";
 </style>
 
 <template>
@@ -31,60 +31,93 @@
 </template>
 
 <script>
-    import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import api from '@/api'
 
-    export default {
-        name: 'Unlock',
-        data () {
-            return {
-                avatorLeft: '0px',
-                inputLeft: '400px',
-                password: '',
-                check: null
-            };
-        },
-        props: {
-            showUnlock: {
-                type: Boolean,
-                default: false
-            }
-        },
-        computed: {
-            avatorPath () {
-                return localStorage.avatorImgPath;
-            }
-        },
-        methods: {
-            validator () {
-                if (Cookies.get('password') == this.password) {
-                    return true;
-                } else {
-                    return false;
-                }
-                // 你可以在这里写密码验证方式，如发起ajax请求将用户输入的密码this.password与数据库用户密码对比
-            },
-            handleClickAvator () {
-                this.avatorLeft = '-180px';
-                this.inputLeft = '0px';
-                this.$refs.inputEle.focus();
-            },
-            handleUnlock () {
-                if (this.validator()) {
-                    this.avatorLeft = '0px';
-                    this.inputLeft = '400px';
-                    this.password = '';
-                    Cookies.set('locking', '0');
-                    this.$emit('on-unlock');
-                } else {
-                    this.$Message.error('密码错误,请重新输入。如果忘了密码，');
-                }
-            },
-            unlockMousedown () {
-                this.$refs.unlockBtn.className = 'unlock-btn click-unlock-btn';
-            },
-            unlockMouseup () {
-                this.$refs.unlockBtn.className = 'unlock-btn';
-            }
-        }
+export default {
+  name: "Unlock",
+  data() {
+    return {
+      avatorLeft: "0px",
+      inputLeft: "400px",
+      password: "",
+      check: null
     };
+  },
+  props: {
+    showUnlock: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    avatorPath() {
+      return localStorage.avatorImgPath;
+    }
+  },
+  methods: {
+    validator() {
+      // if (Cookies.get('password') == this.password) {
+      //     return true;
+      // } else {
+      //     return false;
+      // }
+      // 你可以在这里写密码验证方式，如发起ajax请求将用户输入的密码this.password与数据库用户密码对比
+     return new Promise ((resolve, reject)=>{
+         let fd = new FormData();
+      fd.append("password", this.password);
+      fd.append("username",  Cookies.get("userB"));
+      fd.append("client_id", "browser");
+      fd.append("client_secret", "abc");
+      fd.append("grant_type", "password");
+      this.$axios({
+        method: "post",
+        url: api.login(),
+        data: fd,
+        headers: {
+          "content-Type": "application/x-www-form-urlencoded"
+        }
+      }).then(
+        res => {
+          if (res.status === 200) {
+              resolve(true)
+          } else {
+             reject(false)
+          }
+        },
+        err => {
+          reject(false)
+        }
+      ); 
+     });
+     
+  
+    },
+    handleClickAvator() {
+      this.avatorLeft = "-180px";
+      this.inputLeft = "0px";
+      this.$refs.inputEle.focus();
+    },
+    handleUnlock() {
+       
+       this.validator().then(res=>{
+        this.avatorLeft = "0px";
+        this.inputLeft = "400px";
+        this.password = "";
+        Cookies.set("locking", "0");
+        this.$emit("on-unlock");
+       },err=>{
+             this.$Message.error("密码错误,请重新输入。如果忘了密码，清除浏览器缓存重新登录即可");
+       });
+     
+     
+    },
+    unlockMousedown() {
+      this.$refs.unlockBtn.className = "unlock-btn click-unlock-btn";
+    },
+    unlockMouseup() {
+      this.$refs.unlockBtn.className = "unlock-btn";
+    }
+  }
+};
 </script>

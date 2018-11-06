@@ -1,10 +1,10 @@
 <template>
-    <div style='position: relative;height:100%;padding:10px;'>
-        <Row type="flex" justify="space-between" align="middle" class="code-row-bg" style='margin-bottom:10px;'>
+    <div class="all_box">
+        <Row type="flex" justify="space-between" align="middle" class="code-row-bg">
             <Col span="6">
-            <h2 style="margin: 6px 0 0 20px">二级分类列表</h2>
+            <h2 class="header-title">二级分类列表</h2>
             </Col>
-            <Col span="3" style='text-align:right;margin-right:5px;'>
+            <Col span="3" class="search-add">
             <Button type="primary" @click="newCreate">新建</Button>
             </Col>
         </Row>
@@ -36,6 +36,14 @@
         </div>
          	
     </Modal>
+     <Modal
+        v-model="modal2"
+        title="删除分类"
+        @on-ok="okDelete"
+        :closable="false"
+        @on-cancel="cancel2">
+        <p>确定要删除此分类么？</p>
+    </Modal>
     </div>
 </template>
 <style scoped>
@@ -47,16 +55,26 @@
 <script>
 import api from "@/api";
 import Cookies from "js-cookie";
+import util from '@/libs/util.js';
 
 export default {
   data() {
     return {
+        flag:0,
+        adds: false,//新增权限
+        operation: {
+            edit: false,
+            del: false,
+            edit_del: false,
+        },//权限校验的数据
       dataCount: 0,
       page: {
         pageIndex: 1,
         pageSize: 10
       },
       modal1: false,
+      modal2:false,
+      paramsRowId:'',
       ruleInline: {
         content: [
           { required: true, message: "请输入分类名称", trigger: "blur" }
@@ -85,9 +103,7 @@ export default {
           align: "center",
           render: (h, params) => {
             return h("div", [
-              h(
-                "Button",
-                {
+                this.operation.edit || this.operation.edit_del ?h("Button", {
                   props: {
                     type: "primary",
                     size: "small"
@@ -100,24 +116,20 @@ export default {
                       this.show(params.index, params.row);
                     }
                   }
-                },
-                "编辑"
-              ),
-              h(
-                "Button",
-                {
+                }, "编辑"):"",
+               this.operation.del || this.operation.edit_del ?  h("Button", {
                   props: {
                     type: "error",
                     size: "small"
                   },
                   on: {
                     click: () => {
-                      this.remove(params.index, params.row.id);
+                      // this.remove(params.index, params.row.id);
+                      this.modal2=true;
+                     this.paramsRowId=params.row.id;
                     }
                   }
-                },
-                "删除"
-              )
+                }, "删除"):""
             ]);
           }
         }
@@ -134,6 +146,10 @@ export default {
     };
   },
   created() {
+
+      //权限
+      util.labelJurisdiction(this, 'TWO_CLASS-ADD', 'TWO_CLASS-UPDATE', 'TWO_CLASS-DEL');
+
     this.init();
     this.oneCategoruList();
   },
@@ -179,6 +195,13 @@ export default {
         if (res.data.code == 200) {
           this.categoryList = res.data.data;
           this.dataCount = res.data.page.totalRecords;
+          if(res.data.data.length==0 || res.data.data==[]){
+              if(res.data.page.totalRecords!=0){
+                  this.page.pageIndex= this.page.pageIndex!=0?this.page.pageIndex-1:this.page.pageIndex;
+                  this.init();
+              }
+
+            }
         } else {
           this.$Message.info({
             content: res.data.msg,
@@ -231,7 +254,7 @@ export default {
               url: api.saveLabelCategoryT(),
               data: {
                 parentId:this.categoryDetails.parentId,
-                categoryName: this.categoryDetails.content
+                categoryName: this.categoryDetails.content.replace(/(^\s+)|(\s+$)|\s+/g,'')
               }
             }).then(res => {
               if (res.data.code == 200) {
@@ -255,7 +278,7 @@ export default {
               url: api.updateLabelCategoryT(),
               data: {
                 id: this.categoryDetails.id,
-                categoryName: this.categoryDetails.content
+                categoryName: this.categoryDetails.content.replace(/(^\s+)|(\s+$)|\s+/g,'')
               }
             }).then(res => {
               if (res.data.code == 200) {
@@ -282,6 +305,12 @@ export default {
       this.$refs.formInline.resetFields();
       this.categoryDetails.parentId = '',
        this.categoryDetails.content = ''
+    },
+    okDelete() {
+       this.remove('', this.paramsRowId);
+    },
+    cancel2() {
+      this.modal2 = false;
     }
   }
 };

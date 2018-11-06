@@ -1,3 +1,47 @@
+
+.ivu-cascader-menu{
+  width: 100%;
+}
+.edit_add{
+  .ivu-select-dropdown{
+    width: 100%;
+  }
+  .ivu-select-dropdown{
+    width: 100%;
+  }
+}
+.sourceModal{
+   .ivu-select-dropdown{
+    width: 100%;
+     height: 145%;
+  }
+}
+
+.all_box {
+
+  position: relative;
+  height: 100%;
+  padding: 10px;
+  .code-row-bg {
+    margin-bottom: 10px;
+    .header-title {
+      margin: 6px 0 0 20px
+    }
+    .search-add {
+      text-align: right;
+      margin-right: 5px;
+    }
+    .sea-name {
+      width: 160px;
+    }
+  }
+}
+
+//级联选择:全局下控制下拉的宽度
+.ivu-select-dropdown{
+  //width: 97% !important;
+}
+
 .lock-screen-back {
   border-radius: 50%;
   z-index: -1;
@@ -26,12 +70,11 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 0;
+    z-index: 21;
     transition: width .3s;
     background: rgb(73, 80, 96);
-    margin-top: 10px;
 
-    }
+  }
   .layout-text {
     display: inline-block;
     white-space: nowrap;
@@ -49,6 +92,7 @@
     position: fixed;
     display: block;
     //padding-left: 200px;
+
     width: 100%;
     //height: 100px;
     z-index: 20;
@@ -99,22 +143,12 @@
     height: 60px;
     background: #fff;
     box-shadow: 0 2px 1px 1px rgba(100, 100, 100, .1);
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
     position: relative;
-    z-index: 11;
+
     .navicon-con {
       margin: 6px;
       display: inline-block;
-      .platform {
-        position: absolute;
-        top: 30%;
-        left: 5%;
-      }
-      .data_platform {
-        position: absolute;
-        top: 54%;
-        left: 13% ;
-      }
-
     }
     .header-middle-con {
       position: absolute;
@@ -130,7 +164,7 @@
       right: 0;
       top: 0;
       height: 100%;
-      width: 300px;
+      width: 240px;
       .switch-theme-con {
         display: inline-block;
         width: 40px;
@@ -205,7 +239,7 @@
     right: 0;
     bottom: 0;
     overflow: auto;
-    background-color: #F0F0F0;
+    background-color: #fff;
     z-index: 1;
     transition: left .3s;
     .single-page {
@@ -227,8 +261,8 @@
   padding: 8px;
   text-align: center;
   img {
-    height: 0;
-    width: 0;
+    height: 44px;
+    width: auto;
   }
 }
 
