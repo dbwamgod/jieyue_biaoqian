@@ -107,10 +107,7 @@
                     }, {
                         title: '连接串',
                         key: 'url'
-                    }, {
-                        title: '密码',
-                        key: 'pswd'
-                    }, {
+                    },{
                         title: '操作',
                         key: 'active',
                         align: 'center',

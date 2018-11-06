@@ -54,8 +54,10 @@
                         {required: true, message: '账号不能为空', trigger: 'blur'}
                     ],
                     password: [{required: true, message: '密码不能为空', trigger: 'blur'}]
-                }
+                },
             };
+        },
+        mounted() {
         },
         methods: {
             handleSubmit () {
@@ -109,6 +111,14 @@
                         this.$Message.info('请输入用户和密码');
                     }
                 });
+            },
+            clickOn() {
+            console.log(this.$refs.tree4.getCheckedNodes())
+                
+            },
+            onCheckChange (data) {
+                console.log('data',data);
+                console.log(this.data4)
             }
         }
     };
