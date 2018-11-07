@@ -131,7 +131,7 @@
         },
         created () {
             util.labelJurisdiction(this.columns7,this, 'PRO-ADD', 'PRO-UPDATE', 'PRO-DEL', "" ,'PRO-DETAIL', 'PRO-DETAIL-PO_LIST', 'PRO-DETAIL-PO_EXCEL');
-            // this.edit ||this.del ||this.binding?"":this.columns7.splice(this.columns7.length-1,1)
+
 
             if (Cookies.get('now_index')) {
                 this.page.pageIndex = Number(Cookies.get('now_index'));
@@ -159,6 +159,7 @@
                 this.$store.commit('SearchFunction');
 
             },
+            //分页
             changepage (index) {
                 this.page.pageIndex = index;
                 this.init();

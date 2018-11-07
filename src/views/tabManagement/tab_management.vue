@@ -507,7 +507,6 @@
 
         },
         methods: {
-
             //数据源类型接口
             dataScourseType () {
                 this.$axios({
@@ -525,13 +524,11 @@
                     }
                 });
             },
-
+            //点击添加和删除时防止上次的信息清空!
             delBlurBad (e, params) {
                 let event = e || event;
                 if (event.relatedTarget) {
-
                     if (event.relatedTarget.firstElementChild) {
-                        // console.log(event.relatedTarget.firstElementChild.innerText,);
                         if (event.relatedTarget.firstElementChild.innerText == '添加') {
                             this.index = false;
                             this.editInlineAndCellData = this.edit_t;
@@ -588,10 +585,13 @@
                     }
                 );
             },
+            //搜索
             searchChange () {
                 this.page.pageIndex = 1;
                 this.init();
             },
+
+            //分类数据接口
             getCategoryListSecondary () {
                 return this.$axios({
                     method: 'post',
@@ -614,13 +614,11 @@
                     }
                 });
             },
-
             //对分类的处理
             filterClassification (id) {
                 let aa = this.categoryList.filter(r => r.id === id)[0];
                 return aa ? aa.parentName + '-' + aa.categoryName : '无类型';
             },
-
             //数据类型的接口
             queryLabelDataTypes () {
                 return this.$axios({
