@@ -69,39 +69,7 @@ const app = {
     mutations: {
         labelJurisdiction (state, code) {
             state.labelInfo[code]=true
-/*
-            switch (code) {
-                case 'ONE_CLASS-ADD':
-                    state.homework.now_status = true;
-                    break;
-                case 'ONE_CLASS-UPDATE':
-                    state.homework.before_status = true;
-                    break;
-                case 'TASK_WARN-LIST':
-                    state.homework.early_warn_list = true;
-                    break;
-                case 'TASK_WARN-KILL':
-                    state.homework.kill_job_task = true;
-                    break;
-                case 'TASK_FIND-LIST':
-                    state.homework.check_list = true;
-                    break;
-                case 'TASK_FIND-LOG':
-                    state.homework.log_info = true;
-                    break;
-                case 'TASK_RECOR-LOG':
-                    state.homework.operation_log_info = true;
-                    break;
-                case 'METADATA_COMPARE-MYSQL_LIST':
-                    state.homework.mysql_list = true;
-                    break;
-                case 'AUTH-USER_AUTH':
-                    state.jur.jurisdiction = true;
-                    break;
-                case 'BATCH-USER_AUTH':
-                    state.jur.batch = true;
-                    break;
-            }*/
+
         },
         setTagsList (state, list) {
             state.tagsList.push(...list);

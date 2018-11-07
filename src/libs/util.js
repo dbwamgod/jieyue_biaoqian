@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import env from '../../build/env';
 import semver from 'semver';
 import packjson from '../../package.json';
@@ -273,56 +274,12 @@ util.getStringTime = function (date) {
     return newDate;
 };
 
-util.Http = function (options) {
-
-    let Domain;
-
-    class Http {
-
-        constructor () {
-            Domain = 'http://172.18.101.118:10000/galaxy-label-admin/label';
-        }
-
-        require (options) {
-            if (!options.api) throw new Error('api 不能为空');
-            if (!options.param) {
-                options.param = {};
-            }
-            if (!options.methods) {
-                options.methods = 'POST';
-            }
-            //不传递方法默认为POST
-            return new Promise((resolve, reject) => {
-                return axios({
-                    method: options.methods,
-                    url: options.api,
-                    baseURL: Domain,
-                    data: options.param
-                }).then(response => {
-                    if (response.data.code === 200) { //请求成功
-                        return resolve(response.data);
-                    } else {
-                        console.log(response.data.msg);
-                        return reject(response.data);
-                    }
-                }, error => {
-                    Indicator.close();
-                    console.log(error);
-                    return reject();
-                });
-            });
-        }
-    }
-
-    return Http;
-};
-
 /*
 * 权限校验
-* 参数:a,b,c,d,e;为权限名字
+* 参数:a,b,c,d,e,f,g;为权限名字  tab 为删除操作一栏做准备
 * vm:this
 * */
-util.labelJurisdiction = function (vm, b, c, d, a, e, f, g) {
+util.labelJurisdiction = function (tab,vm, b, c, d, a, e, f, g) {
     if (JSON.parse(localStorage.getItem('labelChild'))) {
         JSON.parse(localStorage.getItem('labelChild')).forEach(r => {
             if (r.resourceCode == a) {
@@ -358,8 +315,9 @@ util.labelJurisdiction = function (vm, b, c, d, a, e, f, g) {
             if (r.resourceCode == g) {
                 vm.operation.findLabelPage = true;
             }
-            // console.log(vm.operation, 489498494);
+
         });
+        vm.operation.edit ||vm.operation.del ||vm.operation.binding?"":tab.splice(tab.length-1,1)
     } else {
         if (Cookies.get('access')) {
             vm.$Message.error('无法检测到你的权限');

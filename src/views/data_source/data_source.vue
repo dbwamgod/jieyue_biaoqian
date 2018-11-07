@@ -41,9 +41,9 @@
                     <Input type="password" v-model="formData.pswd" placeholder="请输入密码"/>
                 </FormItem>
 
-                <div style='text-align: right;'>
+                <div class="button-active">
                     <Button type="primary" @click="test" style="float: left;" v-if="lineTest">连接测试</Button>
-                    <Button type="primary" @click='ok' style=" margin-right:10px;">保存</Button>
+                    <Button type="primary" @click='ok' class="cancel">保存</Button>
                     <Button @click='cancel'>取消</Button>
                 </div>
 
@@ -164,8 +164,7 @@
         },
         created () {
             //权限
-            util.labelJurisdiction(this, 'DATA_SOURCE-ADD', 'DATA_SOURCE-UPDATE', 'DATA_SOURCE-DEL',"DATA_SOURCE-CHECK");
-
+            util.labelJurisdiction(this.columns7,this, 'DATA_SOURCE-ADD', 'DATA_SOURCE-UPDATE', 'DATA_SOURCE-DEL',"DATA_SOURCE-CHECK");
             this.dataList();
         },
         methods: {

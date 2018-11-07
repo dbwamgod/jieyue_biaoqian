@@ -8,7 +8,7 @@ const user = {
             let keys= Object.keys(Cookies());
             keys.map(r=>{
                 Cookies.remove(r);
-            })
+            });
 
 
             // Cookies.remove('userB');

@@ -9,20 +9,17 @@ import '@/locale';
 import 'iview/dist/styles/iview.css';
 import VueI18n from 'vue-i18n';
 import util from './libs/util';
-
 import axios from 'axios';
-Vue.prototype.$axios=axios;
+
+Vue.prototype.$axios = axios;
 import qs from 'qs';
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
- // axios.defaults.headers['authorization'] = '';
+// axios.defaults.headers['authorization'] = '';
 
-Vue.prototype.$qs=qs;
+Vue.prototype.$qs = qs;
 
 Vue.use(VueI18n);
 Vue.use(iView);
-// import ElementUI from 'element-ui'
-// import '/element-ui/lib/theme-default/index.css'
-// Vue.use(ElementUI);
 
 new Vue({
     el: '#app',
@@ -40,7 +37,7 @@ new Vue({
         // 权限菜单过滤相关
         this.$store.commit('updateMenulist');
         // iview-admin检查更新
-        util.checkUpdate(this);
+        // util.checkUpdate(this);
     },
     created () {
         let tagsList = [];

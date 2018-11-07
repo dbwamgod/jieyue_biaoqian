@@ -130,8 +130,9 @@
             };
         },
         created () {
-            util.labelJurisdiction(this, 'PRO-ADD', 'PRO-UPDATE', 'PRO-DEL', "" ,'PRO-DETAIL', 'PRO-DETAIL-PO_LIST', 'PRO-DETAIL-PO_EXCEL');
-            console.log(this.operation,);
+            util.labelJurisdiction(this.columns7,this, 'PRO-ADD', 'PRO-UPDATE', 'PRO-DEL', "" ,'PRO-DETAIL', 'PRO-DETAIL-PO_LIST', 'PRO-DETAIL-PO_EXCEL');
+            // this.edit ||this.del ||this.binding?"":this.columns7.splice(this.columns7.length-1,1)
+
             if (Cookies.get('now_index')) {
                 this.page.pageIndex = Number(Cookies.get('now_index'));
                 Cookies.remove('now_index');
@@ -187,7 +188,7 @@
                             this.data6 = res.data.data || [];
                             this.dataCount = res.data.page.totalRecords;
                             // }
-                            // console.log( res.data.data==null);
+
                             if (res.data.data == null || res.data.data == []) {
                                 if (res.data.page.totalRecords != 0) {
                                     this.page.pageIndex =

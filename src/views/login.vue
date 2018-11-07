@@ -43,6 +43,7 @@
     import api from '@/api';
 
     export default {
+        inject:["out"],
         data () {
             return {
                 form: {
@@ -128,8 +129,8 @@
                                                 localStorage.setItem('labelChild', JSON.stringify(this.disNay));
                                                 let resourceCodes = resource.map(r => r.resourceCode);
                                                 if (resourceCodes.includes('CLASS_MANAGE')) {
-                                                    let typeMag = resource[0].resourceCode;
-                                                    if (typeMag == 'ONE_CLASS' || 'TWO_CLASS') {
+                                                    let typeMag = resource[0].child[0].resourceCode
+                                                    if (typeMag == 'ONE_CLASS' || typeMag == 'TWO_CLASS') {
                                                         Cookies.set('label-defaultHome', this.codeCompare[typeMag]);
                                                         this.$router.push({
                                                             name: this.codeCompare[typeMag]
@@ -146,10 +147,11 @@
                                                 }
                                             } else {
                                                 const title = '登录错误';
-                                               let keys= Object.keys(Cookies());
-                                                keys.map(r=>{
-                                                    Cookies.remove(r);
-                                                })
+                                               // let keys= Object.keys(Cookies());
+                                               //  keys.map(r=>{
+                                               //      Cookies.remove(r);
+                                               //  });
+                                                this.out();//清楚所有cookies
                                                 this.$Modal.error({
                                                     title: title,
                                                     content: '您未开通系统权限, 请联系管理员',
@@ -157,10 +159,11 @@
                                             }
                                         } else {
                                             const title = '资源错误';
-                                            let keys= Object.keys(Cookies());
+                                         /*   let keys= Object.keys(Cookies());
                                             keys.map(r=>{
                                                 Cookies.remove(r);
-                                            })
+                                            })*/
+                                            this.out();//清楚所有cookies
                                             this.$Modal.error({
                                                 title: title,
                                                 content: res.data.msg,
@@ -172,7 +175,6 @@
                                 });
 
                             } else {
-
                                 this.$Message.error('登录失败！帐号或密码错误');
                             }
                         }, (err) => {

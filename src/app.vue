@@ -5,14 +5,17 @@
 </template>
 
 <script>
+    import Cookies from "js-cookie"
+
     export default {
+        //局部重新加载(dom)
         provide () {
             return {
-                reload: this.reload
+                reload: this.reload,
+                out:this.out
             };
         },
         data () {
-
             return {
                 bock: true,
                 theme: this.$store.state.app.themeColor
@@ -26,15 +29,17 @@
                 }
             };
         },
-        mounted () {
-        },
-        beforeDestroy () {
-        },
         methods: {
             reload () {
                 this.bock = false;
                 this.$nextTick(function () {
                     this.bock = true;
+                });
+            },
+            out(){
+                let keys= Object.keys(Cookies());
+                keys.map(r=>{
+                    Cookies.remove(r);
                 });
             }
         }
@@ -42,14 +47,12 @@
 </script>
 
 <style>
-    html,
-    body {
+    html,body {
         width: 100%;
         height: 100%;
         background: #f0f0f0;
         overflow: hidden;
     }
-
     .app-main {
         width: 100%;
         height: 100%;

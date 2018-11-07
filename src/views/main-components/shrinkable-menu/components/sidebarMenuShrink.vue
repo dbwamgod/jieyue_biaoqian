@@ -7,11 +7,14 @@
                         <Icon type="ionic" :size='20' color="#fff"></Icon>
                     </Button>
                     <DropdownMenu class="downMenu" slot="list">
-                        <DropdownItem name="home_list" key="1-1" v-if="menuDisplay.first_type"><span class="downText">一级分类</span></DropdownItem>
-                        <DropdownItem name="typeSecond_two" key="1-2" v-if="menuDisplay.second_type"><span class="downText">二级分类</span></DropdownItem>
+                        <DropdownItem name="home_list" key="1-1" v-if="menuDisplay.ONE_CLASS"><span class="downText">一级分类</span>
+                        </DropdownItem>
+                        <DropdownItem name="typeSecond_two" key="1-2" v-if="menuDisplay.TWO_CLASS"><span
+                                class="downText">二级分类</span></DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
-                <Dropdown transfer placement="right-start" :key="4" @on-click="changeMenu" v-if="menuDisplay.data_source">
+                <Dropdown transfer placement="right-start" :key="4" @on-click="changeMenu"
+                          v-if="menuDisplay.DATA_SOURCE">
                     <Button class="levelTypeButton" type="text">
                         <Icon type="android-radio-button-on" :size='20' color="#fff"></Icon>
                     </Button>
@@ -21,7 +24,8 @@
                         </DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
-                <Dropdown transfer placement="right-start" :key="2" @on-click="changeMenu" v-if="menuDisplay.tabManagement">
+                <Dropdown transfer placement="right-start" :key="2" @on-click="changeMenu"
+                          v-if="menuDisplay.LABEL_MANAGE">
                     <Button class="levelTypeButton" type="text">
                         <Icon type="pricetags" :size='20' color="#fff"></Icon>
                     </Button>
@@ -31,7 +35,7 @@
                         </DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
-                <Dropdown transfer placement="right-start" :key="3" @on-click="changeMenu" v-if="menuDisplay.proManagement">
+                <Dropdown transfer placement="right-start" :key="3" @on-click="changeMenu" v-if="menuDisplay.PRO">
                     <Button class="levelTypeButton" type="text">
                         <Icon type="filing" :size='20' color="#fff"></Icon>
                     </Button>
@@ -52,11 +56,11 @@
         data () {
             return {
                 menuDisplay: {
-                    first_type: false,
-                    second_type: false,
-                    tabManagement: false,
-                    proManagement: false,
-                    data_source: false,
+                    'ONE_CLASS': false,
+                    'TWO_CLASS': false,
+                    'LABEL_MANAGE': false,
+                    'PRO': false,
+                    'DATA_SOURCE': false,
                 },
                 dropdown: {
                     FAStype: false,
@@ -74,34 +78,21 @@
             },
             menuTheme: {
                 type: String,
-                default: 'darck'
+                default: 'dark'
             }
         },
         created () {
+            //判断下拉菜单是否显示
             let localQ = JSON.parse(localStorage.getItem('label-Jurisdiction'));
-            if (localQ.length !== 0) {
-                localQ.forEach(r => {
-                    r.resourceCode == 'CLASS_MANAGE' ? r.child.forEach(t => this.menuListDisplay.push(t.resourceCode)) : this.menuListDisplay.push(r.resourceCode);
-
-                });
-                let FAStype = 0;
-                for (var variable of this.menuListDisplay) {
-                    if (variable == 'ONE_CLASS') {
-                        FAStype++;
-                        this.menuDisplay.first_type = true;
-                    } else if (variable == 'TWO_CLASS') {
-                        FAStype++;
-                        this.menuDisplay.second_type = true;
-                    } else if (variable == 'LABEL_MANAGE') {
-                        this.menuDisplay.tabManagement = true;
-                    } else if (variable == 'PRO') {
-                        this.menuDisplay.proManagement = true;
-                    } else if (variable == 'DATA_SOURCE') {
-                        this.menuDisplay.data_source = true;
-                    }
-                }
-                this.dropdown.FAStype = FAStype >=1;
-            }
+            localQ && localQ.length && localQ.forEach(r => {
+                r.resourceCode == 'CLASS_MANAGE' ? r.child.forEach(t => this.menuListDisplay.push(t.resourceCode)) : this.menuListDisplay.push(r.resourceCode);
+            });
+            let FAStype = 0;
+            this.menuListDisplay.length && this.menuListDisplay.map(r => {
+                r == 'ONE_CLASS' || r == 'TWO_CLASS' ? FAStype++ : '';
+                this.menuDisplay[r] = true;
+            });
+            this.dropdown.FAStype = FAStype >= 1;
         },
         methods: {
             changeMenu (active) {

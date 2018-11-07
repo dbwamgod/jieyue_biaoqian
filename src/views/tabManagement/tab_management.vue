@@ -10,7 +10,7 @@
             <Button type="primary" @click="searchChange">搜索</Button>
             </Col>
         </Row>
-        <Table border :columns="columns7" :data="data6" v-if="operation.findLabel"></Table>
+        <Table border :columns="columns7" :data="data6"></Table>
         <!--<Button type="primary" @click="$router.push({name:'new_create'})">新建</Button>-->
         <Page :total="dataCount" show-total :page-size="page.pageSize" :current="page.pageIndex" class="paging"
               @on-change="changepage"/>
@@ -20,7 +20,7 @@
                 :title=" isEdit"
                 :closable="false"
                 :footer-hide='true'
-                @on-cancel="cancel">
+                @on-cancel="cancelAddLabel">
             <div>
                 <Form ref="formInline" :model="categoryDetails" :rules="ruleInline" inline>
                     <FormItem prop="groupName" label="组名：" label-position="right" :label-width="100" class="edit_add">
@@ -62,9 +62,9 @@
                 </Form>
             </div>
 
-            <div style='text-align: right;'>
-                <Button type="primary" @click='ok' style=" margin-right:10px;">确定</Button>
-                <Button @click='cancel'>取消</Button>
+            <div  class="button-active">
+                <Button type="primary" @click='okAddLabel' class="cancel">确定</Button>
+                <Button @click='cancelAddLabel'>取消</Button>
             </div>
 
         </Modal>
@@ -73,7 +73,7 @@
                 title="删除标签"
                 @on-ok="okDelete"
                 :closable="false"
-                @on-cancel="cancel2">
+                @on-cancel="cancelDelete">
             <p>确定要删除此标签么？</p>
         </Modal>
     </div>
@@ -85,8 +85,6 @@
     import util from '@/libs/util.js';
 
     export default {
-
-
         data () {
             return {
                 flag:0,
@@ -114,7 +112,6 @@
                     }
                 ],
                 DataTypesList: [],
-                queryLabelDataTypesList: [],
                 index: true,
                 edit_t: [],
                 editInlineAndCellData: [
@@ -390,6 +387,7 @@
                                     return r.label;
                                 }
                             });
+                           scource= scource.length?scource:"无"
                             return h('div', [
                                 h('p', {
                                     style: {
@@ -500,9 +498,8 @@
         },
         created () {
             //权限
-            util.labelJurisdiction(this, 'LABEL_MANAGE-ADD', 'LABEL_MANAGE-UPDATE', 'LABEL_MANAGE-DEL', "", 'LABEL_MANAGE-UPDATE_STATUS', 'LABEL_MANAGE-F_G_L', 'LABEL_MANAGE-FIND');
+            util.labelJurisdiction(this.columns7,this, 'LABEL_MANAGE-ADD', 'LABEL_MANAGE-UPDATE', 'LABEL_MANAGE-DEL', "", 'LABEL_MANAGE-UPDATE_STATUS', 'LABEL_MANAGE-F_G_L', 'LABEL_MANAGE-FIND');
             this.dataScourseType();
-
             this.edit_t = JSON.parse(JSON.stringify(this.editInlineAndCellData));
             this.$axios
                 .all([this.getCategoryListSecondary(), this.queryLabelDataTypes()])
@@ -511,7 +508,7 @@
         },
         methods: {
 
-            //数据源类型
+            //数据源类型接口
             dataScourseType () {
                 this.$axios({
                     method: 'get',
@@ -617,23 +614,21 @@
                     }
                 });
             },
+
+            //对分类的处理
             filterClassification (id) {
                 let aa = this.categoryList.filter(r => r.id === id)[0];
                 return aa ? aa.parentName + '-' + aa.categoryName : '无类型';
             },
-            filterWordType (id) {
-                let aa = this.queryLabelDataTypesList.filter(r => r.id === id)[0];
-                return aa ? aa.typeName : '无类型';
-            },
+
+            //数据类型的接口
             queryLabelDataTypes () {
                 return this.$axios({
                     method: 'get',
                     url: api.queryLabelDataTypes()
                 }).then(res => {
                     if (res.data.code == 200) {
-                        this.queryLabelDataTypesList = res.data.data;
-
-                        this.DataTypesList = this.queryLabelDataTypesList.map(r => {
+                        this.DataTypesList = res.data.data.map(r => {
                             return {
                                 value: r.id || 0,
                                 name: r.typeName || string
@@ -654,6 +649,8 @@
                 this.categoryDetails.processingType = 0;
                 this.categoryDetails.dataSourceId = [0];
             },
+
+            //编辑
             show (data) {
                 this.isEdit = '编辑';
                 this.modal1 = true;
@@ -664,10 +661,11 @@
                     if (res.data.code == 200) {
 
                         let info = res.data.data;
+                        // this.categoryDetails=info
                         info.labels.forEach(r => {
                             r.indexStatus += '';
                         });
-                        this.categoryDetails.processingRules = res.data.data.sql;
+                        this.categoryDetails.processingRules = info.sql;
                         this.categoryDetails.groupName = info.groupName;
                         this.categoryDetails.name = info.labelName;
                         this.categoryDetails.labelType = info.dataType;
@@ -688,25 +686,8 @@
                     }
                 });
             },
-            remove (id, index) {
-                this.$axios({
-                    method: 'get',
-                    url: api.removeLabelByIds(id),
-                }).then(res => {
-                    if (res.data.code == 200) {
-                        this.init();
-                        this.$Message.success({
-                            content: '删除成功',
-                            duration: 3
-                        });
-                    } else {
-                        this.$Message.error({
-                            content: res.data.msg,
-                            duration: 3
-                        });
-                    }
-                });
-            },
+
+            //启用/停用标签装态
             available (id, available) {
                 this.$axios({
                     method: 'post',
@@ -730,12 +711,14 @@
                     }
                 });
             },
+            //分页
             changepage (index) {
                 this.labelname = '';
                 this.page.pageIndex = index;
                 this.init();
             },
-            ok () {
+            //确定增加标签组
+            okAddLabel () {
                 this.$refs.formInline.validate(valid => {
                     if (valid) {
 
@@ -778,7 +761,7 @@
                                             rule: '',
                                         }];
 
-                                        this.cancel();
+                                        this.cancelAddLabel ();
                                         this.init();
                                         this.$Message.success('创建成功');
                                     } else {
@@ -812,7 +795,7 @@
                             }).then(
                                 res => {
                                     if (res.data.code == 200) {
-                                        this.cancel();
+                                        this.cancelAddLabel();
                                         this.init();
                                         this.$Message.success('修改成功');
                                     } else {
@@ -833,7 +816,8 @@
                     }
                 });
             },
-            cancel () {
+            //取消增加标签组
+            cancelAddLabel () {
                 this.editInlineAndCellData = [{
                     labelCode: '',
                     labelName: '',
@@ -863,10 +847,31 @@
                     precision: ''
                 };
             },
+            //确定删除标签组
             okDelete () {
                 this.remove(this.paramsRowId, '');
             },
-            cancel2 () {
+            remove (id, index) {
+                this.$axios({
+                    method: 'get',
+                    url: api.removeLabelByIds(id),
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        this.init();
+                        this.$Message.success({
+                            content: '删除成功',
+                            duration: 3
+                        });
+                    } else {
+                        this.$Message.error({
+                            content: res.data.msg,
+                            duration: 3
+                        });
+                    }
+                });
+            },
+            //取消删除标签组
+            cancelDelete () {
                 this.modal2 = false;
             }
         }
@@ -876,18 +881,14 @@
 <style scoped>
     .tab_man_textarea textarea {
         resize: vertical;
-
     }
-
     .tab_man_textarea {
         width: 1000px;
     }
-
     .paging {
         float: right;
         margin-top: 10px;
     }
-
     .edit_add {
         /*formItem  :w97%  是整个宽度   input和select是formItem的97%*/
         width: 97%;

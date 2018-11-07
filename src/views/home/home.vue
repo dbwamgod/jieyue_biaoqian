@@ -19,15 +19,13 @@
                 @on-cancel="cancel">
             <Form ref="formInline" :model="categoryDetails" :rules="ruleInline" inline>
                 <FormItem prop="content" label="一级分类：" label-position="right" :label-width="100">
-                    <Input v-model="categoryDetails.content" placeholder="请输入分类名称" style="width: 300px"/>
+                    <Input v-model="categoryDetails.content" placeholder="请输入分类名称" class="first-type"/>
                 </FormItem>
-
             </Form>
-            <div style='text-align: right;'>
-                <Button @click='cancel' style=" margin-right:10px;">取消</Button>
+            <div class="button-active">
+                <Button @click='cancel' class="cancel">取消</Button>
                 <Button type="primary" @click='ok'>确定</Button>
             </div>
-
         </Modal>
         <Modal
                 v-model="modal2"
@@ -41,6 +39,15 @@
 
 </template>
 <style scoped>
+    .first-type{
+        width: 300px;
+    }
+    .cancel {
+        margin-right: 10px;
+    }
+    .button-active {
+        text-align: right;
+    }
     .paging {
         float: right;
         margin-top: 10px;
@@ -51,11 +58,10 @@
     import Cookies from 'js-cookie';
     import util from '@/libs/util.js';
 
-
     export default {
         data () {
             return {
-                flag:0,
+                flag: 0,
                 adds: false,//新增权限
                 operation: {
                     edit: false,
@@ -133,7 +139,7 @@
         created () {
 
             //权限
-            util.labelJurisdiction(this, 'ONE_CLASS-ADD', 'ONE_CLASS-UPDATE', 'ONE_CLASS-DEL');
+            util.labelJurisdiction(this.columns7,this, 'ONE_CLASS-ADD', 'ONE_CLASS-UPDATE', 'ONE_CLASS-DEL');
 
             this.init();
         },
@@ -164,7 +170,6 @@
                                 this.page.pageIndex = this.page.pageIndex != 0 ? this.page.pageIndex - 1 : this.page.pageIndex;
                                 this.init();
                             }
-
                         }
                     } else {
                         this.$Message.info({
@@ -276,8 +281,6 @@
         }
     };
 </script>
-<style>
-</style>
 
 
 

@@ -13,7 +13,7 @@
                         :open-names="openedSubmenuArr"
                         :menu-list="menuList">
                     <div slot="top" class="logo-con">
-                        <h2 style="color: #fff">标签平台</h2>
+                        <h2 style="color: #fff;">标签平台</h2>
                     </div>
                 </shrinkable-menu>
             </scroll-bar>
@@ -34,14 +34,9 @@
                     </div>
                 </div>
                 <div class="header-avator-con">
-
                     <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
                     <!--<lock-screen style="    margin-right: 26px;"></lock-screen>-->
-
-
                     <!-- <message-tip v-model="mesCount"></message-tip> -->
-
-
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
@@ -54,7 +49,7 @@
                                     <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
-                            <Avatar :src="avatorPath" style="background: #619fe7;margin-left: 10px;"></Avatar>
+                            <Avatar :src="avatorPath" class="header-img"></Avatar>
                         </Row>
                     </div>
                 </div>
@@ -64,7 +59,7 @@
             </div>-->
         </div>
         <div class="single-page-con" :style="{left: shrink?'60px':'200px'}">
-            <div class="single-page" style="margin:0">
+            <div class="single-page"  style="margin:0">
                 <keep-alive :include="cachePage">
                     <router-view></router-view>
                 </keep-alive>

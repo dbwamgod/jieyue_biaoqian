@@ -24,17 +24,17 @@
                             <Option v-for="item in categoryListSelect" :value="item.id" :key="item.id">{{ item.categoryName}}</Option>
                         </Select>
                 </FormItem>
-     
+
                 <FormItem prop="content" label="二级分类：" label-position="right" :label-width="100">
                     <Input v-model="categoryDetails.content" placeholder="请输入二分类名称" style="width: 300px" />
                 </FormItem>
-     
+
         </Form>
-        <div style='text-align: right;'>
-            <Button @click='cancel' style=" margin-right:10px;">取消</Button>
+        <div style='text-align: right;' class="button-active" >
+            <Button @click='cancel' style=" margin-right:10px;" class="cancel" >取消</Button>
             <Button type="primary" @click='ok'>确定</Button>
         </div>
-         	
+
     </Modal>
      <Modal
         v-model="modal2"
@@ -47,6 +47,7 @@
     </div>
 </template>
 <style scoped>
+
 .paging {
   float: right;
   margin-top: 10px;
@@ -148,7 +149,7 @@ export default {
   created() {
 
       //权限
-      util.labelJurisdiction(this, 'TWO_CLASS-ADD', 'TWO_CLASS-UPDATE', 'TWO_CLASS-DEL');
+      util.labelJurisdiction(this.columns7,this, 'TWO_CLASS-ADD', 'TWO_CLASS-UPDATE', 'TWO_CLASS-DEL');
 
     this.init();
     this.oneCategoruList();
@@ -171,7 +172,7 @@ export default {
         }
       }).then(res => {
         if (res.data.code == 200) {
-          this.categoryListSelect = res.data.data;     
+          this.categoryListSelect = res.data.data;
         } else {
           this.$Message.info({
             content: res.data.msg+' 请刷新',
@@ -315,6 +316,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-</style>

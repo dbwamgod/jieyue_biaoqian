@@ -20,12 +20,12 @@ class Http {
                 if(response.data.Code === 100000){ //请求成功
                     return resolve(response.data)
                 }else{
-                    console.log(response.data.Msg)
+
                     return reject(response.data)
                 }
             },error => {
                 Indicator.close();
-                console.log(error)
+
                 return reject()
             })
         })
