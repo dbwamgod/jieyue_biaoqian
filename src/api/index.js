@@ -1,8 +1,9 @@
 import Cookies from 'js-cookie';
 //标签dev1.0.0
-const _baseUrl = 'http://stg.bdc.jieyue.com';
-// const _baseUrl = 'http://api.bdc.jieyue.com';
-// const _baseUrl = 'http://172.18.101.118:10000';
+const _baseUrl = 'http://stg.bdc.jieyue.com/api';    //准生产环境
+// const _baseUrl = 'http://api.bdc.jieyue.com';    //生产环境
+// const _baseUrl = 'http://172.18.101.118:10000';    //开发环境
+// const _baseUrl = 'http://10.50.170.110:10000';    //开发环境
 const _baseUrlA = _baseUrl + '/galaxy-label-admin/label';
 //产品
 const _baseUrlC = _baseUrl + '/galaxy-label-api';

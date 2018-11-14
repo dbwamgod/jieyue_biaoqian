@@ -8,7 +8,7 @@
     import Cookies from "js-cookie"
 
     export default {
-        //局部重新加载(dom)
+        //局部重新加载(dom)和请除所有cookies
         provide () {
             return {
                 reload: this.reload,

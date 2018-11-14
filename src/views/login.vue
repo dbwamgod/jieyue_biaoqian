@@ -110,26 +110,20 @@
                                         if (res.data.code == 200) {
                                             if (res.data.data.length) {
                                                 Cookies.set('galaxy_info', '1');
-                                                let dataLen = [];
-                                                res.data.data.map((r, i) => {
-                                                    dataLen.push(r);
-                                                });
-                                                localStorage.setItem('label-Jurisdiction', JSON.stringify(dataLen));
+                                                localStorage.setItem('label-Jurisdiction', JSON.stringify(res.data.data));
                                                 let set = new Set(JSON.parse(localStorage.getItem('label-Jurisdiction')));
                                                 let resource = [...set];
                                                 resource.forEach(r => {
                                                         r.child &&r.child.forEach(res => {
-                                                            res.child?this.disNay.push(...res.child):this.disNay.push(res)
-                                                            if(!res.menu &&r.child){
-                                                                this.disNay.push(res)
-                                                            }
+                                                            res.child?this.disNay.push(...res.child):this.disNay.push(res);
+                                                            !res.menu &&r.child? this.disNay.push(res):""
                                                         });
                                                 });
-                                                this.disNay=new Set(this.disNay)
+                                                this.disNay=new Set(this.disNay);
                                                 localStorage.setItem('labelChild', JSON.stringify(this.disNay));
                                                 let resourceCodes = resource.map(r => r.resourceCode);
                                                 if (resourceCodes.includes('CLASS_MANAGE')) {
-                                                    let typeMag = resource[0].child[0].resourceCode
+                                                    let typeMag = resource[0].child[0].resourceCode;
                                                     if (typeMag == 'ONE_CLASS' || typeMag == 'TWO_CLASS') {
                                                         Cookies.set('label-defaultHome', this.codeCompare[typeMag]);
                                                         this.$router.push({
