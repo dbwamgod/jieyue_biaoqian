@@ -10,14 +10,18 @@ const _baseUrlC = _baseUrl + '/galaxy-label-api';
 
 //token
 function cookies_con () {
-    let cookies_cons = 'access_token=' + Cookies.get('token');
+    let cookies_cons;
+    cookies_cons = 'access_token=' + Cookies.get('token');
     return cookies_cons;
 }
 
 export default {
     //获取资源权限
-    Resource_permissions () {
-        return _baseUrl+ '/platform-user-admin/user/find/auth/?' + cookies_con();
+    /**
+     * @return {string}
+     */
+    Resource_permissions: function () {
+        return `${_baseUrl}/platform-user-admin/user/find/auth/?${cookies_con()}`;
     },
     login () {
         // return 'http://api.bdc.jieyue.com/api/platform-user-oauth2/oauth/token';
