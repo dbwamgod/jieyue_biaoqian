@@ -4,6 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/api/index.js" line="20" />
   </component>
   <component name="ChangeListManager">
+
     <list default="true" id="7ce3439a-fc9b-4957-99ab-326cbdaafdfa" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/build/webpack.prod.config.js" afterPath="$PROJECT_DIR$/build/webpack.prod.config.js" />
@@ -11,6 +12,14 @@
       <change beforePath="$PROJECT_DIR$/src/api/index.js" afterPath="$PROJECT_DIR$/src/api/index.js" />
       <change beforePath="$PROJECT_DIR$/src/app.vue" afterPath="$PROJECT_DIR$/src/app.vue" />
       <change beforePath="$PROJECT_DIR$/src/views/login.vue" afterPath="$PROJECT_DIR$/src/views/login.vue" />
+
+    <list default="true" id="484d7776-59f4-48d1-8897-fb62eeeb9ea4" name="Default" comment="">
+
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/src/views/home/home.vue" afterPath="$PROJECT_DIR$/src/views/home/home.vue" />
+      <change beforePath="$PROJECT_DIR$/src/views/productManagement/edit_product.vue" afterPath="$PROJECT_DIR$/src/views/productManagement/edit_product.vue" />
+      <change beforePath="$PROJECT_DIR$/src/views/productManagement/new_product.vue" afterPath="$PROJECT_DIR$/src/views/productManagement/new_product.vue" />
+      <change beforePath="$PROJECT_DIR$/src/views/tabManagement/tab_management.vue" afterPath="$PROJECT_DIR$/src/views/tabManagement/tab_management.vue" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -81,6 +90,7 @@
       </file>
       <file leaf-file-name="webpack.prod.config.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build/webpack.prod.config.js">
+
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="225">
               <caret line="24" column="37" lean-forward="false" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
@@ -89,6 +99,7 @@
           </provider>
         </entry>
       </file>
+
       <file leaf-file-name="login.vue" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/views/login.vue">
           <provider selected="true" editor-type-id="text-editor">
@@ -110,6 +121,7 @@
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
+
             </state>
           </provider>
         </entry>
@@ -169,6 +181,7 @@
         <option value="$PROJECT_DIR$/src/main.js" />
         <option value="$PROJECT_DIR$/src/views/main.less" />
         <option value="$PROJECT_DIR$/src/store/modules/user.js" />
+
         <option value="$PROJECT_DIR$/src/views/Main.vue" />
         <option value="$PROJECT_DIR$/src/views/main-components/shrinkable-menu/components/sidebarMenu.vue" />
         <option value="$PROJECT_DIR$/src/views/home/home.vue" />
@@ -179,6 +192,7 @@
         <option value="$PROJECT_DIR$/src/views/tabManagement/tab_management.vue" />
         <option value="$PROJECT_DIR$/src/views/productManagement/product_management.vue" />
         <option value="$PROJECT_DIR$/src/views/productManagement/new_product.vue" />
+
         <option value="$PROJECT_DIR$/src/views/productManagement/edit_product.vue" />
         <option value="$PROJECT_DIR$/src/views/main-components/shrinkable-menu/components/sidebarMenuShrink.vue" />
         <option value="$PROJECT_DIR$/src/common/deleteCom/elete.vue" />
@@ -209,7 +223,9 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+
     <option name="x" value="956" />
+
     <option name="width" value="974" />
     <option name="height" value="1047" />
   </component>
