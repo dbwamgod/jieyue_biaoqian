@@ -2,7 +2,7 @@
     <div class="all_box">
         <Row type="flex" justify="space-between" align="middle" class="code-row-bg">
             <Col span="6">
-            <h2 class="header-title">标签列表</h2>
+            <h2 class="header-title">标签管理</h2>
             </Col>
             <Col span="8" class="search-add">
             <Button type="primary" @click="newCreate" v-if="adds">新建</Button>
@@ -22,7 +22,7 @@
                 :footer-hide='true'
                 @on-cancel="cancelAddLabel">
             <div>
-                <Form ref="formInline" :model="categoryDetails" :rules="ruleInline" inline>
+                <Form ref="formInline" :model="categoryDetails" :rules="ruleInline" inline style="padding: 34px;">
                     <FormItem prop="groupName" label="组名：" label-position="right" :label-width="100" class="edit_add">
                         <Input v-model="categoryDetails.groupName" placeholder="请输入组名" class="edit_add"/>
                     </FormItem>
@@ -41,9 +41,11 @@
                             <Radio :label="index">{{item}}</Radio>
                         </RadioGroup>
                     </FormItem>
-                    <FormItem prop="labels" label="标签：" label-position="right" :label-width="100" style="width: 92.8%;">
+                    <FormItem prop="labels" label="标签：" label-position="right" :label-width="100" style="width: 100%;"
+                              class="formTable">
                         <Table border :columns="labels" :data="editInlineAndCellData" height="200px"></Table>
                     </FormItem>
+
                     <FormItem prop="processing" label="重复加工：" label-position="right" :label-width="100">
                         <RadioGroup v-model="categoryDetails.processing">
                             <Radio label="0">否</Radio>
@@ -51,7 +53,7 @@
                         </RadioGroup>
                     </FormItem>
                     <FormItem prop="dataSourceId" label="数据源：" label-position="right" :label-width="100 "
-                              class="edit_add">
+                              class="edit_add dataSourse">
                         <Cascader :data="dataScourseTypes" v-model="categoryDetails.dataSourceId"
                                   class="edit_add"></Cascader>
                     </FormItem>
@@ -62,7 +64,7 @@
                 </Form>
             </div>
 
-            <div  class="button-active">
+            <div class="button-active">
                 <Button type="primary" @click='okAddLabel' class="cancel">确定</Button>
                 <Button @click='cancelAddLabel'>取消</Button>
             </div>
@@ -87,8 +89,8 @@
     export default {
         data () {
             return {
-                flag:0,
-                lineTest:false,
+                flag: 0,
+                lineTest: false,
                 adds: false,//新增权限
                 operation: {
                     edit: false,
@@ -98,8 +100,8 @@
                     edit_binding: false,
                     del_binding: false,
                     edit_del_binding: false,
-                    findLabel:false,
-                    findLabelPage:false,
+                    findLabel: false,
+                    findLabelPage: false,
                 },//权限校验的数据
                 dataScourseTypes: [],
                 indexList: [
@@ -125,6 +127,7 @@
                     }
                 ],
                 procesing_type: ['java', 'sql', 'javascript', 'spark', 'groovy'],
+
                 labels: [
                     {
                         title: '代码',
@@ -137,6 +140,222 @@
                                     type: 'text',
                                     value: this.editInlineAndCellData[params.index].labelCode
                                 },
+                                style: {},
+                                on: {
+                                    'on-change' (event) {
+                                        params.row.labelCode= event.srcElement.value || event.target.value;
+                                        _this.edit_t[params.index].labelCode = event.srcElement.value || event.target.value;
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    {
+                        title: '名称',
+                        key: 'labelName',
+                        align: 'center',
+                        render: (h, params) => {
+                            let _this = this;
+                            return h('Input', {
+                                props: {
+                                    type: 'text',
+                                    value: this.editInlineAndCellData[params.index].labelName
+                                }, style: {},
+                                on: {
+                                    'on-change' (event) {
+                                        params.row.labelName= event.srcElement.value || event.target.value;
+                                        _this.edit_t[params.index].labelName = event.srcElement.value || event.target.value;
+
+                                    }
+                                }
+                            });
+                        }
+
+                    },
+                    {
+                        title: '数据类型',
+                        key: 'dataType',
+                        align: 'center',
+                        render: (h, params) => {
+                            let _this = this;
+                            return h('Select', {
+                                    props: {
+                                        value: this.editInlineAndCellData[params.index].dataType
+                                    },
+                                    on: {
+                                        'on-change': (event) => {
+                                            params.row.dataType= event;
+                                            _this.edit_t[params.index].dataType = event;
+                                        }
+                                    },
+                                },
+                                this.DataTypesList.map((item) => {
+                                    return h('Option', {
+                                        props: {
+                                            value: item.value,
+                                            label: item.name
+                                        }
+                                    });
+                                })
+                            );
+                        }
+                    },
+                    {
+                        title: '默认值',
+                        key: 'defaultVal',
+                        align: 'center',
+                        render: (h, params) => {
+                            let _this = this;
+                            return h('Input', {
+                                props: {
+                                    type: 'text',
+                                    value: this.editInlineAndCellData[params.index].defaultVal
+                                },
+                                style: {},
+                                on: {
+                                    'on-change' (event) {
+                                        params.row.defaultVal= event.srcElement.value || event.target.value;
+                                        _this.edit_t[params.index].defaultVal = event.srcElement.value || event.target.value;
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    {
+                        title: '是否创建索引',
+                        key: 'indexStatus',
+                        align: 'center',
+                        render: (h, params) => {
+                            let _this = this;
+                            return h('Select', {
+                                    props: {
+                                        value: this.editInlineAndCellData[params.index].indexStatus
+                                    },
+                                    on: {
+                                        'on-change': (event) => {
+                                            params.row.indexStatus= event;
+                                            _this.edit_t[params.index].indexStatus = event;
+                                        }
+                                    },
+                                },
+                                this.indexList.map((item) => {
+                                    return h('Option', {
+                                        props: {
+                                            value: item.value,
+                                            label: item.name
+                                        }
+                                    });
+                                })
+                            );
+                        }
+                    },
+                    {
+                        title: '规则内容',
+                        key: 'rule',
+                        align: 'center',
+                        render: (h, params) => {
+                            let _this = this;
+
+                            return h('Input', {
+                                props: {
+                                    type: 'text',
+                                    value: this.editInlineAndCellData[params.index].rule,
+
+                                },
+                                on: {
+
+
+
+
+                                    'on-change'(event) {
+                                        console.log( '1231231231232',params.row, _this.edit_t)
+                                        params.row.rule= event.srcElement.value || event.target.value;
+                                        _this.edit_t[params.index]['rule'] = event.srcElement.value || event.target.value;
+
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    {
+                        title: '操作',
+                        key: 'actions',
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            if (this.index) {
+                                                console.log(this.edit_t);
+                                                this.editInlineAndCellData = JSON.parse(JSON.stringify(this.edit_t));
+                                                this.editInlineAndCellData.splice(params.index + 1, 0, {
+                                                    labelCode: '',
+                                                    labelName: '',
+                                                    dataType: '',
+                                                    defaultVal: '',
+                                                    indexStatus: '',
+                                                    rule: '',
+                                                });
+                                                this.edit_t=  JSON.parse(JSON.stringify(this.editInlineAndCellData));
+
+                                            } else {
+                                                this.index = true;
+                                            }
+                                        },
+
+                                    }
+                                }, '添加'),
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            if (this.index) {
+                                                this.editInlineAndCellData = JSON.parse(JSON.stringify(this.edit_t));
+
+                                                if (this.editInlineAndCellData.length === 1) {
+                                                    return;
+                                                }
+                                                this.editInlineAndCellData.splice(params.index, 1);
+                                                this.edit_t=  JSON.parse(JSON.stringify(this.editInlineAndCellData));
+                                            } else {
+                                                this.index = true;
+                                            }
+
+                                        }
+                                    }
+                                }, '删除')
+                            ]);
+                        }
+                    },
+                ],
+
+             /*   labels: [
+                    {
+                        title: '代码',
+                        key: 'labelCode',
+                        align: 'center',
+                        render: (h, params) => {
+                            let _this = this;
+                            return h('Input', {
+                                props: {
+                                    type: 'text',
+                                    value: this.editInlineAndCellData[params.index].labelCode,
+                                },
+                                vModel:this.a,
                                 style: {},
                                 on: {
                                     'on-blur' (event) {
@@ -210,6 +429,7 @@
                                 }, style: {},
                                 on: {
                                     'on-blur' (event) {
+                                        console.log(event);
                                         _this.edit_t[params.index].defaultVal = event.srcElement.value || event.target.value;
                                         _this.delBlurBad(event, params);
 
@@ -258,9 +478,11 @@
                                     value: this.editInlineAndCellData[params.index].rule
                                 },
                                 on: {
-                                    'on-blur' (event) {
+                                    'on-change' (event) {
+                                        console.log(_this.edit_t,1111111);
+                                        _this.edit_t= JSON.parse(JSON.stringify(_this.editInlineAndCellData));
                                         _this.edit_t[params.index].rule = event.srcElement.value || event.target.value;
-                                        _this.delBlurBad(event, params);
+                                        // _this.delBlurBad(event, params);
                                     }
                                 }
                             });
@@ -283,7 +505,7 @@
                                     on: {
                                         click: () => {
                                             if (this.index) {
-                                                this.editInlineAndCellData = this.edit_t;
+                                                this.editInlineAndCellData = JSON.parse(JSON.stringify(this.edit_t));
                                                 this.editInlineAndCellData.splice(params.index + 1, 0, {
                                                     labelCode: '',
                                                     labelName: '',
@@ -324,7 +546,7 @@
                             ]);
                         }
                     },
-                ],
+                ],*/
                 dataCount: 0,
                 page: {
                     pageIndex: 1,
@@ -387,7 +609,7 @@
                                     return r.label;
                                 }
                             });
-                           scource= scource.length?scource:"无"
+                            scource = scource.length ? scource : '无';
                             return h('div', [
                                 h('p', {
                                     style: {
@@ -405,12 +627,12 @@
                             let labels = params.row.labels && params.row.labels.map((r) => {
                                 return r.labelCode + ':' + r.labelName;
                             });
-                            let pList = labels.length && labels.map(item => {
+                            let pList = labels.length && labels.map((item, i) => {
                                 return h('p', {
                                     style: {
                                         marginRight: '5px'
                                     },
-                                }, item + ',');
+                                }, item + `${labels.length == 1 ? '' : ','}`);
                             });
                             return h('div', pList);
                         }
@@ -422,7 +644,7 @@
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
-                                this.operation.edit || this.operation.edit_del || this.operation.edit_binding || this.operation.edit_del_binding ?  h('Button', {
+                                this.operation.edit || this.operation.edit_del || this.operation.edit_binding || this.operation.edit_del_binding ? h('Button', {
                                     props: {
                                         type: 'primary',
                                         size: 'small'
@@ -435,8 +657,8 @@
                                             this.show(params.row);
                                         }
                                     }
-                                }, '编辑'):"",
-                               this.operation.del || this.operation.edit_del || this.operation.del_binding || this.operation.edit_del_binding ? h('Button', {
+                                }, '编辑') : '',
+                                this.operation.del || this.operation.edit_del || this.operation.del_binding || this.operation.edit_del_binding ? h('Button', {
                                     props: {
                                         type: 'error',
                                         size: 'small'
@@ -451,8 +673,8 @@
                                             this.paramsRowId = params.row.id;
                                         }
                                     }
-                                }, '删除'):"",
-                               this.operation.binding || this.operation.edit_binding || this.operation.del_binding || this.operation.edit_del_binding ?  h('Button', {
+                                }, '删除') : '',
+                                this.operation.binding || this.operation.edit_binding || this.operation.del_binding || this.operation.edit_del_binding ? h('Button', {
                                     props: {
                                         //available 可用
                                         type: params.row.available == 0 ? 'primary' : 'error',
@@ -463,7 +685,7 @@
                                             this.available(params.row.id, params.row.available);
                                         }
                                     }
-                                }, params.row.available == 0 ? '启用' : '停用'):"",
+                                }, params.row.available == 0 ? '启用' : '停用') : '',
                             ]);
                         }
                     }
@@ -478,7 +700,7 @@
                     classification: [{type: 'number', required: true, message: '请选择分类', trigger: 'change'}],
                     name: [{required: true, message: '请输入名称', trigger: 'blur'}],
                     processingRules: [{required: true, message: '请输入sql', trigger: 'blur'},],
-                    precision: [{pattern: /^[0-9]{0,5}$/, message: '请输入数字最多五位', trigger: 'blur'}, ]
+                    precision: [{pattern: /^[0-9]{0,5}$/, message: '请输入数字最多五位', trigger: 'blur'},]
                 },
                 categoryDetails: {
                     groupName: '',
@@ -498,7 +720,7 @@
         },
         created () {
             //权限
-            util.labelJurisdiction(this.columns7,this, 'LABEL_MANAGE-ADD', 'LABEL_MANAGE-UPDATE', 'LABEL_MANAGE-DEL', "", 'LABEL_MANAGE-UPDATE_STATUS', 'LABEL_MANAGE-F_G_L', 'LABEL_MANAGE-FIND');
+            util.labelJurisdiction(this.columns7, this, 'LABEL_MANAGE-ADD', 'LABEL_MANAGE-UPDATE', 'LABEL_MANAGE-DEL', '', 'LABEL_MANAGE-UPDATE_STATUS', 'LABEL_MANAGE-F_G_L', 'LABEL_MANAGE-FIND');
             this.dataScourseType();
             this.edit_t = JSON.parse(JSON.stringify(this.editInlineAndCellData));
             this.$axios
@@ -507,6 +729,13 @@
 
         },
         methods: {
+
+            // add(e){
+            //     console.log(e.path[4],e.path[5],11111);
+            // e.path[4].append(e.path[4])
+            //
+            //     },
+
             //数据源类型接口
             dataScourseType () {
                 this.$axios({
@@ -759,7 +988,7 @@
                                             rule: '',
                                         }];
 
-                                        this.cancelAddLabel ();
+                                        this.cancelAddLabel();
                                         this.init();
                                         this.$Message.success('创建成功');
                                     } else {
@@ -877,19 +1106,39 @@
 </script>
 
 <style scoped>
+
+    #test-table th {
+        /*border: none;*/
+
+    }
+
+    #test-table th {
+        border: 1px solid #e9eaec;
+        /*box-sizing: unset !important;*/
+    }
+
+    #test-table tr {
+
+    }
+
     .tab_man_textarea textarea {
         resize: vertical;
     }
+
     .tab_man_textarea {
         width: 1000px;
     }
+
     .paging {
         float: right;
         margin-top: 10px;
     }
+
     .edit_add {
         /*formItem  :w97%  是整个宽度   input和select是formItem的97%*/
-        width: 97%;
+        width: 100%;
+        /*padding: 35px;*/
+        /*margin-right: 55px;*/
     }
 
 
