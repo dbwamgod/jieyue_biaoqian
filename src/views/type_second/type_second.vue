@@ -24,17 +24,25 @@
                             <Option v-for="item in categoryListSelect" :value="item.id" :key="item.id">{{ item.categoryName}}</Option>
                         </Select>
                 </FormItem>
-     
+
                 <FormItem prop="content" label="二级分类：" label-position="right" :label-width="100">
                     <Input v-model="categoryDetails.content" placeholder="请输入二分类名称" style="width: 300px" />
                 </FormItem>
-     
+
         </Form>
-        <div style='text-align: right;'>
-            <Button @click='cancel' style=" margin-right:10px;">取消</Button>
+        <div style='text-align: right;' class="button-active" >
+            <Button @click='cancel' style=" margin-right:10px;" class="cancel" >取消</Button>
             <Button type="primary" @click='ok'>确定</Button>
         </div>
-         	
+
+    </Modal>
+     <Modal
+        v-model="modal2"
+        title="删除分类"
+        @on-ok="okDelete"
+        :closable="false"
+        @on-cancel="cancel2">
+        <p>确定要删除此分类么？</p>
     </Modal>
      <Modal
         v-model="modal2"
@@ -47,6 +55,7 @@
     </div>
 </template>
 <style scoped>
+
 .paging {
   float: right;
   margin-top: 10px;
@@ -55,10 +64,18 @@
 <script>
 import api from "@/api";
 import Cookies from "js-cookie";
+import util from '@/libs/util.js';
 
 export default {
   data() {
     return {
+        flag:0,
+        adds: false,//新增权限
+        operation: {
+            edit: false,
+            del: false,
+            edit_del: false,
+        },//权限校验的数据
       dataCount: 0,
       page: {
         pageIndex: 1,
@@ -95,9 +112,7 @@ export default {
           align: "center",
           render: (h, params) => {
             return h("div", [
-              h(
-                "Button",
-                {
+                this.operation.edit || this.operation.edit_del ?h("Button", {
                   props: {
                     type: "primary",
                     size: "small"
@@ -110,12 +125,8 @@ export default {
                       this.show(params.index, params.row);
                     }
                   }
-                },
-                "编辑"
-              ),
-              h(
-                "Button",
-                {
+                }, "编辑"):"",
+               this.operation.del || this.operation.edit_del ?  h("Button", {
                   props: {
                     type: "error",
                     size: "small"
@@ -127,9 +138,7 @@ export default {
                      this.paramsRowId=params.row.id;
                     }
                   }
-                },
-                "删除"
-              )
+                }, "删除"):""
             ]);
           }
         }
@@ -146,6 +155,10 @@ export default {
     };
   },
   created() {
+
+      //权限
+      util.labelJurisdiction(this.columns7,this, 'TWO_CLASS-ADD', 'TWO_CLASS-UPDATE', 'TWO_CLASS-DEL');
+
     this.init();
     this.oneCategoruList();
   },
@@ -167,7 +180,7 @@ export default {
         }
       }).then(res => {
         if (res.data.code == 200) {
-          this.categoryListSelect = res.data.data;     
+          this.categoryListSelect = res.data.data;
         } else {
           this.$Message.info({
             content: res.data.msg+' 请刷新',
@@ -311,6 +324,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-</style>

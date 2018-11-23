@@ -18,8 +18,15 @@ fs.open('./build/env.js', 'w', function(err, fd) {
 
 module.exports = merge(webpackBaseConfig, {
     output: {
+<<<<<<< HEAD
         // publicPath: 'http://api.bdc.jieyue.com/galaxy-label-admin/',  // 修改 https://iv...admin 这部分为你的服务器域名
         publicPath: 'http://172.18.101.163:8080/galaxy-label-admin/',  // 修改 https://iv...admin 这部分为你的服务器域名
+=======
+        // publicPath: 'http://api.bdc.jieyue.com/galaxy-label-admin/',  // 生产环境
+        publicPath: 'http://172.18.101.163:8080/galaxy-label-admin/',  // 开发环境
+        // publicPath: 'http://10.50.170.110:10000/galaxy-label-admin/',  // 开发环境
+        // publicPath: 'http://stg.bdc.jieyue.com/galaxy-label-admin/',  // 准生产环境
+>>>>>>> origin/dev1.2.0
         filename: '[name].[hash].js',
         chunkFilename: '[name].[hash].chunk.js'
     },

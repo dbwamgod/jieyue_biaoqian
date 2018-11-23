@@ -44,8 +44,8 @@
             </Row>
             <Row class="checkProduct-container-operation">
                 <Col span="12" offset="8">
-                <Button type="primary" @click="checkInfo" class="handle">查询</Button>
-                <Button type="primary" @click="comeout" class="handle">导出</Button>
+                <Button type="primary" @click="checkInfo" class="handle" v-if="queryFindLabel">查询</Button>
+                <Button type="primary" @click="comeout" class="handle" v-if="queryFindLabel">导出</Button>
                 <Button @click="canel">返回</Button>
                 </Col>
             </Row>
@@ -90,7 +90,8 @@
                 title: [],
                 defaultFlag: [],
                 check_out: [],
-                check_out_flag: false
+                check_out_flag: false,
+                queryFindLabel:false,
             };
         },
         watch: {
@@ -103,6 +104,7 @@
         created () {
             this.product_getDetail(this.$route.query.id);
             this.product_First_list();
+            this.queryFindLabel=JSON.parse(this.$route.query.findLabel)
         },
         methods: {
             canel () {
@@ -293,13 +295,7 @@
                 new Promise((res, rej) => {
                     res(this.product_productOutput_list(1));
                 }).then(res => {
-                    window.open(api.product_out(encodeURIComponent(JSON.stringify({
-                        'queryParam': this.defaultRules.queryParam,
-                        'codeIds': this.check_list,
-                        'pageSize': 0,
-                        'pageIndex': 0
-                    }))), '_blank');
-
+                    window.open(api.product_out(encodeURIComponent(this.defaultRules.queryParam),encodeURIComponent(this.check_list.join(","))), '_blank')
                 }).catch(res => {
                     this.reload();
                 });

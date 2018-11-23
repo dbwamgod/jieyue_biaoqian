@@ -3,6 +3,7 @@
 </style>
 
 <template>
+
     <div class="login" @keydown.enter="handleSubmit">
         <div class="login-con">
             <Card :bordered="false">
@@ -30,7 +31,6 @@
                             <Button @click="handleSubmit" type="primary" long>登录</Button>
                         </FormItem>
                     </Form>
-                    <!--<p class="login-tip">输入任意用户名和密码即可</p>-->
                 </div>
             </Card>
         </div>
@@ -43,6 +43,7 @@
     import api from '@/api';
 
     export default {
+        inject:["out"],
         data () {
             return {
                 form: {
@@ -50,11 +51,18 @@
                     password: ''
                 },
                 rules: {
-                    userName: [
-                        {required: true, message: '账号不能为空', trigger: 'blur'}
-                    ],
+                    userName: [{required: true, message: '账号不能为空', trigger: 'blur'}],
                     password: [{required: true, message: '密码不能为空', trigger: 'blur'}]
                 },
+                codeCompare: {
+                    TWO_CLASS: 'typeSecond_two',
+                    ONE_CLASS: 'home_list',
+                    CLASS_MANAGE: 'home_list',
+                    DATA_SOURCE: 'SourcePage',//源数据
+                    LABEL_MANAGE: 'Tab_management_list',//标签管理
+                    PRO: 'product_management_list',//产品管理
+                },
+                disNay: [],
             };
         },
         mounted() {
@@ -92,20 +100,81 @@
                                         'content-Type': 'application/x-www-form-urlencoded',
                                     },
                                 }).then(res => {
-
                                     Cookies.set('userId', res.data.principal.id);
-                                });
-                                this.$router.push({
-                                    name: 'home_list'
+                                    this.$axios({
+                                        method: 'post',
+                                        url: api.Resource_permissions(),
+                                        data: {
+                                            tenantCode: 'LABEL_SYSTEM',
+                                            userId: Cookies.get('userId')
+                                        }
+                                    }).then(res => {
+                                        if (res.data.code == 200) {
+                                            if (res.data.data.length) {
+                                                Cookies.set('galaxy_info', '1');
+                                                localStorage.setItem('label-Jurisdiction', JSON.stringify(res.data.data));
+                                                let set = new Set(JSON.parse(localStorage.getItem('label-Jurisdiction')));
+                                                let resource = [...set];
+                                                resource.forEach(r => {
+                                                        r.child &&r.child.forEach(res => {
+                                                            res.child?this.disNay.push(...res.child):this.disNay.push(res);
+                                                            !res.menu &&r.child? this.disNay.push(res):""
+                                                        });
+                                                });
+                                                this.disNay=new Set(this.disNay);
+                                                localStorage.setItem('labelChild', JSON.stringify(this.disNay));
+                                                let resourceCodes = resource.map(r => r.resourceCode);
+                                                if (resourceCodes.includes('CLASS_MANAGE')) {
+                                                    let typeMag = resource[0].child[0].resourceCode;
+                                                    if (typeMag == 'ONE_CLASS' || typeMag == 'TWO_CLASS') {
+                                                        Cookies.set('label-defaultHome', this.codeCompare[typeMag]);
+                                                        this.$router.push({
+                                                            name: this.codeCompare[typeMag]
+                                                        });
+                                                    }
+                                                } else {
+                                                    for (var code in  resourceCodes) {
+                                                        Cookies.set('label-defaultHome', this.codeCompare[resourceCodes[code]]);
+                                                        this.$router.push({
+                                                            name: this.codeCompare[resourceCodes[code]]
+                                                        });
+                                                        return;
+                                                    }
+                                                }
+                                            } else {
+                                                const title = '登录错误';
+                                               // let keys= Object.keys(Cookies());
+                                               //  keys.map(r=>{
+                                               //      Cookies.remove(r);
+                                               //  });
+                                                this.out();//清楚所有cookies
+                                                this.$Modal.error({
+                                                    title: title,
+                                                    content: '您未开通系统权限, 请联系管理员',
+                                                });
+                                            }
+                                        } else {
+                                            const title = '资源错误';
+                                         /*   let keys= Object.keys(Cookies());
+                                            keys.map(r=>{
+                                                Cookies.remove(r);
+                                            })*/
+                                            this.out();//清楚所有cookies
+                                            this.$Modal.error({
+                                                title: title,
+                                                content: res.data.msg,
+                                            });
+                                        }
+
+                                    });
+
                                 });
 
-                            }else{
+                            } else {
                                 this.$Message.error('登录失败！帐号或密码错误');
-
                             }
-
-                        },(err)=>{
-                            this.$Message.error('登录失败！帐号或密码错误');
+                        }, (err) => {
+                            this.$Message.error('登录失败！帐号不存在');
                         });
                     } else {
                         this.$Message.info('请输入用户和密码');

@@ -48,7 +48,7 @@
                 </Col>
                 <Col span="18" class="edit_checkRule_container">
                 <div class="container_label" ref="container_label">
-{{title.length?"":"没有输出标签"}}
+                    {{title.length?'':'没有输出标签'}}
                     <Tag v-for="(item,index) in title" :key="index" :name="item.labelName||item.title"
                          closable @on-close="handleClose2"
                          class="edit_tag">
@@ -215,7 +215,7 @@
                                                     on: {
                                                         click: ev => {
                                                             ev.path[0].style.color = '#9ea7b4';
-                                                            let flag = this.title.find(r => (r.labelId||r.id) === params.data.id);
+                                                            let flag = this.title.find(r => (r.labelId || r.id) === params.data.id);
                                                             if (!flag) {
                                                                 if (this.title.filter(r => r.Id === params.data.id)[0]) {
                                                                 } else {

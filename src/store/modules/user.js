@@ -4,15 +4,22 @@ const user = {
 
     mutations: {
         logout (state, vm) {
-            Cookies.remove('userB');
-            Cookies.remove('password');
-            Cookies.remove('token');
-            Cookies.remove('userId');
-            Cookies.remove('access');
-            Cookies.remove('pages');
-            Cookies.remove('del');
-            Cookies.remove('flag');
-            Cookies.remove('categoryId');
+
+            let keys= Object.keys(Cookies());
+            keys.map(r=>{
+                Cookies.remove(r);
+            });
+
+
+            // Cookies.remove('userB');
+            // Cookies.remove('password');
+            // Cookies.remove('token');
+            // Cookies.remove('userId');
+            // Cookies.remove('access');
+            // Cookies.remove('pages');
+            // Cookies.remove('del');
+            // Cookies.remove('flag');
+            // Cookies.remove('categoryId');
             sessionStorage.removeItem("pages")
             // 恢复默认样式
             let themeLink = document.querySelector('link[name="theme"]');

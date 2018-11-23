@@ -2,10 +2,10 @@
     <div class="all_box">
         <Row type="flex" justify="space-between" align="middle" class="code-row-bg">
             <Col span="6">
-            <h2  class="header-title">标签列表</h2>
+            <h2 class="header-title">标签列表</h2>
             </Col>
             <Col span="8" class="search-add">
-            <Button type="primary" @click="newCreate" style=" ">新建</Button>
+            <Button type="primary" @click="newCreate" v-if="adds">新建</Button>
             <Input v-model="labelname" icon="ios-search" search placeholder="请搜索..." class="sea-name"/>
             <Button type="primary" @click="searchChange">搜索</Button>
             </Col>
@@ -20,13 +20,14 @@
                 :title=" isEdit"
                 :closable="false"
                 :footer-hide='true'
-                @on-cancel="cancel">
+                @on-cancel="cancelAddLabel">
             <div>
                 <Form ref="formInline" :model="categoryDetails" :rules="ruleInline" inline>
-                    <FormItem prop="groupName" label="组名：" label-position="right" :label-width="100" class="edit_add" >
+                    <FormItem prop="groupName" label="组名：" label-position="right" :label-width="100" class="edit_add">
                         <Input v-model="categoryDetails.groupName" placeholder="请输入组名" class="edit_add"/>
                     </FormItem>
-                    <FormItem prop="classification" label="分类：" placeholder="请选择" label-position="right" :label-width="100" class="edit_add" >
+                    <FormItem prop="classification" label="分类：" placeholder="请选择" label-position="right"
+                              :label-width="100" class="edit_add">
                         <Select v-model="categoryDetails.classification" class="edit_add">
                             <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{item.parentName +'-'+
                                 item.categoryName}}
@@ -49,8 +50,10 @@
                             <Radio label="1">是</Radio>
                         </RadioGroup>
                     </FormItem>
-                    <FormItem prop="dataSourceId" label="数据源：" label-position="right" :label-width="100 " class="edit_add">
-                        <Cascader :data="dataScourseTypes" v-model="categoryDetails.dataSourceId"  class="edit_add"></Cascader>
+                    <FormItem prop="dataSourceId" label="数据源：" label-position="right" :label-width="100 "
+                              class="edit_add">
+                        <Cascader :data="dataScourseTypes" v-model="categoryDetails.dataSourceId"
+                                  class="edit_add"></Cascader>
                     </FormItem>
                     <FormItem prop="processingRules" label="sql：" label-position="right" :label-width="100">
                         <Input v-model="categoryDetails.processingRules" type="textarea" class='tab_man_textarea'
@@ -59,9 +62,9 @@
                 </Form>
             </div>
 
-            <div style='text-align: right;'>
-                <Button type="primary" @click='ok' style=" margin-right:10px;">确定</Button>
-                <Button @click='cancel'>取消</Button>
+            <div  class="button-active">
+                <Button type="primary" @click='okAddLabel' class="cancel">确定</Button>
+                <Button @click='cancelAddLabel'>取消</Button>
             </div>
 
         </Modal>
@@ -70,7 +73,7 @@
                 title="删除标签"
                 @on-ok="okDelete"
                 :closable="false"
-                @on-cancel="cancel2">
+                @on-cancel="cancelDelete">
             <p>确定要删除此标签么？</p>
         </Modal>
     </div>
@@ -78,15 +81,26 @@
 <script>
     import api from '@/api';
     import Cookies from 'js-cookie';
-    // import canEditTable from '@/views/my-components/editTable/canEditTable.vue';
+
+    import util from '@/libs/util.js';
 
     export default {
-        components: {
-            // canEditTable
-        },
         data () {
             return {
-
+                flag:0,
+                lineTest:false,
+                adds: false,//新增权限
+                operation: {
+                    edit: false,
+                    del: false,
+                    binding: false,
+                    edit_del: false,
+                    edit_binding: false,
+                    del_binding: false,
+                    edit_del_binding: false,
+                    findLabel:false,
+                    findLabelPage:false,
+                },//权限校验的数据
                 dataScourseTypes: [],
                 indexList: [
                     {
@@ -98,7 +112,6 @@
                     }
                 ],
                 DataTypesList: [],
-                queryLabelDataTypesList: [],
                 index: true,
                 edit_t: [],
                 editInlineAndCellData: [
@@ -369,11 +382,12 @@
                         key: 'dataSourceId',
                         render: (h, params) => {
 
-                            let scource=this.dataScourseTypes&&this.dataScourseTypes.map(r => {
+                            let scource = this.dataScourseTypes && this.dataScourseTypes.map(r => {
                                 if (r.value === params.row.dataSourceId) {
-                                    return r.label
+                                    return r.label;
                                 }
                             });
+                           scource= scource.length?scource:"无"
                             return h('div', [
                                 h('p', {
                                     style: {
@@ -391,12 +405,12 @@
                             let labels = params.row.labels && params.row.labels.map((r) => {
                                 return r.labelCode + ':' + r.labelName;
                             });
-                            let pList = labels.length&&labels.map(item=>{
-                               return  h('p', {
+                            let pList = labels.length && labels.map(item => {
+                                return h('p', {
                                     style: {
                                         marginRight: '5px'
                                     },
-                                }, item+',')
+                                }, item + ',');
                             });
                             return h('div', pList);
                         }
@@ -408,60 +422,48 @@
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
-                                h(
-                                    'Button',
-                                    {
-                                        props: {
-                                            type: 'primary',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            marginRight: '5px'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.show(params.row);
-                                            }
-                                        }
+                                this.operation.edit || this.operation.edit_del || this.operation.edit_binding || this.operation.edit_del_binding ?  h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
                                     },
-                                    '编辑'
-                                ),
-                                h(
-                                    'Button',
-                                    {
-                                        props: {
-                                            type: 'error',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            marginRight: '5px'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                // this.remove(params.row.id, params.index);
-                                                this.modal2 = true;
-                                                this.paramsRowId = params.row.id;
-                                            }
-                                        }
+                                    style: {
+                                        marginRight: '5px'
                                     },
-                                    '删除'
-                                ),
-                                h(
-                                    'Button',
-                                    {
-                                        props: {
-                                            //available 可用
-                                            type: params.row.available == 0 ? 'primary' : 'error',
-                                            size: 'small'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.available(params.row.id, params.row.available);
-                                            }
+                                    on: {
+                                        click: () => {
+                                            this.show(params.row);
                                         }
+                                    }
+                                }, '编辑'):"",
+                               this.operation.del || this.operation.edit_del || this.operation.del_binding || this.operation.edit_del_binding ? h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
                                     },
-                                    params.row.available == 0 ? '启用' : '停用'
-                                )
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.remove(params.row.id, params.index);
+                                            this.modal2 = true;
+                                            this.paramsRowId = params.row.id;
+                                        }
+                                    }
+                                }, '删除'):"",
+                               this.operation.binding || this.operation.edit_binding || this.operation.del_binding || this.operation.edit_del_binding ?  h('Button', {
+                                    props: {
+                                        //available 可用
+                                        type: params.row.available == 0 ? 'primary' : 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.available(params.row.id, params.row.available);
+                                        }
+                                    }
+                                }, params.row.available == 0 ? '启用' : '停用'):"",
                             ]);
                         }
                     }
@@ -472,29 +474,11 @@
                     groupName: [{required: true, message: '请输入组名', trigger: 'blur'}],
                     code: [{required: true, message: '请输入分类代码', trigger: 'blur'}],
                     labels: [{required: false, message: '请输入完整的标签', trigger: 'blur'}],
-                    labelType: [
-                        {
-                            type: 'number',
-                            required: true,
-                            message: '请选择类型',
-                            trigger: 'change'
-                        }
-                    ],
-                    classification: [
-                        {
-                            type: 'number',
-                            required: true,
-                            message: '请选择分类',
-                            trigger: 'change'
-                        }
-                    ],
+                    labelType: [{type: 'number', required: true, message: '请选择类型', trigger: 'change'}],
+                    classification: [{type: 'number', required: true, message: '请选择分类', trigger: 'change'}],
                     name: [{required: true, message: '请输入名称', trigger: 'blur'}],
-                    processingRules: [
-                        {required: true, message: '请输入sql', trigger: 'blur'},
-                    ],
-                    precision: [
-                        {pattern: /^[0-9]{0,5}$/, message: '请输入数字最多五位', trigger: 'blur'},
-                    ]
+                    processingRules: [{required: true, message: '请输入sql', trigger: 'blur'},],
+                    precision: [{pattern: /^[0-9]{0,5}$/, message: '请输入数字最多五位', trigger: 'blur'}, ]
                 },
                 categoryDetails: {
                     groupName: '',
@@ -513,19 +497,17 @@
             };
         },
         created () {
-
+            //权限
+            util.labelJurisdiction(this.columns7,this, 'LABEL_MANAGE-ADD', 'LABEL_MANAGE-UPDATE', 'LABEL_MANAGE-DEL', "", 'LABEL_MANAGE-UPDATE_STATUS', 'LABEL_MANAGE-F_G_L', 'LABEL_MANAGE-FIND');
             this.dataScourseType();
-
             this.edit_t = JSON.parse(JSON.stringify(this.editInlineAndCellData));
             this.$axios
                 .all([this.getCategoryListSecondary(), this.queryLabelDataTypes()])
                 .then(this.$axios.spread((acct, perms) => this.init()));
 
-
         },
         methods: {
-
-            //数据源类型
+            //数据源类型接口
             dataScourseType () {
                 this.$axios({
                     method: 'get',
@@ -542,13 +524,11 @@
                     }
                 });
             },
-
+            //点击添加和删除时防止上次的信息清空!
             delBlurBad (e, params) {
                 let event = e || event;
                 if (event.relatedTarget) {
-
                     if (event.relatedTarget.firstElementChild) {
-                        // console.log(event.relatedTarget.firstElementChild.innerText,);
                         if (event.relatedTarget.firstElementChild.innerText == '添加') {
                             this.index = false;
                             this.editInlineAndCellData = this.edit_t;
@@ -605,10 +585,13 @@
                     }
                 );
             },
+            //搜索
             searchChange () {
                 this.page.pageIndex = 1;
                 this.init();
             },
+
+            //分类数据接口
             getCategoryListSecondary () {
                 return this.$axios({
                     method: 'post',
@@ -631,23 +614,19 @@
                     }
                 });
             },
+            //对分类的处理
             filterClassification (id) {
                 let aa = this.categoryList.filter(r => r.id === id)[0];
                 return aa ? aa.parentName + '-' + aa.categoryName : '无类型';
             },
-            filterWordType (id) {
-                let aa = this.queryLabelDataTypesList.filter(r => r.id === id)[0];
-                return aa ? aa.typeName : '无类型';
-            },
+            //数据类型的接口
             queryLabelDataTypes () {
                 return this.$axios({
                     method: 'get',
                     url: api.queryLabelDataTypes()
                 }).then(res => {
                     if (res.data.code == 200) {
-                        this.queryLabelDataTypesList = res.data.data;
-
-                        this.DataTypesList = this.queryLabelDataTypesList.map(r => {
+                        this.DataTypesList = res.data.data.map(r => {
                             return {
                                 value: r.id || 0,
                                 name: r.typeName || string
@@ -668,6 +647,8 @@
                 this.categoryDetails.processingType = 0;
                 this.categoryDetails.dataSourceId = [0];
             },
+
+            //编辑
             show (data) {
                 this.isEdit = '编辑';
                 this.modal1 = true;
@@ -676,15 +657,17 @@
                     url: api.queryLabelById(data.id)
                 }).then(res => {
                     if (res.data.code == 200) {
+
                         let info = res.data.data;
+                        // this.categoryDetails=info
                         info.labels.forEach(r => {
                             r.indexStatus += '';
                         });
-                        this.categoryDetails.processingRules = res.data.data.sql;
+                        this.categoryDetails.processingRules = info.sql;
                         this.categoryDetails.groupName = info.groupName;
                         this.categoryDetails.name = info.labelName;
                         this.categoryDetails.labelType = info.dataType;
-                        this.categoryDetails.classification = this.filterClassification(info.categoryId)=='无类型'?'':info.classification||1;
+                        this.categoryDetails.classification = this.filterClassification(info.categoryId) == '无类型' ? '' : info.classification || 1;
                         this.categoryDetails.dataSourceId = [info.dataSourceId];
                         this.categoryDetails.processing = Number(info.oneTime);
                         this.categoryDetails.processingType = Number(info.processType);
@@ -701,25 +684,8 @@
                     }
                 });
             },
-            remove (id, index) {
-                this.$axios({
-                    method: 'get',
-                    url: api.removeLabelByIds(id),
-                }).then(res => {
-                    if (res.data.code == 200) {
-                        this.init();
-                        this.$Message.success({
-                            content: '删除成功',
-                            duration: 3
-                        });
-                    } else {
-                        this.$Message.error({
-                            content: res.data.msg,
-                            duration: 3
-                        });
-                    }
-                });
-            },
+
+            //启用/停用标签装态
             available (id, available) {
                 this.$axios({
                     method: 'post',
@@ -743,12 +709,14 @@
                     }
                 });
             },
+            //分页
             changepage (index) {
                 this.labelname = '';
                 this.page.pageIndex = index;
                 this.init();
             },
-            ok () {
+            //确定增加标签组
+            okAddLabel () {
                 this.$refs.formInline.validate(valid => {
                     if (valid) {
 
@@ -791,7 +759,7 @@
                                             rule: '',
                                         }];
 
-                                        this.cancel();
+                                        this.cancelAddLabel ();
                                         this.init();
                                         this.$Message.success('创建成功');
                                     } else {
@@ -825,7 +793,7 @@
                             }).then(
                                 res => {
                                     if (res.data.code == 200) {
-                                        this.cancel();
+                                        this.cancelAddLabel();
                                         this.init();
                                         this.$Message.success('修改成功');
                                     } else {
@@ -846,7 +814,8 @@
                     }
                 });
             },
-            cancel () {
+            //取消增加标签组
+            cancelAddLabel () {
                 this.editInlineAndCellData = [{
                     labelCode: '',
                     labelName: '',
@@ -876,10 +845,31 @@
                     precision: ''
                 };
             },
+            //确定删除标签组
             okDelete () {
                 this.remove(this.paramsRowId, '');
             },
-            cancel2 () {
+            remove (id, index) {
+                this.$axios({
+                    method: 'get',
+                    url: api.removeLabelByIds(id),
+                }).then(res => {
+                    if (res.data.code == 200) {
+                        this.init();
+                        this.$Message.success({
+                            content: '删除成功',
+                            duration: 3
+                        });
+                    } else {
+                        this.$Message.error({
+                            content: res.data.msg,
+                            duration: 3
+                        });
+                    }
+                });
+            },
+            //取消删除标签组
+            cancelDelete () {
                 this.modal2 = false;
             }
         }
@@ -889,20 +879,15 @@
 <style scoped>
     .tab_man_textarea textarea {
         resize: vertical;
-
     }
-
     .tab_man_textarea {
         width: 1000px;
     }
-
     .paging {
         float: right;
         margin-top: 10px;
     }
-
-
-    .edit_add{
+    .edit_add {
         /*formItem  :w97%  是整个宽度   input和select是formItem的97%*/
         width: 97%;
     }

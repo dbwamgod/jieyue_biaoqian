@@ -41,9 +41,9 @@
                     <Input type="password" v-model="formData.pswd" placeholder="请输入密码"/>
                 </FormItem>
 
-                <div style='text-align: right;'>
-                    <Button type="primary" @click="test" style="float: left;">连接测试</Button>
-                    <Button type="primary" @click='ok' style=" margin-right:10px;">保存</Button>
+                <div class="button-active">
+                    <Button type="primary" @click="test" style="float: left;" v-if="lineTest">连接测试</Button>
+                    <Button type="primary" @click='ok' class="cancel">保存</Button>
                     <Button @click='cancel'>取消</Button>
                 </div>
 
@@ -56,11 +56,19 @@
 
 <script>
     import api from '@/api';
+    import util from '@/libs/util.js';
 
     export default {
         name: 'data_source',
         data () {
             return {
+                lineTest:false,
+                adds: false,//新增权限
+                operation: {
+                    edit: false,
+                    del: false,
+                    edit_del: false,
+                },//权限校验的数据
                 cascaderForm: [
                     {
                         label: 'hive',
@@ -107,13 +115,16 @@
                     }, {
                         title: '连接串',
                         key: 'url'
-                    },{
+                    }, {
+                        title: '密码',
+                        key: 'pswd'
+                    }, {
                         title: '操作',
                         key: 'active',
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
-                                h('Button', {
+                               this.operation.edit || this.operation.edit_del ? h('Button', {
                                     props: {
                                         type: 'primary',
                                         size: 'small'
@@ -126,8 +137,8 @@
                                             this.edit_add('edit', params.row);
                                         }
                                     }
-                                }, '修改'),
-                                h('Button', {
+                                }, '修改'):"",
+                                this.operation.del || this.operation.edit_del ? h('Button', {
                                     props: {
                                         type: 'error',
                                         size: 'small'
@@ -137,7 +148,7 @@
                                             this.remove(params.index, params.row.id);
                                         }
                                     }
-                                }, '删除')
+                                }, '删除'):""
                             ]);
                         }
                     }
@@ -152,7 +163,8 @@
             };
         },
         created () {
-
+            //权限
+            util.labelJurisdiction(this.columns7,this, 'DATA_SOURCE-ADD', 'DATA_SOURCE-UPDATE', 'DATA_SOURCE-DEL',"DATA_SOURCE-CHECK");
             this.dataList();
         },
         methods: {

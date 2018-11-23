@@ -256,7 +256,6 @@
                                         expand: false,
                                         children: [],
                                         render: (h, params) => {
-
                                             return h('span', {
                                                 style:this.style_view,
                                                 on: {

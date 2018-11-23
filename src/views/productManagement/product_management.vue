@@ -5,7 +5,7 @@
             <h2 class="header-title">产品管理</h2>
             </Col>
             <Col span="6" class="search-add">
-            <Button type="primary" @click="newCreate" style="margin-right: 4%;">新建
+            <Button type="primary" @click="newCreate" style="margin-right: 4%;" v-if="adds">新建
             </Button>
             <Input v-model="labelname" icon="ios-search" placeholder="请搜索..." style="width: 40%;"/>
             <Button type="primary" @click="searchChange">搜索</Button>
@@ -27,11 +27,26 @@
 
     import api from '@/api';
     import Cookies from 'js-cookie';
+    import util from '@/libs/util.js';
 
     export default {
         inject: ['reload'],
         data () {
             return {
+                flag:0,
+                lineTest:false,
+                adds: false,//新增权限
+                operation: {
+                    edit: false,
+                    del: false,
+                    binding: false,
+                    edit_del: false,
+                    edit_binding: false,
+                    del_binding: false,
+                    edit_del_binding: false,
+                    findLabel:false,
+                    findLabelPage:false,
+                },//权限校验的数据
                 labelname: '',
                 dataCount: 0,
                 page: {
@@ -62,28 +77,25 @@
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
-                                h('Button', {
-                                    props: {
+                                this.operation.binding|| this.operation.edit_binding || this.operation.del_binding || this.operation.edit_del_binding ?     h('Button', {props: {
                                         type: 'success',
                                         size: 'small'
-                                    },
-                                    style: {
+                                    }, style: {
                                         marginRight: '10px'
-                                    },
-                                    on: {
+                                    }, on: {
                                         click: () => {
                                             Cookies.set('now_index', this.page.pageIndex);
-
                                             this.$router.push({
                                                 name: 'check_product',
                                                 query: {
                                                     id: JSON.stringify(this.data6[params.index].id),
+                                                    findLabel:this.operation.findLabel,
+                                                    findLabelPage:this.operation.findLabelPage,
                                                 }
                                             });
                                         }
-                                    }
-                                }, '查看'),
-                                h('Button', {
+                                    }}, '查看'):"",
+                              this.operation.edit || this.operation.edit_del || this.operation.edit_binding || this.operation.edit_del_binding ?  h('Button', {
                                     props: {
                                         type: 'info',
                                         size: 'small'
@@ -96,8 +108,8 @@
                                             this.edit(this.data6[params.index]);
                                         }
                                     }
-                                }, '编辑'),
-                                h('Button', {
+                                }, '编辑'):"",
+                                this.operation.del|| this.operation.edit_del || this.operation.edit_binding || this.operation.edit_del_binding ?    h('Button', {
                                     props: {
                                         type: 'error',
                                         size: 'small'
@@ -107,7 +119,7 @@
                                             this.product_delete(this.data6[params.index].id);
                                         }
                                     }
-                                }, '删除')
+                                }, '删除'):""
                             ]);
                         }
                     }
@@ -118,6 +130,9 @@
             };
         },
         created () {
+            util.labelJurisdiction(this.columns7,this, 'PRO-ADD', 'PRO-UPDATE', 'PRO-DEL', "" ,'PRO-DETAIL', 'PRO-DETAIL-PO_LIST', 'PRO-DETAIL-PO_EXCEL');
+
+
             if (Cookies.get('now_index')) {
                 this.page.pageIndex = Number(Cookies.get('now_index'));
                 Cookies.remove('now_index');
@@ -144,6 +159,7 @@
                 this.$store.commit('SearchFunction');
 
             },
+            //分页
             changepage (index) {
                 this.page.pageIndex = index;
                 this.init();
@@ -173,7 +189,6 @@
                             this.data6 = res.data.data || [];
                             this.dataCount = res.data.page.totalRecords;
                             // }
-                            // console.log( res.data.data==null);
                             if (res.data.data == null || res.data.data == []) {
                                 if (res.data.page.totalRecords != 0) {
                                     this.page.pageIndex =

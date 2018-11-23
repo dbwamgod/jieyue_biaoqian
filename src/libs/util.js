@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import env from '../../build/env';
 import semver from 'semver';
 import packjson from '../../package.json';
@@ -98,20 +99,20 @@ util.setCurrentPath = function (vm, name) {
         }
     });
     let currentPathArr = [];
-    if (name === 'home_index') {
+    if (name === 'home_list') {
         currentPathArr = [
             {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
+                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_list')),
                 path: '',
-                name: 'home_index'
+                name: 'home_list'
             }
         ];
-    } else if ((name.indexOf('_index') >= 0 || isOtherRouter) && name !== 'home_index') {
+    } else if ((name.indexOf('_index') >= 0 || isOtherRouter) && name !== 'home_list') {
         currentPathArr = [
             {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
+                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_list')),
                 path: '/home',
-                name: 'home_index'
+                name: 'home_list'
             },
             {
                 title: title,
@@ -141,7 +142,7 @@ util.setCurrentPath = function (vm, name) {
                 {
                     title: '标签平台',
                     path: '',
-                    name: 'home_index'
+                    name: 'home_list'
                 }
             ];
         } else if (currentPathObj.children.length <= 1 && currentPathObj.name !== 'home') {
@@ -266,10 +267,68 @@ util.checkUpdate = function (vm) {
     //     }
     // });
 };
-util.getStringTime = function (date) {
-const newDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
-return newDate;
+util.getStringTime = function (date) {
+    const newDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+
+    return newDate;
+};
+
+/*
+* 权限校验
+* 参数:a,b,c,d,e,f,g;为权限名字  tab 为删除操作一栏做准备
+* vm:this
+* */
+util.labelJurisdiction = function (tab,vm, b, c, d, a, e, f, g) {
+    if (JSON.parse(localStorage.getItem('labelChild'))) {
+        JSON.parse(localStorage.getItem('labelChild')).forEach(r => {
+            if (r.resourceCode == a) {
+                vm.lineTest = true;
+            } else if (r.resourceCode == b) {
+                vm.adds = true;
+            } else if (r.resourceCode == c) {
+                vm.operation.edit = true;
+                vm.flag = 1;
+            } else if (r.resourceCode == d) {
+                vm.del = true;
+                if (vm.flag === 1) {
+                    vm.operation.edit_del = true;
+                    vm.flag = 2;
+                } else {
+                    vm.del = true;
+                    vm.flag = 3;
+                }
+            } else if (r.resourceCode == e) {
+                if (vm.flag === 2) {
+                    vm.operation.edit_del_binding = true;
+                } else if (vm.flag === 0) {
+                    vm.operation.binding = true;
+                } else if (vm.flag === 3) {
+                    vm.operation.del_binding = true;
+                } else if (vm.flag === 1) {
+                    vm.operation.edit_binding = true;
+                }
+            }
+            if (r.resourceCode == f) {
+                vm.operation.findLabel = true;
+            }
+            if (r.resourceCode == g) {
+                vm.operation.findLabelPage = true;
+            }
+
+        });
+        vm.operation.edit ||vm.operation.del ||vm.operation.binding?"":tab.splice(tab.length-1,1)
+    } else {
+        if (Cookies.get('access')) {
+            vm.$Message.error('无法检测到你的权限');
+            vm.$store.commit('logout', vm);
+            vm.$store.commit('clearOpenedSubmenu');
+            vm.$router.push({
+                name: 'login'
+            });
+        }
+
+    }
 };
 
 export default util;

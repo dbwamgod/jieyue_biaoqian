@@ -50,7 +50,7 @@ export const otherRouter = {
     redirect: '/typeFirst',
     component: Main,
     children: [
-        {path: 'typeFirst', title: '一级分类', name: 'home_index', component: () => import('@/views/home/home.vue')},
+        {path: 'typeFirst', title: '一级分类', name: 'home_list', component: () => import('@/views/home/home.vue')},
         {path: 'message', title: '消息中心', name: 'message_index', component: () => import('@/views/message/message.vue')}
     ],
 };
@@ -82,7 +82,11 @@ export const appRouter = [
     //queryDataSourcePage
     //分页查询数据源配置
     {
-        path: '/queryDataSourcePage', icon: 'android-radio-button-on', title: '数据源', name: 'queryDataSourcePage', component: Main,
+        path: '/queryDataSourcePage',
+        icon: 'android-radio-button-on',
+        title: '数据源',
+        name: 'queryDataSourcePage',
+        component: Main,
         children: [
             {
                 path: 'index',

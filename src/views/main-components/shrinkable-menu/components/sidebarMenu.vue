@@ -4,54 +4,39 @@
 
 <template>
     <Menu ref="sideMenu" :active-name="activeName" :open-names="['0']" :theme="menuTheme" width="auto"
-          @on-select="menuSelect" style="" :accordion="false">
-        <Submenu name="1">
-
-
+          @on-select="menuSelect" :accordion="false">
+        <Submenu name="1" v-if="dropdown.FAStype">
             <template slot="title">
                 <Icon type="ios-analytics"></Icon>
-                <!--<router-link tag="span" to="/typeFirst">分类管理</router-link>-->
                 分类管理
             </template>
-
-            <MenuItem name="1-1" style="padding: 0">
-
-                <router-link tag="li" to="/typeFirst/index"
-                             style="width:100%;height: 50px;text-align: center;line-height: 50px;">一级分类
-                </router-link>
-
+            <MenuItem name="1-1" class="levelType" v-if="menuDisplay.ONE_CLASS">
+                <router-link tag="li" to="/typeFirst/index" class="typeHow">一级分类</router-link>
             </MenuItem>
-            <MenuItem name="1-2" style="padding: 0">
-
-                <router-link tag="li" to="/typeFirst/second"
-                             style="width:100%;height: 50px;text-align: center; line-height: 50px;">二级分类
-                </router-link>
-
+            <MenuItem name="1-2" class="levelType" v-if="menuDisplay.TWO_CLASS">
+                <router-link tag="li" to="/typeFirst/second" class="typeHow">二级分类</router-link>
             </MenuItem>
         </Submenu>
-        <MenuItem name="4" style="padding: 0; margin:0;">
-            <div style="text-align: center;">
-                <router-link tag="li" to="/queryDataSourcePage/index"
-                             style="width:93%;  height: 50px;line-height: 50px; font-size:14px; ">
-                    <Icon type="android-radio-button-on" style='margin-right:13px;margin-left: -72px; '></Icon>数据源</router-link>
-            </div>
-        </MenuItem>
-        <MenuItem name="2" style="padding: 0; margin:0;">
-            <div style="text-align: center;">
-                <router-link tag="li" to="/Tab_management/index"
-                             style="width:100%;  height: 50px;line-height: 50px; font-size:14px; ">
-                    <Icon type="pricetags" style='margin-right:8px;margin-left: -72px; '></Icon>
-                    标签管理
-
+        <MenuItem name="4" class="MenuB" v-if="menuDisplay.LABEL_MANAGE">
+            <div class="menuContainer">
+                <router-link tag="li" to="/queryDataSourcePage/index" class="menuRouter">
+                    <Icon type="android-radio-button-on" class="MenuIcon"></Icon>
+                    数据源
                 </router-link>
             </div>
         </MenuItem>
-        <MenuItem name="3" style="padding: 0;font-weight: 100;">
-            <div style="text-align: center;">
-                <router-link tag="li" to="/product_management/index"
-                             style="width:100%; height: 50px; line-height: 50px; ">
-
-                    <Icon type="filing" style='margin-right:8px;margin-left: -72px; '></Icon>
+        <MenuItem name="2" class="MenuB" v-if="menuDisplay.PRO">
+            <div class="menuContainer">
+                <router-link tag="li" to="/Tab_management/index" class="menuRouter">
+                    <Icon type="pricetags" class="MenuIcon"></Icon>
+                    标签管理
+                </router-link>
+            </div>
+        </MenuItem>
+        <MenuItem name="3" class="MenuB" v-if="menuDisplay.DATA_SOURCE">
+            <div class="menuContainer">
+                <router-link tag="li" to="/product_management/index" class="menuRouter">
+                    <Icon type="filing" class="MenuIcon"></Icon>
                     产品管理
                 </router-link>
             </div>
@@ -65,8 +50,26 @@
     export default {
         data () {
             return {
+                menuDisplay: {
+                    'ONE_CLASS': false,
+                    'TWO_CLASS': false,
+                    'LABEL_MANAGE': false,
+                    'PRO': false,
+                    'DATA_SOURCE': false,
+                },
+                menuListDisplay: [],
                 activeName: '1-1',
-                accordion: true
+                accordion: true,
+                dropdown: {
+                    FAStype: false,//一级分类和二级分类的下拉菜单
+                },
+                pathNameObj: {
+                    'home_list': '1-1',
+                    'SourcePage': '4-1',
+                    'typeSecond_two': '1-2',
+                    'Tab_management_list': '2-1',
+                    'product_management_list': '3-1',
+                },
             };
         },
         name: 'sidebarMenu',
@@ -82,21 +85,30 @@
             }
         },
         watch: {
+            //监听路由控制菜单的高亮显示
             '$route' (to, form) {
                 const pathNameObj = {
-                    home_list: '1-1', typeSecond_two: '1-2',SourcePage:"4", Tab_management_list: '2',
+                    home_list: '1-1', typeSecond_two: '1-2', SourcePage: '4', Tab_management_list: '2',
                     product_management_list: '3'
                 };
-                if (pathNameObj[to.name]) {
-                    this.activeName = pathNameObj[to.name];
-                    sessionStorage.setItem('pages', pathNameObj[to.name]);
-                }
+                this.activeName = pathNameObj[to.name] || pathNameObj[form.name];
+                pathNameObj[to.name] && sessionStorage.setItem('pages', pathNameObj[to.name]);
             }
         },
         created () {
-            if (sessionStorage.getItem('pages')) {
-                this.activeName = sessionStorage.getItem('pages') || '1-1';
-            }
+            let localQ = JSON.parse(localStorage.getItem('label-Jurisdiction'));
+            //判断权限
+            localQ &&localQ.length && localQ.forEach(r => {
+                r.resourceCode == 'CLASS_MANAGE' ? r.child.forEach(t => this.menuListDisplay.push(t.resourceCode)) : this.menuListDisplay.push(r.resourceCode);
+            });
+            let FAStype = 0;
+            this.menuListDisplay.length && this.menuListDisplay.map(r => {
+                r == 'ONE_CLASS' || r == 'TWO_CLASS' ? FAStype++ : '';
+                this.menuDisplay[r] = true;
+            });
+            this.dropdown.FAStype = FAStype >= 1;
+            //默认首次高亮显示的菜单
+            this.activeName = sessionStorage.getItem(`pages`) ? sessionStorage.getItem(`pages`) : this.pathNameObj[this.$store.state.app.currentPageName];
         },
 
         methods: {
@@ -114,9 +126,4 @@
         }
     };
 </script>
-<style>
-    router-link {
-        color: white;
-    }
-</style>
 
