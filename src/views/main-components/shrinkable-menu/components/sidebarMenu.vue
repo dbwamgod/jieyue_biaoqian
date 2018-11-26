@@ -99,8 +99,10 @@
             let firstIng
             let localQ = JSON.parse(localStorage.getItem('label-Jurisdiction'));
             //判断权限
-            localQ &&localQ.length && localQ.forEach(r => {
-                firstIng= !firstIng ? this.pathNameObj[r.resourceCode]:''
+            localQ &&localQ.length && localQ.forEach((r ,i)=> {
+
+               !i? (firstIng=  r.resourceCode=="CLASS_MANAGE"?r.child.map(s=>this.pathNameObj[s.resourceCode])[0]:this.pathNameObj[r.resourceCode]):"";//只判断第一次有的资源名  并高亮显示菜单
+
                 r.resourceCode == 'CLASS_MANAGE' ? r.child.forEach(t => this.menuListDisplay.push(t.resourceCode)) : this.menuListDisplay.push(r.resourceCode);
             });
             let FAStype = 0;

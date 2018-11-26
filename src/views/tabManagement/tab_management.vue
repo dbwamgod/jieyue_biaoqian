@@ -216,6 +216,8 @@
                                     'on-change' (event) {
                                         params.row.defaultVal= event.srcElement.value || event.target.value;
                                         _this.edit_t[params.index].defaultVal = event.srcElement.value || event.target.value;
+
+
                                     }
                                 }
                             });
@@ -268,7 +270,6 @@
 
 
                                     'on-change'(event) {
-                                        console.log( '1231231231232',params.row, _this.edit_t)
                                         params.row.rule= event.srcElement.value || event.target.value;
                                         _this.edit_t[params.index]['rule'] = event.srcElement.value || event.target.value;
 
@@ -294,7 +295,6 @@
                                     on: {
                                         click: () => {
                                             if (this.index) {
-                                                console.log(this.edit_t);
                                                 this.editInlineAndCellData = JSON.parse(JSON.stringify(this.edit_t));
                                                 this.editInlineAndCellData.splice(params.index + 1, 0, {
                                                     labelCode: '',
@@ -342,211 +342,6 @@
                         }
                     },
                 ],
-
-             /*   labels: [
-                    {
-                        title: '代码',
-                        key: 'labelCode',
-                        align: 'center',
-                        render: (h, params) => {
-                            let _this = this;
-                            return h('Input', {
-                                props: {
-                                    type: 'text',
-                                    value: this.editInlineAndCellData[params.index].labelCode,
-                                },
-                                vModel:this.a,
-                                style: {},
-                                on: {
-                                    'on-blur' (event) {
-                                        _this.edit_t[params.index].labelCode = event.srcElement.value || event.target.value;
-                                        _this.delBlurBad(event, params);
-                                    }
-                                }
-                            });
-                        }
-                    },
-                    {
-                        title: '名称',
-                        key: 'labelName',
-                        align: 'center',
-                        render: (h, params) => {
-                            let _this = this;
-                            return h('Input', {
-                                props: {
-                                    type: 'text',
-                                    value: this.editInlineAndCellData[params.index].labelName
-                                }, style: {},
-                                on: {
-                                    'on-blur' (event) {
-
-                                        _this.edit_t[params.index].labelName = event.srcElement.value || event.target.value;
-                                        _this.delBlurBad(event, params);
-
-                                    }
-                                }
-                            });
-                        }
-
-                    },
-                    {
-                        title: '数据类型',
-                        key: 'dataType',
-                        align: 'center',
-                        render: (h, params) => {
-                            let _this = this;
-                            return h('Select', {
-                                    props: {
-                                        value: this.editInlineAndCellData[params.index].dataType
-                                    },
-                                    on: {
-                                        'on-change': (event) => {
-                                            _this.edit_t[params.index].dataType = event;
-                                        }
-                                    },
-                                },
-                                this.DataTypesList.map((item) => {
-                                    return h('Option', {
-                                        props: {
-                                            value: item.value,
-                                            label: item.name
-                                        }
-                                    });
-                                })
-                            );
-                        }
-                    },
-                    {
-                        title: '默认值',
-                        key: 'defaultVal',
-                        align: 'center',
-                        render: (h, params) => {
-                            let _this = this;
-                            return h('Input', {
-                                props: {
-                                    type: 'text',
-                                    value: this.editInlineAndCellData[params.index].defaultVal
-                                }, style: {},
-                                on: {
-                                    'on-blur' (event) {
-                                        console.log(event);
-                                        _this.edit_t[params.index].defaultVal = event.srcElement.value || event.target.value;
-                                        _this.delBlurBad(event, params);
-
-                                    }
-                                }
-                            });
-                        }
-                    },
-                    {
-                        title: '是否创建索引',
-                        key: 'iletxStatus',
-                        align: 'center',
-                        render: (h, params) => {
-                            let _this = this;
-                            return h('Select', {
-                                    props: {
-                                        value: this.editInlineAndCellData[params.index].indexStatus
-                                    },
-                                    on: {
-                                        'on-change': (event) => {
-                                            _this.edit_t[params.index].indexStatus = event;
-                                        }
-                                    },
-                                },
-                                this.indexList.map((item) => {
-                                    return h('Option', {
-                                        props: {
-                                            value: item.value,
-                                            label: item.name
-                                        }
-                                    });
-                                })
-                            );
-                        }
-                    },
-                    {
-                        title: '规则内容',
-                        key: 'rule',
-                        align: 'center',
-                        render: (h, params) => {
-                            let _this = this;
-
-                            return h('Input', {
-                                props: {
-                                    type: 'text',
-                                    value: this.editInlineAndCellData[params.index].rule
-                                },
-                                on: {
-                                    'on-change' (event) {
-                                        console.log(_this.edit_t,1111111);
-                                        _this.edit_t= JSON.parse(JSON.stringify(_this.editInlineAndCellData));
-                                        _this.edit_t[params.index].rule = event.srcElement.value || event.target.value;
-                                        // _this.delBlurBad(event, params);
-                                    }
-                                }
-                            });
-                        }
-                    },
-                    {
-                        title: '操作',
-                        key: 'actions',
-                        align: 'center',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            if (this.index) {
-                                                this.editInlineAndCellData = JSON.parse(JSON.stringify(this.edit_t));
-                                                this.editInlineAndCellData.splice(params.index + 1, 0, {
-                                                    labelCode: '',
-                                                    labelName: '',
-                                                    dataType: '',
-                                                    defaultVal: '',
-                                                    indexStatus: '',
-                                                    rule: '',
-                                                });
-                                            } else {
-                                                this.index = true;
-                                            }
-                                        },
-
-                                    }
-                                }, '添加'),
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            if (this.index) {
-                                                if (this.editInlineAndCellData.length === 1) {
-                                                    return;
-                                                }
-                                                this.editInlineAndCellData.splice(params.index, 1);
-
-                                            } else {
-                                                this.index = true;
-                                            }
-                                        }
-                                    }
-                                }, '删除')
-                            ]);
-                        }
-                    },
-                ],*/
                 dataCount: 0,
                 page: {
                     pageIndex: 1,
@@ -731,7 +526,6 @@
         methods: {
 
             // add(e){
-            //     console.log(e.path[4],e.path[5],11111);
             // e.path[4].append(e.path[4])
             //
             //     },
